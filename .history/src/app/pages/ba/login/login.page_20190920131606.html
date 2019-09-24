@@ -1,0 +1,46 @@
+<ion-content no-padding>
+  <div class="main">
+    <ion-card>
+      <ion-card-content>
+        <ion-row class="row">
+          <div class="logo">
+            <ion-avatar (click)='developerMode()'>
+              <img src="assets/svg/ba-logo.svg">
+            </ion-avatar>
+          </div>
+          <div class="auth-form">
+            <ion-text>
+              <h2 no-margin margin-vertical text-center>Welcome</h2>
+            </ion-text>
+          </div>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input clearInput type="email" placeholder="Email" [(ngModel)]="email" class="input" padding-horizontal
+              clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input clearInput type="password" placeholder="Password" [(ngModel)]="password" class="input"
+              padding-horizontal clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button shape="round" expand="block" color="primary" (click)="signIn()" class="btn-color"><strong>Sign
+                In</strong></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="developer">
+          <ion-col>
+            <ion-item no-lines>
+              <ion-label>Development Mode</ion-label>
+              <ion-checkbox slot="start" [(ngModel)]="developer"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

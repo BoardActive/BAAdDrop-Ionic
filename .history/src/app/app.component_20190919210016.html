@@ -1,0 +1,37 @@
+<ion-app>
+  <ion-split-pane>
+      <ion-menu class="sidemenu-1" side="end" type="overlay">
+          <ion-content class="contentBg">
+        <div>
+      <ion-card no-padding no-margin slot="fixed" class="driverCard fixed" color="primary">
+          <ion-item lines="none" padding-vertical>
+            <div class="driverProfileImage">
+              <ion-avatar slot="start" class="profile">
+                <img src="../../../../assets/map/driver.jpeg">
+              </ion-avatar>
+              <div margin-start>
+                <h3 class="userName" no-margin>John Doe</h3>
+                <span class="userDetails">
+                  <ion-icon name="star"></ion-icon>Premium Member
+                </span>
+              </div>
+            </div>
+          </ion-item>
+      </ion-card>
+    </div>
+    <ion-content class="contentBg">
+      <ion-list lines="none" padding-top>
+        <ion-menu-toggle auto-hide="false" *ngFor="let item of appMenu">
+          <ion-item>
+            <!-- <ion-icon slot="start" [name]="item.icon" [ngClass]="{'active':item.active}"></ion-icon> -->
+            <ion-label [ngClass]="{'active':item.active}">
+              {{item.title}}
+            </ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+    </ion-menu>
+    <ion-router-outlet main></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

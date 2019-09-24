@@ -1,5 +1,7 @@
 {
   "name": "BAAdDrop-Ionic",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

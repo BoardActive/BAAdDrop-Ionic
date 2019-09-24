@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "247328967680",
+    "firebase_url": "https://boardactive-addrop.firebaseio.com",
+    "project_id": "boardactive-addrop",
+    "storage_bucket": "boardactive-addrop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247328967680:android:7582d2671282e70a",
+        "android_client_info": {
+          "package_name": "com.boardactive.addrop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "247328967680-g9uo7eh609jkod6f66f6beocti8enovb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-IdJFpIxA7_3JBveckuO2YK5SYszKT_o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

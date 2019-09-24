@@ -1,0 +1,459 @@
+@import "~@ionic/angular/css/core.css";
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+// @import "assets/animate.css";
+
+:root[mode="ios"] .lato,
+:root[mode="md"] .mlatouli {
+  --ion-font-family: "Lato" !important;
+  font-family: "Lato" !important;
+}
+ 
+:root[mode="ios"] .muli,
+:root[mode="md"] .muli {
+  --ion-font-family: "Muli" !important;
+  font-family: "Muli" !important;
+}
+:root[mode="ios"] .srisakdi,
+:root[mode="md"] .srisakdi {
+  --ion-font-family: "Srisakdi" !important;
+  font-family: "Srisakdi" !important;
+}
+:root[mode="ios"] .qranklestein,
+:root[mode="md"] .qranklestein {
+  --ion-font-family: "Qranklestein" !important;
+  font-family: "Qranklestein" !important;
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./assets/fonts/Lato-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: italic;
+  font-weight: normal;
+  src: url("./assets/fonts/Lato-Italic.ttf");
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 900;
+  src: url("./assets/fonts/Lato-Black.ttf");
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./assets/fonts/Lato-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./assets/fonts/Lato-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: italic;
+  font-weight: 700;
+  src: url("./assets/fonts/Lato-BoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: italic;
+  font-weight: 500;
+  src: url("./assets/fonts/Lato-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: italic;
+  font-weight: 900;
+  src: url("./assets/fonts/Lato-BlackItalic.ttf");
+}
+
+@font-face {
+  font-family: "Qranklestein";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./assets/fonts/Qranklestein.ttf");
+}
+
+@font-face {
+  font-family: "Muli";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./assets/fonts/Muli.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./assets/fonts/Muli.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: italic;
+  font-weight: normal;
+  src: url("./assets/fonts/Muli-Italic.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: italic;
+  font-weight: 400;
+  src: url("./assets/fonts/Muli-Light-Italic.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./assets/fonts/Muli-Light.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./assets/fonts/Muli-SemiBold.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: italic;
+  font-weight: 500;
+  src: url("./assets/fonts/Muli-Semi-BoldItalic.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: normal;
+  font-weight: bold;
+  src: url("./assets/fonts/Muli-Bold.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: italic;
+  font-weight: bold;
+  src: url("./assets/fonts/Muli-BoldItalic.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: italic;
+  font-weight: 100;
+  src: url("./assets/fonts/Muli-ExtraLightItalic.ttf");
+}
+@font-face {
+  font-family: "Muli";
+  font-style: normal;
+  font-weight: 100;
+  src: url("./assets/fonts/Muli-ExtraLight.ttf");
+}
+
+.searchbar-input {
+  border-radius: 25px !important;
+  height: 30px !important;
+}
+.searchbar-search-icon.sc-ion-searchbar-md {
+  left: 90% !important;
+  top: 6px;
+}
+.searchbar-clear-button.sc-ion-searchbar-md {
+  left: 13px !important;
+  right: 0 !important;
+}
+.searchbar-search-icon.sc-ion-searchbar-ios {
+  color: white !important;
+  height: 87% !important;
+}
+
+ion-item {
+  // --highlight-color-valid: #ffffff00;
+  // --inner-border-width: 0px 0px 0px 0px;
+  // --border-width: 0 0 0px 0;
+}
+
+.sc-ion-searchbar-ios-h {
+  padding-bottom: 0 !important;
+}
+
+.ion-color-d3blue {
+  --ion-color-base: #0c96df;
+  --ion-color-base-rgb: 12, 150, 223;
+  --ion-color-contrast: #ffffff;
+  --ion-color-contrast-rgb: 255, 255, 255;
+  --ion-color-shade: #0f80cf;
+  --ion-color-tint: #1ba0ec;
+}
+.ion-color-d4blue {
+  --ion-color-base: #37a9d8;
+  --ion-color-base-rgb: 12, 150, 223;
+  --ion-color-contrast: #ffffff;
+  --ion-color-contrast-rgb: 255, 255, 255;
+  --ion-color-shade: #37a9d8;
+  --ion-color-tint: #37a9d8;
+}
+.ion-color-d3green {
+  --ion-color-base: #00c06d;
+  --ion-color-base-rgb: 0, 192, 109;
+  --ion-color-contrast: #ffffff;
+  --ion-color-contrast-rgb: 255, 255, 255;
+  --ion-color-shade: #00c06d;
+  --ion-color-tint: #00c06d;
+}
+.ion-color-rose {
+  --ion-color-base: #ff7d91;
+  --ion-color-base-rgb: 255, 125, 145;
+  --ion-color-contrast: #ffffff;
+  --ion-color-contrast-rgb: 255, 255, 255;
+  --ion-color-shade: #ff7d91;
+  --ion-color-tint: #ff7d91;
+}
+.ion-color-firebase {
+  --ion-color-base: #ffa000;
+  --ion-color-base-rgb: 255, 160, 0;
+  --ion-color-contrast: #ffffff;
+  --ion-color-contrast-rgb: 255, 255, 255;
+  --ion-color-shade: #e69100;
+  --ion-color-tint: #ffbe4d;
+}
+
+.custom-class {
+  height: 100px;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.mto {
+  margin-top: 12px;
+  ion-icon {
+    margin-bottom: -2px;
+  }
+}
+
+  h1 {
+    font-size: 2.0em;
+    font-weight: bold;
+    color: var(--ion-color-primary);
+    font-family: "Lato" !important;
+    font-style: 900;
+    padding: .5em;
+  }
+
+  h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--ion-color-primary);
+    font-family: "Lato" !important;
+    font-style: 900;
+    padding: .1em;
+  }
+
+  h3 {
+    font-size: .9em;
+    font-weight: bold;
+    color: var(--ion-color-secondary);
+    font-family: "Lato" !important;
+    font-style: normal;
+    padding: .1em;
+  }
+
+  h4 {
+    font-size: .8em;
+    font-weight: bold;
+    color: var(--ion-color-secondary);
+    font-family: "Lato" !important;
+    font-style: normal;
+    padding: .1em;
+  }
+
+  ion-title {
+    // font-size: 2em;
+    // font-weight: bold;
+    color: var(--ion-color-primary-contrast);
+    font-family: "Lato" !important;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+  }
+
+  // Helpers //
+  .w100 {
+    width: 100%;
+  }
+  
+  .bold,
+  .fw500 {
+      font-weight: 500 !important;
+  }
+  
+  .fw700 {
+      font-weight: 700 !important;
+  }
+  
+  .text08 {
+    font-size: .8rem;
+  }
+  
+  .text1 {
+    font-size: 1rem !important;
+  }
+
+  .text12 {
+    font-size: 1.2rem;
+  }
+
+  .text15 {
+    font-size: 1.5rem;
+  }
+  
+  .text20 {
+    font-size: 2rem;
+  }
+
+  .text25 {
+    font-size: 2.5rem;
+  }
+  
+  .text-white {
+      color: #fff;
+  }
+  
+  .text-primary {
+      color: var(--ion-color-primary);
+  }
+
+  .text-secondary {
+    color: var(--ion-color-secondary);
+}
+  
+  .text-dark {
+    color: var(--ion-color-dark);
+  }
+
+  ion-card {
+    --background: var(--ion-color-primary-contrast);
+    margin: auto;
+    position: relative;
+    text-align: center;
+
+    ion-card-header {
+      text-align: center;
+      font-size: 2.0em;
+      width: 100%;
+      font-weight: normal;
+      color: var(--ion-color-primary);
+    }
+  }
+
+  ion-segment {
+
+  }
+
+  ion-segment-button {
+    height: 30px;
+    margin-left: .5rem;
+    margin-right: .5rem;
+    margin-top: 1rem;
+    border-width: 3px;
+    border-radius: 50px;
+  }
+
+  ion-icon {
+    margin: .3em;
+    width: 2em;
+    height: 2em;
+  }
+
+  ion-back-button {
+    ion-icon {
+      margin: .3em;
+      width: 1.5em;
+      height: 1.5em;
+    }  
+  }
+
+  ion-button {
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  ion-header {
+    // --background: transparent;
+    --background: linear-gradient(to top right, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+    color: var(--ion-color-primary-contrast);
+  }
+
+  ion-toolbar{
+    // --background: transparent;
+    --background: linear-gradient(to top right, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+    color: var(--ion-color-primary-contrast);
+  }
+  
+  ion-content{
+    // --background: var(--ion-color-dark);
+  }
+
+  ion-label {
+    color: var(--ion-color-primary);
+    margin: .5em;
+  }
+
+  ion-text {
+    font-size: 1em;
+    font-weight: normal;
+    color: var(--ion-color-secondary);
+    font-family: "Lato" !important;
+    font-style: normal;
+    // padding: .5em;
+    text-align: start;
+  }
+
+  .item {
+    background-color: rgb(240, 240, 240);
+    border: 1px solid rgb(210, 210, 210);
+    border-radius: 9px;
+    font-size: 0.9em !important;
+  }
+  
+  .input {
+    background-color: rgb(240, 240, 240);
+    border: 1px solid rgb(210, 210, 210);
+    border-radius: 9px;
+    font-size: 0.9em !important;
+  }
+  
+  @media screen and (min-width: 767px) {
+    ion-list {
+      width: 600px;
+      margin: auto;
+
+      .scroll-content {
+        display: table !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .scroll {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+      }
+   }
+  }
+
+

@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button color="light"></ion-menu-button>
+      </ion-buttons>
+      <ion-icon (click)='switchApp()' src="assets/svg/ba-shuffle.svg" expand="icon-only" slot="start">
+      </ion-icon>
+      <ion-icon (click)='signOut()' src="assets/svg/ba-log-out.svg" expand="icon-only" slot="end">
+      </ion-icon>
+      <ion-icon (click)='presentAlertConfirm()' src="assets/svg/ba-trash.svg" expand="icon-only" slot="end">
+      </ion-icon>
+      <ion-title (click)="developerMode()">Message List</ion-title>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="development" color="secondary">
+      <ion-button size="small" color="tertiary" (click)="getMe()">getMe</ion-button>
+      <ion-button size="small" color="tertiary" (click)="putMe()">putMe</ion-button>
+      <ion-button size="small" color="tertiary" (click)="postMe()">postMe</ion-button>
+      <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()">CLR</ion-button>
+      <ion-button *ngIf="!showLog" size="small" color="tertiary" (click)="viewLog(true)">LOG</ion-button>
+      <ion-button *ngIf="showLog" size="small" color="primary" (click)="viewLog(false)">HIDE</ion-button>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="main" *ngIf="!showLog">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+    <div *ngFor="let item of messages">
+      <ion-item (click)="openMessage(item)">
+        <ion-label>
+          <h2>{{ item.title }}</h2>
+          <p text-wrap>{{ item.body }}</p>
+          <small>{{ item.dateCreated | date: "MM/dd/yyyy H:mm" }}</small>
+        </ion-label>
+      </ion-item>
+    </div>
+  </ion-content>
+
+  <ion-content class="main" *ngIf="showLog">
+    <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="setFilteredItems()"></ion-searchbar>
+    <div class='logger'>
+      <ion-list>
+        <ion-item *ngFor="let event of events">
+          <ion-row>
+            <ion-col align-self-stretch>
+              <ion-item>
+                <ion-label>
+                  <p><small class="title"><strong>[event]&nbsp;{{ event.name }}</strong></small></p>
+                  <p><small class="timestamp">{{event.timestamp}}</small></p>
+                  <pre><code>{{ event.content}}</code></pre>
+                </ion-label>
+              </ion-item>
+            </ion-col>
+            <!-- <ion-col align-self-end>
+            </ion-col> -->
+          </ion-row>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ion-content>
+
+  <ion-footer>
+    <!-- <ion-toolbar> -->
+    <!-- <ion-button> -->
+    <!-- </ion-button> -->
+    <!-- </ion-toolbar> -->
+  </ion-footer>

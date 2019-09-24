@@ -1,0 +1,15 @@
+<ion-header>
+    <ion-header>
+      <ion-toolbar>
+        <ion-icon (click)='signOut()' src="assets/svg/ba-log-out.svg" expand="icon-only" color="light" mode="md"
+          slot="end">
+        </ion-icon>
+        <ion-title>Select An App</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+<ion-content class="main">
+  <ion-list *ngFor="let app of apps">
+    <h3>{{ app.name }}</h3>
+  </ion-list>
+</ion-content>

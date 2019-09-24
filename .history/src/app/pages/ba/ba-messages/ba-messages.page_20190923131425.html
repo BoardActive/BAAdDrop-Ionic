@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button color="light"></ion-menu-button>
+      </ion-buttons>
+      <ion-icon (click)='switchApp()' src="assets/svg/ba-shuffle.svg" expand="icon-only" slot="start">
+      </ion-icon>
+      <ion-icon (click)='signOut()' src="assets/svg/ba-log-out.svg" expand="icon-only" slot="end">
+      </ion-icon>
+      <ion-icon (click)='presentAlertConfirm()' src="assets/svg/ba-trash.svg" expand="icon-only" slot="end">
+      </ion-icon>
+      <ion-title>Message List</ion-title>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="development" color="secondary">
+      <ion-button size="small" color="tertiary" (click)="getMe()">getMe</ion-button>
+      <ion-button size="small" color="tertiary" (click)="putMe()">putMe</ion-button>
+      <ion-button size="small" color="tertiary" (click)="postMe()">postMe</ion-button>
+      <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()">CLR</ion-button>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="main">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+    <!-- <ion-card> -->
+    <div *ngFor="let item of messages">
+      <ion-item (click)="openMessage(item)">
+        <ion-label>
+          <h2>{{ item.title }}</h2>
+          <p text-wrap>{{ item.body }}</p>
+          <small>{{ item.dateCreated | date: "MM/dd/yyyy H:mm" }}</small>
+        </ion-label>
+      </ion-item>
+    </div>
+    <!-- </ion-card> -->
+  </ion-content>
+
+  <ion-footer>
+    <!-- <ion-toolbar> -->
+    <!-- <ion-button> -->
+    <!-- </ion-button> -->
+    <!-- </ion-toolbar> -->
+  </ion-footer>
