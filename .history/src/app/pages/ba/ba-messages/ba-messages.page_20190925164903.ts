@@ -160,10 +160,10 @@ export class BaMessagesPage implements OnInit {
     });
 
     this.events.subscribe('notification:opened', () => {
-      const eventMsg = 'BA Notification: opened';
-      this.localStorageService.getItem('msg').subscribe(payload => {
-        this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+      const eventMsg = 'BA Notification: notap';
+      this.localStorageService.getItem('msg').subscribe(response => {
+        this.addEvent(eventMsg, new Date(), response);
+        this.getData();
       });
     });
   }

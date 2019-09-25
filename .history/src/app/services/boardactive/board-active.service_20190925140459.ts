@@ -67,6 +67,7 @@ export class BoardActiveService {
  * Configures the Client's Firebase Cloud Messaging notifications
  */
     private configureFirebase(): Observable<any> {
+        const myDate: string = new Date().toISOString();
         return new Observable((observer) => {
             this.fcmProvider.getToken().then(token => {
                 this.localStorageService.setItem('token', token).subscribe(token => {
@@ -74,68 +75,52 @@ export class BoardActiveService {
                     observer.complete();
                 });
             });
-            
-            this.fcmProvider.listenToNotifications().pipe(tap(payload => {
-                const myDate: string = new Date().toISOString();
-                let thisMsg: MessageDto = MessageModel.empty();
-                thisMsg = payload;
-                thisMsg.notificationId = payload['gcm.message_id'];
-                thisMsg.dateCreated = myDate;
-                thisMsg.dateLastUpdated = myDate;
-                this.addMessage(thisMsg);
-                this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
-                this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                    this.events.publish('notification:receive');
-                });
-                if (thisMsg.tap) {
-                    console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg));
-                    this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                        this.events.publish('notification:tap');
-                    });
-                    this.modalMessage(thisMsg);
-                } else {
-                    console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
-                    // this.localStorageService.getItem(`msgType`).subscribe(type => {
-                    // this.newLocalNotification(thisMsg, 1);
-                    // });
 
-                    this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                        this.events.publish('notification:notap');
-                    });
-                }
-            })).subscribe(
-            //     response => {
-            //     const myDate: string = new Date().toISOString();
-            //     console.log(`listenToNotifications: ${JSON.stringify(response, null, 2)}`);
-            //     let msg: MessageDto = MessageModel.empty();
-            //     msg = response;
-            //     msg.dateCreated = myDate;
-            //     msg.dateLastUpdated = myDate;
-            //     msg.notificationId = response['gcm.message_id'];
-            //     this.addMessage(msg);
-            //     this.postEvent('received', response.messageId, response['gcm.message_id'], response.isTestMessage);
-            //     this.localStorageService.setItem('msg', msg).subscribe(response => {
+            
+            // .pipe(tap(payload => {
+            //     let thisMsg: MessageDto;
+            //     thisMsg = payload;
+            //     thisMsg.notificationId = payload['gcm.message_id'];
+            //     thisMsg.dateCreated = myDate;
+            //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
             //         this.events.publish('notification:receive');
             //     });
-            //     if (msg.tap) {
-            //         console.log(`[BA:TAP] : ` + JSON.stringify(msg));
-            //         this.localStorageService.setItem('msg', msg).subscribe(response => {
-            //             this.events.publish('notification:tap');
-            //         });
-            //         this.modalMessage(response);
+
+            //     this.postEvent('received', thisMsg.messageId, thisMsg['gcm.message_id'], thisMsg.isTestMessage);
+            //     if (thisMsg.tap) {
+            //         this.postEvent('opened', thisMsg.messageId, thisMsg.notificationId, thisMsg.isTestMessage);
+            //         this.modalMessage(payload);
             //     } else {
-            //         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(response));
-            //         // this.localStorageService.getItem(`msgType`).subscribe(type => {
-            //         this.newLocalNotification(msg, 1);
-            //         // });
-
-            //         this.localStorageService.setItem('msg', msg).subscribe(response => {
-            //             this.events.publish('notification:notap');
-            //         });
-
+            //         this.newLocalNotification(thisMsg, 1);
             //     }
-            // }
-            );
+            // }))
+
+
+            this.fcmProvider.listenToNotifications().subscribe(response => {
+                console.log(`listenToNotifications: ${JSON.stringify(response, null, 2)}`);
+                let msg: MessageDto;
+                msg = response;
+                msg.notificationId = response['gcm.message_id'];
+                msg.dateCreated = myDate;
+                msg.isRead = false;
+                this.addMessage(msg);
+                this.localStorageService.setItem('msg', msg).subscribe(response => {
+                    this.events.publish('notification:receive');
+                });
+                this.postEvent('received', response.messageId, response['gcm.message_id'], response.isTestMessage);
+                if (msg.tap) {
+                    console.log(`[BA:TAP] : ` + JSON.stringify(msg));
+                    this.localStorageService.setItem('msg', msg).subscribe(response => {
+                        this.events.publish('notification:tap');
+                    });
+                    this.modalMessage(response);
+                } else {
+                    console.log(`[BA:NOT_TAP] : ` + JSON.stringify(response));
+                    // this.localStorageService.getItem(`msgType`).subscribe(type => {
+                    this.newLocalNotification(msg, 1);
+                    // });
+                }
+            });
         });
     }
 

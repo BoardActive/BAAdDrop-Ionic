@@ -137,33 +137,17 @@ export class BaMessagesPage implements OnInit {
   listenToEvents() {
     this.events.subscribe('notification:receive', () => {
       const eventMsg = 'BA Notification: receive';
-      this.localStorageService.getItem('msg').subscribe(response => {
+      const msg = this.localStorageService.getItem('msg').subscribe(response => {
         this.addEvent(eventMsg, new Date(), response);
         this.getData();
       });
     });
 
     this.events.subscribe('notification:tap', () => {
-      const eventMsg = 'BA Notification: tap';
-      this.localStorageService.getItem('msg').subscribe(response => {
+      const eventMsg = 'BA Notification: receive:tap';
+      const msg = this.localStorageService.getItem('msg').subscribe(response => {
         this.addEvent(eventMsg, new Date(), response);
         this.getData();
-      });
-    });
-
-    this.events.subscribe('notification:notap', () => {
-      const eventMsg = 'BA Notification: notap';
-      this.localStorageService.getItem('msg').subscribe(response => {
-        this.addEvent(eventMsg, new Date(), response);
-        this.getData();
-      });
-    });
-
-    this.events.subscribe('notification:opened', () => {
-      const eventMsg = 'BA Notification: opened';
-      this.localStorageService.getItem('msg').subscribe(payload => {
-        this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
       });
     });
   }
@@ -376,7 +360,6 @@ export class BaMessagesPage implements OnInit {
 
     this.localStorageService.getItem('messages').subscribe(data => {
       this.messages = data;
-      this.messages = this.messages.sort((a,b) => new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime());
       console.log(`getData() messages: ${JSON.stringify(this.messages, null, 2)}`);
     });
   }
@@ -401,7 +384,7 @@ export class BaMessagesPage implements OnInit {
     setTimeout(() => {
       console.log('Async operation has ended');
       event.target.complete();
-    }, 1000);
+    }, 2000);
   }
 
   startLocation() {

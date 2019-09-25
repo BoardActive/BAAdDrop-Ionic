@@ -11,7 +11,6 @@ export class MessageModel {
         imageUrl: string,
         isTestMessage: string,
         tap: boolean,
-        isRead: boolean,
         body: string,
         title: string,
         notificationId: string,
@@ -25,7 +24,6 @@ export class MessageModel {
         this.imageUrl = imageUrl;
         this.isTestMessage = isTestMessage;
         this.tap = tap;
-        this.isRead = isRead;
         this.body = body;
         this.title = title;
         this.notificationId = notificationId;
@@ -39,23 +37,21 @@ export class MessageModel {
     public imageUrl: string;
     public isTestMessage: string;
     public tap: boolean;
-    public isRead: boolean;
+    public tag: string;
     public body: string;
     public title: string;
     public notificationId: string;
     public messageData: Array<string>;
 
     public static empty(): MessageModel {
-        const myDate: string = new Date().toISOString();
         return new MessageModel(
             null,
-            myDate, 
-            myDate, 
             null, 
             null, 
             null, 
-            false, 
-            false, 
+            null, 
+            null, 
+            null, 
             null, 
             null, 
             null, 
@@ -71,7 +67,6 @@ export class MessageModel {
             imageUrl: this.imageUrl,
             isTestMessage: this.isTestMessage,
             tap: this.tap,
-            isRead: this.isRead,
             body: this.body,
             title: this.title,
             notificationId: this.notificationId,
@@ -88,7 +83,6 @@ export interface MessageDto {
     imageUrl: string,
     isTestMessage: string,
     tap: boolean,
-    isRead: boolean,
     body: string,
     title: string,
     notificationId: string,

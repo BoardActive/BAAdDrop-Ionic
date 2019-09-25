@@ -82,6 +82,7 @@ export class BoardActiveService {
                 thisMsg.notificationId = payload['gcm.message_id'];
                 thisMsg.dateCreated = myDate;
                 thisMsg.dateLastUpdated = myDate;
+                thisMsg.notificationId = payload['gcm.message_id'];
                 this.addMessage(thisMsg);
                 this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
                 this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
@@ -96,7 +97,7 @@ export class BoardActiveService {
                 } else {
                     console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
                     // this.localStorageService.getItem(`msgType`).subscribe(type => {
-                    // this.newLocalNotification(thisMsg, 1);
+                    this.newLocalNotification(thisMsg, 1);
                     // });
 
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {

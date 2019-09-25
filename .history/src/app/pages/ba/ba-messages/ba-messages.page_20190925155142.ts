@@ -158,14 +158,6 @@ export class BaMessagesPage implements OnInit {
         this.getData();
       });
     });
-
-    this.events.subscribe('notification:opened', () => {
-      const eventMsg = 'BA Notification: opened';
-      this.localStorageService.getItem('msg').subscribe(payload => {
-        this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
-      });
-    });
   }
 
   signOut() {

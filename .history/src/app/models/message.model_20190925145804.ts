@@ -46,11 +46,10 @@ export class MessageModel {
     public messageData: Array<string>;
 
     public static empty(): MessageModel {
-        const myDate: string = new Date().toISOString();
         return new MessageModel(
             null,
-            myDate, 
-            myDate, 
+            null, 
+            null, 
             null, 
             null, 
             null, 

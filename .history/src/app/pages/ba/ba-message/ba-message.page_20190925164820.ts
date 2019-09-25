@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NavParams, ModalController, Events } from '@ionic/angular';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
-import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
+
 @Component({
   selector: 'app-ba-message',
   templateUrl: './ba-message.page.html',
@@ -19,7 +19,6 @@ export class BaMessagePage implements OnInit {
     public sanitizer: DomSanitizer,
     private modalCtrl: ModalController,
     private navParams: NavParams,
-    private localStorageService: LocalStorageService,
     private events: Events
   ) {
     this.message = this.navParams.get('message');
@@ -27,9 +26,6 @@ export class BaMessagePage implements OnInit {
     this.messageData = JSON.parse(this.message.messageData);
 
     // this.youtubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.messageData.urlYoutube);
-    this.localStorageService.setItem('msg', this.message).subscribe(response => {
-      this.events.publish('notification:opened');
-    });
 
   }
 

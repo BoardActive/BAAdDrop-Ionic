@@ -5,8 +5,8 @@ export class MessageModel {
 
     constructor(
         id: number, 
-        dateCreated: string,
-        dateLastUpdated: string,
+        dateCreated: Date,
+        dateLastUpdated: Date,
         messageId: string,
         imageUrl: string,
         isTestMessage: string,
@@ -33,8 +33,8 @@ export class MessageModel {
     }
 
     public id: number
-    public dateCreated: string;
-    public dateLastUpdated: string;
+    public dateCreated: Date;
+    public dateLastUpdated: Date;
     public messageId: string;
     public imageUrl: string;
     public isTestMessage: string;
@@ -46,11 +46,10 @@ export class MessageModel {
     public messageData: Array<string>;
 
     public static empty(): MessageModel {
-        const myDate: string = new Date().toISOString();
         return new MessageModel(
             null,
-            myDate, 
-            myDate, 
+            null, 
+            null, 
             null, 
             null, 
             null, 
@@ -82,8 +81,8 @@ export class MessageModel {
 
 export interface MessageDto {
     id: number, 
-    dateCreated: string,
-    dateLastUpdated: string,
+    dateCreated: Date,
+    dateLastUpdated: Date,
     messageId: string,
     imageUrl: string,
     isTestMessage: string,

@@ -19,6 +19,7 @@
       <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()">CLR</ion-button>
       <ion-button *ngIf="!showLog" size="small" color="tertiary" (click)="viewLog(true)">LOG</ion-button>
       <ion-button *ngIf="showLog" size="small" color="primary" (click)="viewLog(false)">HIDE</ion-button>
+      <!-- <ion-searchbar *ngIf="showLog" [(ngModel)]="searchTerm" (ionInput)="searchEvents($event)"></ion-searchbar> -->
     </ion-toolbar>
   </ion-header>
 
@@ -33,17 +34,15 @@
         <ion-label>
           <h2>{{ item.title }}</h2>
           <p text-wrap>{{ item.body }}</p>
-          <small>{{ item.dateCreated | date: "MM/dd/yyyy H:mm:ss" }}</small>
+          <small>{{ item.dateCreated | date: "MM/dd/yyyy H:mm" }}</small>
         </ion-label>
-        <ion-icon *ngIf="!item.isRead" src="assets/svg/ba-read.svg" color="primary" expand="icon-only" slot="end">
-        </ion-icon>
+        <ion-icon slot="icon-only" name="radio-on" item-right></ion-icon>
       </ion-item>
     </div>
   </ion-content>
 
   <ion-content class="main" *ngIf="showLog">
-      <ion-searchbar *ngIf="showLog" [(ngModel)]="searchTerm" (ionInput)="searchEvents($event)"></ion-searchbar>
-      <div class='logger'>
+    <div class='logger'>
       <div *ngFor="let event of log_events">
           <ion-row>
             <ion-col>

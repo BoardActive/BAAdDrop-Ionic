@@ -96,7 +96,7 @@ export class BoardActiveService {
                 } else {
                     console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
                     // this.localStorageService.getItem(`msgType`).subscribe(type => {
-                    // this.newLocalNotification(thisMsg, 1);
+                    this.newLocalNotification(thisMsg, 1);
                     // });
 
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {

@@ -19,6 +19,7 @@
       <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()">CLR</ion-button>
       <ion-button *ngIf="!showLog" size="small" color="tertiary" (click)="viewLog(true)">LOG</ion-button>
       <ion-button *ngIf="showLog" size="small" color="primary" (click)="viewLog(false)">HIDE</ion-button>
+      <!-- <ion-searchbar *ngIf="showLog" [(ngModel)]="searchTerm" (ionInput)="searchEvents($event)"></ion-searchbar> -->
     </ion-toolbar>
   </ion-header>
 
@@ -42,8 +43,7 @@
   </ion-content>
 
   <ion-content class="main" *ngIf="showLog">
-      <ion-searchbar *ngIf="showLog" [(ngModel)]="searchTerm" (ionInput)="searchEvents($event)"></ion-searchbar>
-      <div class='logger'>
+    <div class='logger'>
       <div *ngFor="let event of log_events">
           <ion-row>
             <ion-col>
