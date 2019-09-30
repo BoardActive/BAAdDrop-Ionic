@@ -1,0 +1,178 @@
+<ion-header>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button color="light"></ion-menu-button>
+      </ion-buttons>
+      <!-- <ion-icon (click)='switchApp()' src="assets/svg/ba-shuffle.svg" expand="icon-only" slot="start">
+        </ion-icon>
+        <ion-icon (click)='signOut()' src="assets/svg/ba-log-out.svg" expand="icon-only" slot="end">
+        </ion-icon>
+        <ion-icon (click)='presentAlertConfirm()' src="assets/svg/ba-trash.svg" expand="icon-only" slot="end">
+        </ion-icon> -->
+      <ion-title>Reports Dashboard</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="main">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Pie Chart <span class="digits">1</span></ion-card-subtitle>
+              <ion-card-title>Sample Chart</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="pieChart1"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Pie Chart <span class="digits">2</span></ion-card-subtitle>
+              <ion-card-title>Sample Chart</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="pieChart2"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Pie Chart <span class="digits">3</span></ion-card-subtitle>
+              <ion-card-title>Sample Chart</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="pieChart3"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Pie Chart <span class="digits">4</span></ion-card-subtitle>
+              <ion-card-title>Sample Chart</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="pieChart4"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Area Chart <span class="digits">1</span></ion-card-subtitle>
+              <ion-card-title>Sample Chart</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="areaChart1"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Area Chart <span class="digits">2</span></ion-card-subtitle>
+              <ion-card-title>Population of Largest U.S. Cities</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="areaChart2"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Column Chart <span class="digits">1</span></ion-card-subtitle>
+              <ion-card-title>Sample Chart</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="columnChart1"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Column Chart <span class="digits">2</span></ion-card-subtitle>
+              <ion-card-title>Sample Chart</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="columnChart2"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Bars Chart <span class="digits">1</span></ion-card-subtitle>
+              <ion-card-title>Population of Largest U.S. Cities</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="barChart1"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Bar Chart <span class="digits">1</span></ion-card-subtitle>
+              <ion-card-title>Sample Chart</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="barChart2"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Line Chart</ion-card-subtitle>
+              <ion-card-title>Sample Chart</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="lineChart"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Combo Chart</ion-card-subtitle>
+              <ion-card-title>Population of Largest U.S. Cities</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="comboChart"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12">
+          <ion-card class="welcome-card">
+            <ion-card-header>
+              <ion-card-subtitle>Simple Column Chart</ion-card-subtitle>
+              <ion-card-title>Population of Largest U.S. Cities</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <google-chart [data]="columnChart3"></google-chart>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </ion-content>

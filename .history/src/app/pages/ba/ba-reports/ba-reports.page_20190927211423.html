@@ -1,0 +1,198 @@
+<ion-header>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button color="light"></ion-menu-button>
+      </ion-buttons>
+      <!-- <ion-icon (click)='switchApp()' src="assets/svg/ba-shuffle.svg" expand="icon-only" slot="start">
+        </ion-icon>
+        <ion-icon (click)='signOut()' src="assets/svg/ba-log-out.svg" expand="icon-only" slot="end">
+        </ion-icon>
+        <ion-icon (click)='presentAlertConfirm()' src="assets/svg/ba-trash.svg" expand="icon-only" slot="end">
+        </ion-icon> -->
+      <ion-title>Reports Dashboard</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <!-- Container-fluid starts -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-card>
+            <ion-card-header>
+              <h5>Single Vertical Bar Chart</h5>
+            </ion-card-header>
+            <ion-card-content>
+              <ngx-charts-bar-vertical [scheme]="barChartColorScheme" [results]="barChartsingle"
+                [gradient]="barChartGradient" [xAxis]="barChartShowXAxis" [yAxis]="barChartShowYAxis"
+                [legend]="barChartShowLegend" [showXAxisLabel]="barChartShowXAxisLabel"
+                [showYAxisLabel]="barChartShowYAxisLabel" [xAxisLabel]="barChartXAxisLabel"
+                [yAxisLabel]="barChartYAxisLabel" [roundEdges]="false" (select)="onSelect($event)">
+              </ngx-charts-bar-vertical>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card>
+            <ion-card-header>
+                <h5>Multiple Vertical Bar Chart</h5>
+              </ion-card-header>
+            <ion-card-content>
+                <!-- <ngx-charts-bar-vertical-2d [scheme]="barChartColorScheme" [results]="multiData"
+                [gradient]="barChartGradient" [xAxis]="barChartShowXAxis" [yAxis]="barChartShowYAxis"
+                [legend]="barChartShowLegend" [showXAxisLabel]="barChartShowXAxisLabel"
+                [showYAxisLabel]="barChartShowYAxisLabel" [xAxisLabel]="barChartXAxisLabel"
+                [yAxisLabel]="barChartYAxisLabel" [roundEdges]="false" (select)="onSelect($event)">
+              </ngx-charts-bar-vertical-2d> -->
+        </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <!-- <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h5>Single Vertical Bar Chart</h5>
+            </div>
+            <div class="card-body">
+              <div class="flot-chart-container">
+                <div class="flot-chart-placeholder ngx-chart-direction" id="github-issues">
+                  <ngx-charts-bar-vertical [scheme]="barChartColorScheme" [results]="barChartsingle"
+                    [gradient]="barChartGradient" [xAxis]="barChartShowXAxis" [yAxis]="barChartShowYAxis"
+                    [legend]="barChartShowLegend" [showXAxisLabel]="barChartShowXAxisLabel"
+                    [showYAxisLabel]="barChartShowYAxisLabel" [xAxisLabel]="barChartXAxisLabel"
+                    [yAxisLabel]="barChartYAxisLabel" [roundEdges]="false" (select)="onSelect($event)">
+                  </ngx-charts-bar-vertical>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h5>Multiple Vertical Bar Chart</h5>
+            </div>
+            <div class="card-body">
+              <div class="flot-chart-container">
+                <div class="flot-chart-placeholder ngx-chart-direction" id="github-issues">
+                  <ngx-charts-bar-vertical-2d [scheme]="barChartColorScheme" [results]="multiData"
+                    [gradient]="barChartGradient" [xAxis]="barChartShowXAxis" [yAxis]="barChartShowYAxis"
+                    [legend]="barChartShowLegend" [showXAxisLabel]="barChartShowXAxisLabel"
+                    [showYAxisLabel]="barChartShowYAxisLabel" [xAxisLabel]="barChartXAxisLabel"
+                    [yAxisLabel]="barChartYAxisLabel" [roundEdges]="false" (select)="onSelect($event)">
+                  </ngx-charts-bar-vertical-2d>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 xl-100">
+          <div class="card">
+            <div class="card-header">
+              <h5>Single Pie Chart</h5>
+            </div>
+            <div class="card-body">
+              <div class="flot-chart-container">
+                <div class="flot-chart-placeholder ngx-chart-direction" id="github-issues">
+                  <ngx-charts-pie-chart [scheme]="pieChartColorScheme" [results]="pieChart" [explodeSlices]="true"
+                    [labels]="pieChartShowLabels" [doughnut]="false" arcWidth=0.30 [gradient]="pieChartGradient"
+                    (select)="onSelect($event)">
+                  </ngx-charts-pie-chart>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 xl-100">
+          <div class="card">
+            <div class="card-header">
+              <h5>Grid Pie Chart</h5>
+            </div>
+            <div class="card-body">
+              <div class="flot-chart-container grid-pie-chart">
+                <div class="flot-chart-placeholder ngx-chart-direction" id="github-issues">
+                  <ngx-charts-pie-grid [scheme]="pieChartColorScheme" [results]="pieChart" (select)="onSelect($event)">
+                  </ngx-charts-pie-grid>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h5>Line Chart</h5>
+            </div>
+            <div class="card-body">
+              <div class="flot-chart-container">
+                <div class="flot-chart-placeholder ngx-chart-direction" id="github-issues">
+                  <ngx-charts-line-chart [scheme]="areaChartcolorScheme" [results]="multiData"
+                    [gradient]="areaChartgradient" [xAxis]="areaChartshowXAxis" [yAxis]="areaChartshowYAxis"
+                    [showXAxisLabel]="areaChartshowXAxisLabel" [showYAxisLabel]="areaChartshowYAxisLabel"
+                    [xAxisLabel]="areaChartxAxisLabel" [curve]=lineChartcurve (select)="onSelect($event)">
+                  </ngx-charts-line-chart>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h5>Line Chart</h5>
+            </div>
+            <div class="card-body">
+              <div class="flot-chart-container">
+                <div class="flot-chart-placeholder ngx-chart-direction" id="github-issues">
+                  <ngx-charts-line-chart [scheme]="areaChartcolorScheme" [results]="multiData"
+                    [gradient]="areaChartgradient" [xAxis]="areaChartshowXAxis" [yAxis]="areaChartshowYAxis"
+                    [showXAxisLabel]="areaChartshowXAxisLabel" [showYAxisLabel]="areaChartshowYAxisLabel"
+                    [xAxisLabel]="areaChartxAxisLabel" [curve]="lineChartcurve1" (select)="onSelect($event)">
+                  </ngx-charts-line-chart>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 xl-100">
+          <div class="card">
+            <div class="card-header">
+              <h5>Area Chart</h5>
+            </div>
+            <div class="card-body">
+              <div class="flot-chart-container">
+                <div class="flot-chart-placeholder ngx-chart-direction" id="github-issues">
+                  <ngx-charts-area-chart [scheme]="areaChartcolorScheme" [results]="multiData"
+                    [gradient]="areaChartgradient" [xAxis]="areaChartshowXAxis" [yAxis]="areaChartshowYAxis"
+                    [showXAxisLabel]="areaChartshowXAxisLabel" [showYAxisLabel]="areaChartshowYAxisLabel"
+                    [xAxisLabel]="areaChartxAxisLabel" (select)="onSelect($event)">
+                  </ngx-charts-area-chart>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 xl-100">
+          <div class="card">
+            <div class="card-header">
+              <h5>Gauge Chart</h5>
+            </div>
+            <div class="card-body">
+              <div class="flot-chart-container">
+                <div class="flot-chart-placeholder ngx-chart-direction" id="github-issues">
+                  <ngx-charts-number-card [scheme]="barChartColorScheme" [results]="single">
+                  </ngx-charts-number-card>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <!-- Container-fluid Ends -->
+  </ion-content>
