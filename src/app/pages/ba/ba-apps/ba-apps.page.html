@@ -8,18 +8,20 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content class="main">
-    <ion-card>
-      <ion-item *ngFor="let item of apps" (click)="selectApp(item)">
-        <ion-label>
-          <h2 color="light">{{item.name}}</h2>
-        </ion-label>
-      </ion-item>
-    </ion-card>
-  </ion-content>
+  <!-- <ion-content class="main">
+  <ion-list *ngFor="let app of apps">
+    <ion-item>
+      <div>{{ app.name }}</div>
+    </ion-item>
+  </ion-list>
+</ion-content> -->
 
-  <ion-footer color="secondary">
-    <ion-toolbar>
-        <h2>BoardActive</h2>
-    </ion-toolbar>
-  </ion-footer>
+  <ion-content class="main">
+    <!-- <ion-card> -->
+    <ion-item *ngFor="let item of apps" (click)="selectApp(item)">
+      <ion-label>
+        <h2 color="light">{{item.name}}</h2>
+      </ion-label>
+    </ion-item>
+    <!-- </ion-card> -->
+  </ion-content>

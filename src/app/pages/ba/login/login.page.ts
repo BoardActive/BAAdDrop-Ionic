@@ -5,8 +5,6 @@ import { UtilService } from '../../../services/util/util.service';
 import { AppDto } from 'src/app/models/app.model';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import { Storage } from '@ionic/storage';
-import { BAService } from '../../../services/ba/ba.service';
-import { MeDto } from 'src/app/models/me.model';
 
 @Component({
   selector: 'app-login',
@@ -14,23 +12,24 @@ import { MeDto } from 'src/app/models/me.model';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  public email: any;
-  public password: any;
-  public developer: boolean = false;
-  public easteregg: number = 0;
+public email: any;
+public password: any;
+public developer: boolean = false;
+public easteregg: number = 0;
 
   constructor(
-    private baService: BAService,
+    private baService: BoardActiveService,
     private utilService: UtilService,
-    private menuCtrl: MenuController,
+    private menuCtrl: MenuController, 
     private localStorageService: LocalStorageService,
     private storage: Storage
+
   ) {
-  }
+   }
 
   ngOnInit() {
     this.localStorageService.getItem('environment').subscribe(dev => {
-      if (dev === 'dev') {
+      if(dev === 'dev') {
         this.developer = true;
       } else {
         this.developer = false;
@@ -53,7 +52,7 @@ export class LoginPage implements OnInit {
   }
 
   signIn() {
-    if (this.developer) {
+    if(this.developer) {
       this.localStorageService.setItem('environment', 'dev').subscribe(() => {
 
       });
@@ -63,30 +62,40 @@ export class LoginPage implements OnInit {
       });
     }
 
+    this.localStorageService.setItem('AppTest', '1').subscribe(() => {
+        
+    });
     this.localStorageService.setItem('UserEmail', this.email).subscribe(() => {
-
+        
     });
     this.localStorageService.setItem('UserPassword', this.password).subscribe(() => {
-
+        
     });
 
     this.baService.postLogin(this.email, this.password).subscribe(response => {
-      console.log(`postLogin: ${response}`);
-      this.baService.getMe().subscribe(response => {
-        let me: MeDto = response;
-        this.localStorageService.setItem('me', response).subscribe(() => {
+      const appModel: AppDto = response;
+      if (appModel.apps) {
+        this.storage.set('auth', true).then(() => {
+          this.localStorageService.setItem('apps', appModel).subscribe(() => {
+            if(appModel.apps.length === 1) {
+              this.localStorageService.setItem('AppID', appModel.apps[0].id).subscribe(() => {
+                this.utilService.navigate('/ba-messages', false);        
+              });
+            } else {
+              this.utilService.navigate('/ba-apps', false);
+            }    
+          });
         });
-
-        this.localStorageService.setItem('appId', me.apps[0].id).subscribe(() => {
-          this.utilService.navigate('/ba-reports', false);
-        });
-
-        this.localStorageService.setItem('appName', me.apps[0].name).subscribe(() => {
-        });
-
-      });
+      } else {
+        alert(`${response.message}`);
+      }
     });
   }
+
+  // hideDeveloperMode() {
+  //   this.developer = false;
+  //   this.easteregg = 0;
+  // }
 
   developerMode() {
     this.easteregg = this.easteregg + 1;

@@ -277,6 +277,26 @@ export class BoardActiveService {
 
             })
         });
+
+        // console.log(`[BA:BaClient] postLogin()`);
+        // return new Observable((observer) => {
+        //     const url = this.getEnvironment() + '/login';
+        //     console.log(`[BA:postLogin] url: ${url}`);
+
+        //     const body = {
+        //         email: email,
+        //         password: password
+        //     };
+
+        //     this.http.post(url, body, { params: {}, headers: {} }).subscribe((response) => {
+        //         // console.log(`[BA:postLogin]: ${JSON.stringify(response, null, 2)}`);
+        //         observer.next(response);
+        //         observer.complete();
+        //     }, err => {
+        //         observer.next(err);
+        //         observer.complete();
+        //     });
+        // });
     }
 
     /*
@@ -314,6 +334,34 @@ PUT /me
                 });
             })
         });
+
+        // console.log(`[BA:BaClient] putMe()`);
+        // return new Promise((resolve, reject) => {
+        //     const url = this.getEnvironment() + '/me';
+        //     console.log(`[BA:putMe] url: ${url}`);
+        //     this.storage.get('UserEmail').then(email => {
+        //         const deviceOS = this.device.platform;
+        //         const deviceOSVersion = this.device.version;
+
+        //         const body = {
+        //             email: email,
+        //             deviceOS: deviceOS,
+        //             deviceOSVersion: deviceOSVersion
+        //         };
+        //         console.log(`[BA:putMe] body: ${JSON.stringify(body, null, 2)}`);
+
+        //         this.generateHeaders().then(httpHeaders => {
+        //             console.log(`[BA:putMe] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
+        //             this.http.put(url, body, { headers: httpHeaders }).subscribe(response => {
+        //                 console.log(`[BA:putMe] RESPONSE: ${JSON.stringify(response, null, 2)}`);
+        //                 resolve(response);
+        //             }, err => {
+        //                 console.log(`[BA:putMe] ERROR: ${JSON.stringify(err, null, 2)}`);
+        //                 reject(err);
+        //             });
+        //         });
+        //     });
+        // });
     }
 
     /*
@@ -351,7 +399,57 @@ POST /me
                 });
             })
         });
+
+        // console.log(`[BA:BaClient] postMe()`);
+        // return new Promise((resolve, reject) => {
+        //     const url = this.getEnvironment() + '/me';
+        //     console.log(`[BA:postMe] url: ${url}`);
+        //     this.storage.get('UserEmail').then(email => {
+        //         const deviceOS = this.device.platform;
+        //         const deviceOSVersion = this.device.version;
+
+        //         const body = {
+        //             email: email,
+        //             deviceOS: deviceOS,
+        //             deviceOSVersion: deviceOSVersion
+        //         };
+        //         console.log(`[BA:postMe] body: ${JSON.stringify(body, null, 2)}`);
+
+        //         this.generateHeaders().then(httpHeaders => {
+        //             console.log(`[BA:postMe] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
+        //             this.http.post(url, body, { headers: httpHeaders }).subscribe(response => {
+        //                 console.log(`[BA:postMe] RESPONSE: ${JSON.stringify(response, null, 2)}`);
+        //                 resolve(response);
+        //             }, err => {
+        //                 console.log(`[BA:postMe] ERROR: ${JSON.stringify(err, null, 2)}`);
+        //                 reject(err);
+        //             });
+        //         });
+        //     });
+        // });
     }
+    /*
+    POST /locations
+    */
+    // postLocation(latitude: string, longitude: string): void {
+    //     console.log(`[BA:BaClient] postLocation()`);
+    //     const url = this.getEnvironment() + '/locations';
+    //     console.log(`[BA:postLocation] url: ${url}`);
+    //     const body = {
+    //         'latitude': latitude,
+    //         'longitude': longitude,
+    //         'deviceTime': new Date().toString()
+    //     };
+
+    //     this.generateHeaders().then(httpHeaders => {
+    //         console.log(`[BA:postLocation] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
+    //         this.http.post(url, body, { headers: httpHeaders }).subscribe(response => {
+    //             console.log(`[BA:postLocation] RESPONSE: ${JSON.stringify(response, null, 2)}`);
+    //         }, err => {
+    //             console.log(`[BA:postLocation] RESPONSE: ${JSON.stringify(err, null, 2)}`);
+    //         });
+    //     });
+    // }
 
     /*
     POST /locations
@@ -383,6 +481,29 @@ POST /me
                 });
             })
         });
+
+        // console.log(`[BA:BaClient] postLocationPromise()`);
+        // return new Promise((resolve, reject) => {
+
+        //     const url = this.getEnvironment() + '/locations';
+        //     console.log(`[BA:postLocationPromise] url: ${url}`);
+        //     const body = {
+        //         'latitude': latitude,
+        //         'longitude': longitude,
+        //         'deviceTime': new Date().toString()
+        //     };
+
+        //     this.generateHeaders().then(httpHeaders => {
+        //         console.log(`[BA:postLocationPromise] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
+        //         this.http.post(url, body, { headers: httpHeaders }).subscribe(response => {
+        //             console.log(`[BA:postLocationPromise] RESPONSE: ${JSON.stringify(response, null, 2)}`);
+        //             resolve(response);
+        //         }, err => {
+        //             console.log(`[BA:postLocationPromise] ERROR: ${JSON.stringify(err, null, 2)}`);
+        //             reject(err);
+        //         });
+        //     });
+        // });
     }
 
     /*
@@ -409,6 +530,25 @@ POST /me
                 });
             });
         })
+
+        // console.log(`[BA:BaClient] postEvent()`);
+        // const url = this.getEnvironment() + '/events';
+        // console.log(`[BA:postEvent] url: ${url}`);
+        // const body = {
+        //     'name': name,
+        //     'messageId': messageId,
+        //     'firebaseNotificationId': firebaseNotificationId,
+        //     'isTestMessage': testMsg
+        // };
+
+        // this.generateHeaders().then(httpHeaders => {
+        //     console.log(`[BA:postEvent] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
+        //     this.http.post(url, body, { headers: httpHeaders }).subscribe(response => {
+        //         console.log(`[BA:postEvent] RESPONSE: ${JSON.stringify(response, null, 2)}`);
+        //     }, err => {
+        //         console.log(`[BA:postEvent] ERROR: ${JSON.stringify(err, null, 2)}`);
+        //     });
+        // });
     }
 
     /**

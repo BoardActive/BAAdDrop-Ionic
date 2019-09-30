@@ -41,24 +41,24 @@
             <a href="tel:{{messageData.phoneNumber}}" target="_blank" *ngIf="messageData.phoneNumber">
                 <ion-icon name="call"></ion-icon>
             </a>
-            <a href="mailto:{{messageData.email}}" *ngIf="messageData.email">
+            <a href="#" (click)="email(messageData.email)" *ngIf="messageData.email">
                 <ion-icon name="mail"></ion-icon>
             </a>
-            <a href="http://maps.google.com/?q={{messageData.storeAddress}}" *ngIf="messageData.storeAddress">
+            <a href="#" (click)="mapAddress(messageData.storeAddress)" *ngIf="messageData.storeAddress">
                 <ion-icon name="navigate"></ion-icon>
             </a>
         </div>
         <div padding>
-            <a href="{{messageData.urlLandingPage}}" *ngIf="messageData.urlLandingPage">
+            <a href="#" (click)="openWindow(messageData.urlLandingPage)" *ngIf="messageData.urlLandingPage">
                 <ion-icon name="globe"></ion-icon>
             </a>
-            <a href="{{messageData.urlFacebook}}" *ngIf="messageData.urlFacebook">
+            <a href="#" (click)="openWindow(messageData.urlFacebook)" *ngIf="messageData.urlFacebook">
                 <ion-icon name="logo-facebook"></ion-icon>
             </a>
-            <a href="{{messageData.urlLinkedIn}}" *ngIf="messageData.urlLinkedIn">
+            <a href="#" (click)="openWindow(messageData.urlLinkedIn)" *ngIf="messageData.urlLinkedIn">
                 <ion-icon name="logo-linkedin"></ion-icon>
             </a>
-            <a href="{{messageData.urlTwitter}}" *ngIf="messageData.urlTwitter">
+            <a href="#" (click)="openWindow(messageData.urlTwitter)" *ngIf="messageData.urlTwitter">
                 <ion-icon name="logo-twitter"></ion-icon>
             </a>
         </div>

@@ -4,7 +4,6 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { BoardActiveService } from './services/boardactive/board-active.service';
 import { LocalStorageService } from './services/local-storage/local-storage.service';
-import { UtilService } from './services/util/util.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -14,10 +13,49 @@ export class AppComponent {
 
   public appMenu = [
     {
-      title: 'Reports',
+      title: 'View Token',
       icon: 'home',
       menuItem: 1,
       active: false
+    },
+    {
+      title: 'Device Registration',
+      icon: 'wallet',
+      menuItem: 2
+    },
+    {
+      title: 'App Variables',
+      icon: 'time',
+      menuItem: 3
+    }
+  ];
+
+  public notificationMenu = [
+    {
+      title: 'Basic',
+      icon: 'notifications',
+      menuItem: 4
+    },
+    {
+      title: 'Big Picture',
+      icon: 'notifications',
+      menuItem: 5
+    },
+    {
+      title: 'Action Button',
+      icon: 'notifications',
+      menuItem: 6
+    },
+    {
+      title: 'Big Text',
+      icon: 'notifications',
+      menuItem: 7
+    },
+    {
+      title: 'Inbox Style',
+      icon: 'notifications',
+      menuItem: 8
+
     }
   ];
 
@@ -27,8 +65,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private baService: BoardActiveService,
-    private localStorageService: LocalStorageService,
-    private utilService: UtilService
+    private localStorageService: LocalStorageService
   ) {
     this.initializeApp();
   }
@@ -43,11 +80,15 @@ export class AppComponent {
   menuAction(item: any) {
     switch (item.menuItem) {
       case 1:
-        this.utilService.navigate('ba-reports', true);
+        this.localStorageService.getItem('token').subscribe(token => {
+          alert(`${token}`);
+        });
         break;
       case 2:
-          this.utilService.navigate('ba-reports-ngx', true);
-          break;
+        this.baService.putMe().subscribe(device => {
+          alert(`${JSON.stringify(device, null, 2)}`);
+        });
+        break;
       case 3:
         this.baService.generateHeaders().then(headers => {
           alert(`${JSON.stringify(headers, null, 2)}`);

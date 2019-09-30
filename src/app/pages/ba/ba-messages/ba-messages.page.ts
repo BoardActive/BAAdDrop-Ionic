@@ -18,7 +18,7 @@ import BackgroundGeolocation, {
 } from '../../../services/cordova-background-geolocation';
 import { MessageDto, MessageModel } from 'src/app/models/message.model';
 
-// const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
+const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
 
 @Component({
   selector: 'app-ba-messages',
@@ -31,7 +31,6 @@ export class BaMessagesPage implements OnInit {
   public isRendering: boolean = true;
   public developer: boolean = false;
   public easteregg: number = 0;
-  public cntNotifications: number = 0;
 
   state: any;
   enabled: boolean;
@@ -46,11 +45,11 @@ export class BaMessagesPage implements OnInit {
 
   searchTerm: any = '';
   log_events: any;
-  
+
   // UI State
-  public menuActive: boolean;
-  public motionActivity: string;
-  public odometer: string;
+  menuActive: boolean;
+  motionActivity: string;
+  odometer: string;
 
   messages: MessageDto[];
 
@@ -82,7 +81,7 @@ export class BaMessagesPage implements OnInit {
     this.isMoving = false;
     this.enabled = true;
     this.autoSync = true;
-    this.distanceFilter = 10;
+    this.distanceFilter = 1;
     this.stopTimeout = 1;
     this.stopOnTerminate = false;
     this.startOnBoot = true;
@@ -140,7 +139,6 @@ export class BaMessagesPage implements OnInit {
       const eventMsg = 'BA Notification: receive';
       this.localStorageService.getItem('msg').subscribe(response => {
         this.addEvent(eventMsg, new Date(), response);
-        this.cntNotifications = this.cntNotifications + 1;
         this.getData();
       });
     });
@@ -191,7 +189,7 @@ export class BaMessagesPage implements OnInit {
     // Compose #url from username
     const localStorage = (<any>window).localStorage;
     const username = localStorage.getItem('username');
-    // const url = TRACKER_HOST + username;
+    const url = TRACKER_HOST + username;
 
     ////
     // Step 1:  listen to log_vents
@@ -199,7 +197,7 @@ export class BaMessagesPage implements OnInit {
     BackgroundGeolocation.onLocation(this.onLocation.bind(this));
     BackgroundGeolocation.onMotionChange(this.onMotionChange.bind(this));
     BackgroundGeolocation.onActivityChange(this.onActivityChange.bind(this));
-    // BackgroundGeolocation.onHttp(this.onHttpSuccess.bind(this));
+    BackgroundGeolocation.onHttp(this.onHttpSuccess.bind(this));
     BackgroundGeolocation.onProviderChange(this.onProviderChange.bind(this));
     BackgroundGeolocation.onHeartbeat(this.onHeartbeat.bind(this));
     BackgroundGeolocation.onPowerSaveChange(this.onPowerSaveChange.bind(this));
@@ -218,7 +216,7 @@ export class BaMessagesPage implements OnInit {
       stopOnTerminate: this.stopOnTerminate,
       heartbeatInterval: 60,
       // HTTP / Persistence config
-      // url: url,
+      url: url,
       params: BackgroundGeolocation.transistorTrackerParams(this.device),
       autoSync: this.autoSync,
       autoSyncThreshold: 0,
@@ -280,29 +278,21 @@ export class BaMessagesPage implements OnInit {
       this.motionActivity = `${event.activity}:${event.confidence}%`;
     });
   }
-
-  // onActivityChange(event:MotionActivityEvent) {
-  //   this.zone.run(() => {
-  //     this.state.activityName = event.activity;
-  //     this.state.activityIcon = this.iconMap['activity_' + event.activity];
-  //   });
-  //   console.log('[activitychange] -', event.activity, event.confidence);
-  // }
   /**
   * @event http
   */
-  // onHttpSuccess(response: HttpEvent) {
-  //   console.log('[event] http: ', response);
-  //   this.zone.run(() => {
-  //     this.addEvent('http', new Date(), response);
-  //   });
-  // }
-  // onHttpFailure(response: HttpEvent) {
-  //   console.warn('[event] http failure: ', response);
-  //   this.zone.run(() => {
-  //     this.addEvent('http failure', new Date(), response);
-  //   });
-  // }
+  onHttpSuccess(response: HttpEvent) {
+    console.log('[event] http: ', response);
+    this.zone.run(() => {
+      this.addEvent('http', new Date(), response);
+    });
+  }
+  onHttpFailure(response: HttpEvent) {
+    console.warn('[event] http failure: ', response);
+    this.zone.run(() => {
+      this.addEvent('http failure', new Date(), response);
+    });
+  }
   /**
   * @event heartbeat
   */

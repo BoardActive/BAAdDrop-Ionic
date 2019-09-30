@@ -21,11 +21,6 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from './services/local-storage/local-storage.service';
 
 import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { BAService } from './services/ba/ba.service';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,8 +33,7 @@ import { BAService } from './services/ba/ba.service';
     AppRoutingModule,
     IonicStorageModule.forRoot(),
     HttpClientModule,
-    BaMessagePageModule,
-    BrowserAnimationsModule    
+    BaMessagePageModule    
   ],
   providers: [
     StatusBar,
@@ -51,8 +45,7 @@ import { BAService } from './services/ba/ba.service';
     Device,
     FCMService,
     LocalNotifications,
-    LocalStorageService,
-    BAService
+    LocalStorageService
   ],
   bootstrap: [AppComponent]
 })

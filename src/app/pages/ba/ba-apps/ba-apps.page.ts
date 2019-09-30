@@ -13,7 +13,7 @@ import { Storage } from '@ionic/storage';
 })
 export class BaAppsPage implements OnInit {
   public appData: AppDto;
-  public apps: any[];
+  public apps: [];
 
   constructor(
     private utilService: UtilService,
@@ -27,11 +27,10 @@ export class BaAppsPage implements OnInit {
     this.storage.get('auth').then(auth => {
       console.log(`${auth}`);
       if (auth) {
-        this.localStorageService.getItem('me').subscribe(data => {
-          console.log(`me: ${JSON.stringify(data, null, 2)}`);
+        this.localStorageService.getItem('apps').subscribe(data => {
+          console.log(`apps: ${JSON.stringify(data, null, 2)}`);
           this.appData = data;
           this.apps = data.apps;
-          this.apps = this.apps.sort((a,b) => b.name - a.name);
           console.log(`${JSON.stringify(this.appData, null, 2)}`);
         });
       } else {
@@ -57,10 +56,8 @@ export class BaAppsPage implements OnInit {
       if(!data){
         this.baService.welcomeNotification(1);
       }   
-      this.localStorageService.setItem('appId', item.id).subscribe(() => {
-        this.localStorageService.setItem('appName', item.name).subscribe(() => {
-          this.utilService.navigate('/ba-reports', false);
-        });
+      this.localStorageService.setItem('AppID', item.id).subscribe(() => {
+        this.utilService.navigate('/ba-messages', false);
       });
     });
   }

@@ -19,11 +19,6 @@
       <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()">CLR</ion-button>
       <ion-button *ngIf="!showLog" size="small" color="tertiary" (click)="viewLog(true)">LOG</ion-button>
       <ion-button *ngIf="showLog" size="small" color="primary" (click)="viewLog(false)">HIDE</ion-button>
-      <ion-chip>
-        <ion-icon name="notifications"></ion-icon>
-        <ion-label>{{ cntNotifications }}</ion-label>
-      </ion-chip>
-      <p *ngIf="showLog" text-center><strong>Activity:</strong> {{motionActivity}}   <strong>Distance:</strong> {{odometer}}</p>
     </ion-toolbar>
   </ion-header>
 
@@ -47,28 +42,23 @@
   </ion-content>
 
   <ion-content class="main" *ngIf="showLog">
-    <!-- <ion-searchbar *ngIf="showLog" [(ngModel)]="searchTerm" (ionInput)="searchEvents($event)"></ion-searchbar> -->
-    <div class='logger'>
+      <ion-searchbar *ngIf="showLog" [(ngModel)]="searchTerm" (ionInput)="searchEvents($event)"></ion-searchbar>
+      <div class='logger'>
       <div *ngFor="let event of log_events">
-        <ion-row>
-          <ion-col>
-            <ion-item>
-              <ion-label>
-                <p><small class="title"><strong>[event]&nbsp;{{ event.name }}</strong></small></p>
-                <p><small class="timestamp">{{event.timestamp}}</small></p>
-                <pre><code>{{ event.content }}</code></pre>
-              </ion-label>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label>
+                  <p><small class="title"><strong>[event]&nbsp;{{ event.name }}</strong></small></p>
+                  <p><small class="timestamp">{{event.timestamp}}</small></p>
+                  <pre><code>{{ event.content }}</code></pre>
+                </ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
       </div>
     </div>
   </ion-content>
 
-  <!-- <ion-footer *ngIf="showLog">
-    <ion-toolbar>
-      <ion-title>
-        <span>{{motionActivity}}</span>        
-      </ion-title>
-    </ion-toolbar>
-  </ion-footer> -->
+  <ion-footer>
+  </ion-footer>

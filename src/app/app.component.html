@@ -20,14 +20,25 @@
         <ion-list lines="none" padding-top>
           <ion-menu-toggle auto-hide="false" *ngFor="let item of appMenu">
             <ion-item (click)=menuAction(item)>
-              <!-- <ion-icon slot="start" [name]="item.icon" [ngClass]="{'active':item.active}"></ion-icon> -->
-              <ion-label [ngClass]="{'active':item.active}">
+                <!-- <ion-icon slot="start" [name]="item.icon" [ngClass]="{'active':item.active}"></ion-icon> -->
+                <ion-label [ngClass]="{'active':item.active}">
                 {{item.title}}
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
-      </ion-content>
+        <ion-label>Notifications</ion-label>
+        <ion-list lines="none" padding-top>
+            <ion-menu-toggle auto-hide="false" *ngFor="let item of notificationMenu">
+              <ion-item (click)=menuAction(item)>
+                  <!-- <ion-icon slot="start" [name]="item.icon" [ngClass]="{'active':item.active}"></ion-icon> -->
+                  <ion-label [ngClass]="{'active':item.active}">
+                  {{item.title}}
+                </ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+        </ion-content>
     </ion-menu>
     <ion-router-outlet main></ion-router-outlet>
   </ion-split-pane>
