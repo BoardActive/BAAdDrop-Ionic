@@ -1,17 +1,17 @@
-  ion-content {
+ion-content{
     --background: linear-gradient(to top right, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
   }
   
- .main{
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+//  .main{
+//   height: 100vh;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+// }
 
-ion-card {
-  --background: var(--ion-color-primary-contrast);
-}
+// ion-card {
+//   --background: var(--ion-color-primary-contrast);
+// }
 
 h2 {
   padding: 20px;

@@ -35,6 +35,8 @@
           <p text-wrap>{{ item.body }}</p>
           <small>{{ item.dateCreated | date: "MM/dd/yyyy H:mm:ss" }}</small>
         </ion-label>
+        <ion-icon *ngIf="!item.isRead" src="assets/svg/ba-read.svg" color="primary" expand="icon-only" slot="end">
+        </ion-icon>
       </ion-item>
     </div>
   </ion-content>

@@ -17,6 +17,10 @@
       <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()">CLR</ion-button>
       <ion-button *ngIf="!showLog" size="small" color="tertiary" (click)="viewLog(true)">LOG</ion-button>
       <ion-button *ngIf="showLog" size="small" color="primary" (click)="viewLog(false)">HIDE</ion-button>
+      <ion-chip>
+        <ion-icon name="notifications"></ion-icon>
+        <ion-label>{{ cntNotifications }}</ion-label>
+      </ion-chip>
       <p *ngIf="showLog" text-center><strong>Activity:</strong> {{motionActivity}} <strong>Distance:</strong>
         {{odometer}}</p>
     </ion-toolbar>
@@ -35,6 +39,8 @@
           <p text-wrap>{{ item.body }}</p>
           <small>{{ item.dateCreated | date: "MM/dd/yyyy H:mm:ss" }}</small>
         </ion-label>
+        <ion-icon *ngIf="!item.isRead" src="assets/svg/ba-read.svg" color="primary" expand="icon-only" slot="end">
+        </ion-icon>
       </ion-item>
     </div>
   </ion-content>

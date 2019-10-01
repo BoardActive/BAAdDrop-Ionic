@@ -1,4 +1,4 @@
-  ion-content {
+ion-content{
     --background: linear-gradient(to top right, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
   }
   
@@ -33,8 +33,8 @@ h2 {
 .logo {
   display: flex;
   align-items: center;
-  flex-direction: column;
-  width: 100%;
+  // flex-direction: column;
+  // width: 100%;
   justify-content: center;
   ion-avatar {
     width: 60px;

@@ -1,4 +1,4 @@
-  ion-content {
+ion-content{
     --background: linear-gradient(to top right, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
   }
   
@@ -26,7 +26,7 @@ h2 {
 
 .auth-form {
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   justify-content: center;
 }
 
