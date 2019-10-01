@@ -1,0 +1,83 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title color="light">
+            Message
+        </ion-title>
+        <ion-buttons slot="end">
+            <ion-button icon-left size="large" color="light" shape="round" (click)="close()">
+                <ion-icon name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ng-container *ngIf="isRendering">
+        Loading...
+    </ng-container>
+    <ng-container *ngIf="!isRendering">
+        <div>
+            <img class="promotion-hero-img" [src]="sanitizer.bypassSecurityTrustResourceUrl(message.imageUrl)"/>
+        </div>
+        <!-- TODO this actions bar.. right now styles are hardcoded -->
+        <div padding>
+            <div class="fw500 text10">{{ message.title }}</div>
+            <div class="fw300 text08">{{ message.body }}</div>
+        </div>
+
+        <div padding>
+            <h2 class="fw700 text25" *ngIf="messageData.title">
+                {{ messageData.title }}
+            </h2>
+
+            <div class="fw300 text10" *ngIf="messageData.promoDateStarts">
+                <strong>Promo Starts:</strong> {{ messageData.promoDateStarts | date }}
+            </div>
+            <div lass="fw300 text10" *ngIf="messageData.promoDateEnds">
+                <strong>Promo Ends:</strong> {{ messageData.promoDateEnds | date }}
+            </div>
+        </div>
+        <div padding>
+            <a href="tel:{{messageData.phoneNumber}}" target="_blank" *ngIf="messageData.phoneNumber">
+                <ion-icon name="call"></ion-icon>
+            </a>
+            <a href="mailto:{{messageData.email}}" *ngIf="messageData.email">
+                <ion-icon name="mail"></ion-icon>
+            </a>
+            <a href="http://maps.google.com/?q={{messageData.storeAddress}}" *ngIf="messageData.storeAddress">
+                <ion-icon name="navigate"></ion-icon>
+            </a>
+        </div>
+        <div padding>
+            <a href="{{messageData.urlLandingPage}}" *ngIf="messageData.urlLandingPage">
+                <ion-icon name="globe"></ion-icon>
+            </a>
+            <a href="{{messageData.urlFacebook}}" *ngIf="messageData.urlFacebook">
+                <ion-icon name="logo-facebook"></ion-icon>
+            </a>
+            <a href="{{messageData.urlLinkedIn}}" *ngIf="messageData.urlLinkedIn">
+                <ion-icon name="logo-linkedin"></ion-icon>
+            </a>
+            <a href="{{messageData.urlTwitter}}" *ngIf="messageData.urlTwitter">
+                <ion-icon name="logo-twitter"></ion-icon>
+            </a>
+        </div>
+
+        <!-- <iframe *ngIf="messageData.urlYoutube" width="100%" height="315" src="{{youtubeUrl}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>         -->
+
+        <div padding *ngIf="messageData.urlQRCode">
+            <img src="{{messageData.urlQRCode}}" />
+        </div>
+
+        <div padding>
+            <ion-button shape="round" fill="outline" (click)="close()">Close</ion-button>
+        </div>
+
+        <!-- <div class="ba-mt3 ba-mx3 ba-mb3">
+          <button class="ba-btn" ion-button outline (click)="showMsg()" color="dark-grey">
+              Show Message</button>
+      </div> -->
+
+
+    </ng-container>
+</ion-content>
