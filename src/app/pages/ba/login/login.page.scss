@@ -1,8 +1,6 @@
-  ion-content {
-    --background: linear-gradient(to top right, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
-  }
-  
- .main{
+
+
+.main {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -41,7 +39,7 @@ h2 {
     height: 60px;
     margin: 0;
     border: 2px solid var(--ion-color-primary);
-    box-shadow: .5px .5px #69696A;
-    -webkit-box-shadow: .5px .5px #69696A;
+    box-shadow: 0.5px 0.5px #69696a;
+    -webkit-box-shadow: 0.5px 0.5px #69696a;
   }
 }
