@@ -9,12 +9,6 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-:root[mode="ios"] .montserrat,
-:root[mode="md"] .montserrat {
-  --ion-font-family: "Montserrat" !important;
-  font-family: "Montserrat" !important;
-}
-
 @font-face {
   font-family: "Montserrat";
   font-style: normal;
@@ -71,6 +65,18 @@
   src: url("./assets/fonts/Montserrat-BlackItalic.ttf");
 }
 
+
+:root[mode="ios"] .montserrat,
+:root[mode="md"] .montserrat {
+  --ion-font-family: "Montserrat" !important;
+  font-family: "Montserrat" !important;
+}
+
+// set base font family
+body, html {
+  font-family: "Montserrat" !important;
+}
+
 h1 {
   font-size: 2em;
   color: var(--ion-text-primary);
@@ -99,6 +105,18 @@ h4 {
   font-weight: normal;
 }
 
+h5 {
+  font-size: 0.7em;
+  color: var(--ion-text-secondary);
+  font-family: "Montserrat" !important;
+  font-weight: normal;
+}
+
+// just adding these cuz i could tell it wasnt a global change for some reason. quick hack
+p, small, div {
+  font-family: "Montserrat" !important;
+}
+
 ion-title {
   color: var(--ion-text-primary);
   font-family: "Montserrat" !important;
@@ -115,6 +133,10 @@ ion-title {
 .bold,
 .fw500 {
   font-weight: 500 !important;
+}
+
+.fw600 {
+  font-weight: 600 !important;
 }
 
 .fw700 {
@@ -206,6 +228,16 @@ ion-icon {
   margin: 0.3em;
   width: 2em;
   height: 2em;
+
+  &.icon-sm {
+    height: 24px;
+    width: 24px;
+  }
+
+  &.icon-mono {
+    color: var(--ion-color-medium);
+    fill: var(--ion-color-medium);
+  }
 }
 
 ion-back-button {
@@ -217,7 +249,7 @@ ion-back-button {
 }
 
 ion-button {
-  padding: 0 15.75px !important;
+  // padding: 0 15.75px !important;
   min-height: 30px;
   border-radius: 4px;
   border-width: 1px !important;

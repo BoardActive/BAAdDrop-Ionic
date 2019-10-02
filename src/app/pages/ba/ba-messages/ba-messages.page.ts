@@ -167,10 +167,6 @@ export class BaMessagesPage implements OnInit {
     this.utilService.navigate('/login', false);
   }
 
-  switchApp() {
-    this.utilService.navigate('/ba-apps', false);
-  }
-
   onDeviceReady() {
     console.log(`- configureBackgroundGeolocation:`);
     this.configureBackgroundGeolocation();

@@ -15,17 +15,17 @@ export class AppComponent {
 
   public appMenu = [
     {
-      title: 'View Token',
-      icon: 'home',
-      menuItem: 1
-    },
-    {
-      title: 'Device Registration',
+      title: 'Register Phone',
       icon: 'wallet',
       menuItem: 2
     },
     {
-      title: 'App Variables',
+      title: 'View App Token',
+      icon: 'home',
+      menuItem: 1
+    },
+    {
+      title: 'View App Variables',
       icon: 'time',
       menuItem: 3
     }
@@ -79,6 +79,10 @@ export class AppComponent {
     this.localStorageService.removeItem('apps');
     this.localStorageService.removeItem('appId');
     this.utilService.navigate('/login', false);
+  }
+
+  goApps() {
+    this.utilService.navigate('/ba-apps', false);
   }
 
 }

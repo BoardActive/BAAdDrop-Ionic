@@ -3,20 +3,14 @@
     <ion-menu class="sidemenu-1" side="start" type="overlay">
       <ion-content class="contentBg">
         <div>
-          <ion-card
-            no-padding
-            no-margin
-            slot="fixed"
-            class="driverCard fixed"
-            color="primary"
-          >
-            <ion-item lines="none" padding-vertical>
+          <ion-card no-padding no-margin slot="fixed" class="driverCard fixed">
+            <ion-item lines="none" padding-none>
               <div class="driverProfileImage">
                 <ion-avatar slot="start" class="profile">
                   <img src="assets/svg/ba-logo-wht.svg" />
                 </ion-avatar>
                 <div margin-start>
-                  <h2 class="userName" no-margin>BoardActive</h2>
+                  <h2 no-margin class="text-i fw700">BoardActive</h2>
                 </div>
               </div>
             </ion-item>
@@ -30,23 +24,52 @@
             fill="outline"
             (click)="sendWelcomeMessage()"
           >
-            Send welcome message
+            Send fake message
           </ion-button>
         </div>
-        <ion-list lines="none">
+        <ion-list>
+          <p class="text-secondary">For Developers</p>
           <ion-menu-toggle
             auto-hide="false"
             *ngFor="let item of appMenu"
             (click)="menuAction(item)"
           >
-            <p class="text-primary">
+            <p class="text-primary bold">
               {{ item.title }}
             </p>
           </ion-menu-toggle>
         </ion-list>
 
-        <div padding-vertical padding-horizontal style="margin-top: 16px;">
-          <small (click)="logout()" class="text-danger fw700">Logout</small>
+        <div style="margin: 32px 0;">
+          <ion-item
+            no-margin
+            class="off-action"
+            lines="none"
+            (click)="goApps()"
+          >
+            <ion-icon
+              item-start
+              src="assets/svg/ba-shuffle.svg"
+              class="icon-sm icon-mono"
+            >
+            </ion-icon>
+            <small class="bold text-primary">Change App</small>
+          </ion-item>
+
+          <ion-item
+            no-margin
+            class="off-action"
+            lines="none"
+            (click)="logout()"
+          >
+            <ion-icon
+              item-start
+              src="assets/svg/ba-log-out.svg"
+              class="icon-sm icon-mono"
+            >
+            </ion-icon>
+            <small class="bold text-danger">Logout</small>
+          </ion-item>
         </div>
       </ion-content>
     </ion-menu>

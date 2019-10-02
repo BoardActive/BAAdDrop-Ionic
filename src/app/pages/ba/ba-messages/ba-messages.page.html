@@ -4,13 +4,6 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <!-- <ion-icon
-      (click)="switchApp()"
-      src="assets/svg/ba-shuffle.svg"
-      expand="icon-only"
-      slot="end"
-    >
-    </ion-icon> -->
-    <!-- <ion-icon
       (click)="signOut()"
       src="assets/svg/ba-log-out.svg"
       expand="icon-only"
@@ -73,9 +66,9 @@
   <div *ngFor="let item of messages">
     <ion-item (click)="openMessage(item)" no-padding>
       <ion-col padding-horizontal padding-vertical>
-        <p no-margin class="fw700 text-primary">{{ item.title }}</p>
-        <p no-margin class="text-secondary">{{ item.body }}</p>
-        <small class="text-disabled"
+        <p no-margin class="fw600 text-primary">{{ item.title }}</p>
+        <p no-margin class="text-primary">{{ item.body }}</p>
+        <small class="text-secondary"
           >Received on {{ item.dateCreated | date: "MMMM d" }} at
           {{ item.dateCreated | date: "H:mm:ss" }}</small
         >
