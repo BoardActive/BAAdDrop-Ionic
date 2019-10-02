@@ -3,13 +3,13 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-icon
+    <!-- <ion-icon
       (click)="switchApp()"
       src="assets/svg/ba-shuffle.svg"
       expand="icon-only"
       slot="end"
     >
-    </ion-icon>
+    </ion-icon> -->
     <!-- <ion-icon
       (click)="signOut()"
       src="assets/svg/ba-log-out.svg"
@@ -17,7 +17,7 @@
       slot="end"
     >
     </ion-icon> -->
-    <h2 class="fw700" (click)="developerMode()" no-margin>Inbox</h2>
+    <h2 class="fw700" (click)="developerMode()" no-margin>Message inbox</h2>
   </ion-toolbar>
   <ion-toolbar *ngIf="development" color="secondary">
     <ion-button size="small" color="tertiary" (click)="putMe()"
@@ -57,8 +57,9 @@
     >
     </ion-refresher-content>
   </ion-refresher>
+  <!-- only show clear inbox if more than 2 -->
   <div
-    *ngIf="messages && messages.length"
+    *ngIf="messages && messages.length > 2"
     text-right
     margin-horizontal
     margin-vertical
