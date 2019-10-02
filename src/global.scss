@@ -75,14 +75,14 @@ h1 {
   font-size: 2em;
   color: var(--ion-text-primary);
   font-family: "Montserrat" !important;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 h2 {
   font-size: 1.2em;
   color: var(--ion-text-primary);
   font-family: "Montserrat" !important;
-  font-weight: 900;
+  font-weight: 500;
 }
 
 h3 {
@@ -100,7 +100,7 @@ h4 {
 }
 
 ion-title {
-  color: var(--ion-color-primary-contrast);
+  color: var(--ion-text-primary);
   font-family: "Montserrat" !important;
   font-weight: normal;
   text-transform: uppercase;
@@ -159,6 +159,10 @@ ion-title {
 
 .text-secondary {
   color: var(--ion-text-secondary);
+}
+
+.text-disabled {
+  color: var(--ion-text-disabled);
 }
 
 .text-dark {
