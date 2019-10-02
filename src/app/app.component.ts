@@ -4,6 +4,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { BoardActiveService } from './services/boardactive/board-active.service';
 import { LocalStorageService } from './services/local-storage/local-storage.service';
+import { UtilService } from './services/util/util.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -15,8 +17,7 @@ export class AppComponent {
     {
       title: 'View Token',
       icon: 'home',
-      menuItem: 1,
-      active: false
+      menuItem: 1
     },
     {
       title: 'Device Registration',
@@ -27,11 +28,6 @@ export class AppComponent {
       title: 'App Variables',
       icon: 'time',
       menuItem: 3
-    },
-    {
-      title: 'Welcome Notification',
-      icon: 'notifications',
-      menuItem: 4
     }
   ];
 
@@ -40,6 +36,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private baService: BoardActiveService,
+    private utilService: UtilService,
     private localStorageService: LocalStorageService
   ) {
     this.initializeApp();
@@ -52,6 +49,7 @@ export class AppComponent {
     });
   }
 
+  // what are all the other cases for? 
   menuAction(item: any) {
     switch (item.menuItem) {
       case 1:
@@ -69,22 +67,19 @@ export class AppComponent {
           alert(`${JSON.stringify(headers, null, 2)}`);
         });
         break;
-      case 4:
-        this.baService.welcomeNotification(1);
-        break;
-      case 5:
-        this.baService.welcomeNotification(2);
-        break;
-      case 6:
-        this.baService.welcomeNotification(3);
-        break;
-      case 7:
-        this.baService.welcomeNotification(4);
-        break;
-      case 8:
-        this.baService.welcomeNotification(5);
-        break;
     }
+  }
+  sendWelcomeMessage(type: any) {
+    type = type || 1; // default to 1
+    this.baService.welcomeNotification(type);
+  }
+
+  logout() {
+    this.localStorageService.removeItem('auth');
+    this.localStorageService.removeItem('apps');
+    this.localStorageService.removeItem('appId');
+    this.utilService.navigate('/login', false);
   }
 
 }
+

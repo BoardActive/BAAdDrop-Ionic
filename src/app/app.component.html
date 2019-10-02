@@ -3,11 +3,17 @@
     <ion-menu class="sidemenu-1" side="start" type="overlay">
       <ion-content class="contentBg">
         <div>
-          <ion-card no-padding no-margin slot="fixed" class="driverCard fixed" color="primary">
+          <ion-card
+            no-padding
+            no-margin
+            slot="fixed"
+            class="driverCard fixed"
+            color="primary"
+          >
             <ion-item lines="none" padding-vertical>
               <div class="driverProfileImage">
                 <ion-avatar slot="start" class="profile">
-                  <img src="assets/svg/ba-logo-wht.svg">
+                  <img src="assets/svg/ba-logo-wht.svg" />
                 </ion-avatar>
                 <div margin-start>
                   <h2 class="userName" no-margin>BoardActive</h2>
@@ -16,15 +22,32 @@
             </ion-item>
           </ion-card>
         </div>
-        <ion-list lines="none" padding-top>
-          <ion-menu-toggle auto-hide="false" *ngFor="let item of appMenu">
-            <ion-item (click)=menuAction(item)>
-              <ion-label [ngClass]="{'active':item.active}">
-                {{item.title}}
-              </ion-label>
-            </ion-item>
+        <div padding-vertical padding-horizontal>
+          <ion-button
+            no-margin
+            ion-button
+            color="secondary"
+            fill="outline"
+            (click)="sendWelcomeMessage()"
+          >
+            Send welcome message
+          </ion-button>
+        </div>
+        <ion-list lines="none">
+          <ion-menu-toggle
+            auto-hide="false"
+            *ngFor="let item of appMenu"
+            (click)="menuAction(item)"
+          >
+            <p class="text-primary">
+              {{ item.title }}
+            </p>
           </ion-menu-toggle>
         </ion-list>
+
+        <div padding-vertical padding-horizontal style="margin-top: 16px;">
+          <small (click)="logout()" class="text-danger fw700">Logout</small>
+        </div>
       </ion-content>
     </ion-menu>
     <ion-router-outlet main></ion-router-outlet>

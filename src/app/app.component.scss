@@ -1,7 +1,7 @@
 // PROFILE -- Sidemenu Layout 1 styling START
 .sidemenu-1 {
     .contentBg {
-      --background: #f8f8f8 !important;
+      --background: var(--ion-color-light-tint) !important;
       ion-list {
         padding-left: 28px;
         ion-icon {
@@ -54,11 +54,6 @@
               padding-bottom: 0;
               color: #ff4646;
               font-size: 11px;
-            }
-            .userName {
-              letter-spacing: 1px;
-              margin-bottom: 10px;
-              color: white;
             }
           }
         }
