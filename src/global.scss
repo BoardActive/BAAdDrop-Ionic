@@ -76,8 +76,7 @@
     font-weight: bold;
     color: var(--ion-color-primary);
     font-family: "Montserrat" !important;
-    font-style: 900;
-    padding: .5em;
+    font-weight: 900;
   }
 
   h2 {
@@ -85,8 +84,7 @@
     font-weight: bold;
     color: var(--ion-color-primary);
     font-family: "Montserrat" !important;
-    font-style: 900;
-    padding: .1em;
+    font-weight: 900;
   }
 
   h3 {
@@ -94,8 +92,7 @@
     font-weight: bold;
     color: var(--ion-color-secondary);
     font-family: "Montserrat" !important;
-    font-style: normal;
-    padding: .1em;
+    font-weight: normal;
   }
 
   h4 {
@@ -103,14 +100,13 @@
     font-weight: bold;
     color: var(--ion-color-secondary);
     font-family: "Montserrat" !important;
-    font-style: normal;
-    padding: .1em;
+    font-weight: normal;
   }
 
   ion-title {
     color: var(--ion-color-primary-contrast);
     font-family: "Montserrat" !important;
-    font-style: normal;
+    font-weight: normal;
     text-transform: uppercase;
     letter-spacing: 4px;
   }
