@@ -10,7 +10,7 @@
       slot="end"
     >
     </ion-icon> -->
-    <h2 class="fw700" (click)="developerMode()" no-margin>Message inbox</h2>
+    <h2 class="fw700" (click)="developerMode()" no-margin>Message Inbox</h2>
   </ion-toolbar>
   <ion-toolbar *ngIf="development" color="dark">
     <ion-row padding-horizontal>
@@ -66,8 +66,8 @@
   <div *ngFor="let item of messages">
     <ion-item (click)="openMessage(item)" no-padding>
       <ion-col padding-horizontal padding-vertical>
-        <p no-margin class="fw600 text-primary">{{ item.title }}</p>
-        <p no-margin class="text-primary">{{ item.body }}</p>
+        <p no-margin class="fw600 text-primary mb-1">{{ item.title }}</p>
+        <p no-margin class="text-primary mb-1">{{ item.body }}</p>
         <small class="text-secondary"
           >Received on {{ item.dateCreated | date: "MMMM d" }} at
           {{ item.dateCreated | date: "H:mm:ss" }}</small
