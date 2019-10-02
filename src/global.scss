@@ -73,32 +73,28 @@
 
 h1 {
   font-size: 2em;
-  font-weight: bold;
-  color: var(--ion-color-primary);
+  color: var(--ion-text-primary);
   font-family: "Montserrat" !important;
   font-weight: 900;
 }
 
 h2 {
   font-size: 1.2em;
-  font-weight: bold;
-  color: var(--ion-color-primary);
+  color: var(--ion-text-primary);
   font-family: "Montserrat" !important;
   font-weight: 900;
 }
 
 h3 {
   font-size: 0.9em;
-  font-weight: bold;
-  color: var(--ion-color-secondary);
+  color: var(--ion-text-secondary);
   font-family: "Montserrat" !important;
   font-weight: normal;
 }
 
 h4 {
   font-size: 0.8em;
-  font-weight: bold;
-  color: var(--ion-color-secondary);
+  color: var(--ion-text-secondary);
   font-family: "Montserrat" !important;
   font-weight: normal;
 }
@@ -149,20 +145,28 @@ ion-title {
   font-size: 2.5rem;
 }
 
-.text-white {
-  color: #fff;
+.text-i {
+  color: var(--ion-inverse-text-primary);
+}
+
+.text-i2 {
+  color: var(--ion-inverse-text-secondary);
 }
 
 .text-primary {
-  color: var(--ion-color-primary);
+  color: var(--ion-text-primary);
 }
 
 .text-secondary {
-  color: var(--ion-color-secondary);
+  color: var(--ion-text-secondary);
 }
 
 .text-dark {
   color: var(--ion-color-dark);
+}
+
+.text-danger {
+  color: var(--ion-color-danger);
 }
 
 ion-content {
@@ -215,12 +219,13 @@ ion-header {
 }
 
 ion-toolbar {
-  --background: linear-gradient(
-    to top right,
-    var(--ion-color-primary) 0%,
-    var(--ion-color-primary-shade) 100%
-  );
-  color: var(--ion-color-primary-contrast);
+  // --background: linear-gradient(
+  //   to top right,
+  //   var(--ion-color-primary) 0%,
+  //   var(--ion-color-primary-shade) 100%
+  // );
+  background: var(--ion-color-light) !important;
+  color: var(--ion-text-primary);
 }
 
 ion-content {
@@ -246,6 +251,11 @@ ion-text {
   border: 1px solid var(--ion-color-light-tint);
   border-radius: 4px;
   font-size: 0.9em !important;
+}
+
+.link {
+  color: var(--ion-color-primary) !important;
+  cursor: pointer;
 }
 
 @media screen and (min-width: 767px) {

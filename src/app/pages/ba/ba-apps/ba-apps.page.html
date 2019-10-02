@@ -1,17 +1,18 @@
 <ion-header>
-  <ion-header>
-    <ion-toolbar>
-      <ion-icon (click)='signOut()' src="assets/svg/ba-log-out.svg" expand="icon-only" color="light" mode="md"
+  <ion-toolbar>
+    <!-- <ion-icon (click)='signOut()' src="assets/svg/ba-log-out.svg" expand="icon-only" color="light" mode="md"
         slot="end">
-      </ion-icon>
-      <ion-title><strong>Select An App</strong></ion-title>
-    </ion-toolbar>
-  </ion-header>
+      </ion-icon> -->
+    <h2 padding-horizontal padding-top class="fw700">Select an App</h2>
+  </ion-toolbar>
+</ion-header>
 
-  <ion-content class="main">
-    <ion-item *ngFor="let item of apps" (click)="selectApp(item)">
-      <ion-label>
-        <h2 color="light">{{item.name}}</h2>
-      </ion-label>
-    </ion-item>
-  </ion-content>
+<ion-content class="main">
+  <ion-item *ngFor="let item of apps" (click)="selectApp(item)" no-padding>
+    <h3 class="link" padding-horizontal>{{ item.name }}</h3>
+  </ion-item>
+
+  <ion-row padding-vertical padding-horizontal>
+    <div (click)="signOut()" class="text-danger">Logout</div>
+  </ion-row>
+</ion-content>
