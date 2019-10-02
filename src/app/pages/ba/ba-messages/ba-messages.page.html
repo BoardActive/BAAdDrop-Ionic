@@ -3,28 +3,21 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <!-- <ion-icon
+    <ion-icon
       (click)="switchApp()"
       src="assets/svg/ba-shuffle.svg"
       expand="icon-only"
-      slot="start"
+      slot="end"
     >
     </ion-icon>
-    <ion-icon
+    <!-- <ion-icon
       (click)="signOut()"
       src="assets/svg/ba-log-out.svg"
       expand="icon-only"
       slot="end"
     >
-    </ion-icon>
-    <ion-icon
-      (click)="presentAlertConfirm()"
-      src="assets/svg/ba-trash.svg"
-      expand="icon-only"
-      slot="end"
-    >
     </ion-icon> -->
-    <ion-title (click)="developerMode()">Messages</ion-title>
+    <h2 class="fw700" (click)="developerMode()" no-margin>Inbox</h2>
   </ion-toolbar>
   <ion-toolbar *ngIf="development" color="secondary">
     <ion-button size="small" color="tertiary" (click)="putMe()"
@@ -64,12 +57,25 @@
     >
     </ion-refresher-content>
   </ion-refresher>
+  <div
+    *ngIf="messages && messages.length"
+    text-right
+    margin-horizontal
+    margin-vertical
+  >
+    <small (click)="presentAlertConfirm()" class="fw700 text-danger">
+      Clear inbox
+    </small>
+  </div>
   <div *ngFor="let item of messages">
     <ion-item (click)="openMessage(item)" no-padding>
       <ion-col padding-horizontal padding-vertical>
         <p no-margin class="fw700 text-primary">{{ item.title }}</p>
         <p no-margin class="text-secondary">{{ item.body }}</p>
-        <small class="text-disabled">Received on {{ item.dateCreated | date: "MMMM d" }} at {{ item.dateCreated | date: "H:mm:ss" }}</small>
+        <small class="text-disabled"
+          >Received on {{ item.dateCreated | date: "MMMM d" }} at
+          {{ item.dateCreated | date: "H:mm:ss" }}</small
+        >
       </ion-col>
     </ion-item>
   </div>
