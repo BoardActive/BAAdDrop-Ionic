@@ -78,55 +78,26 @@ export class BoardActiveService {
                 thisMsg.notificationId = payload['gcm.message_id'];
                 thisMsg.dateCreated = myDate;
                 thisMsg.dateLastUpdated = myDate;
-                this.addMessage(thisMsg);
                 this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
                 this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                     this.events.publish('notification:receive');
                 });
                 if (thisMsg.tap) {
+                    this.addMessage(thisMsg);
                     console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg));
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                         this.events.publish('notification:tap');
                     });
                     this.modalMessage(thisMsg);
                 } else {
+                    this.addMessage(thisMsg);
                     console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
+                    this.newLocalNotification(thisMsg, 1);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                         this.events.publish('notification:notap');
                     });
                 }
             })).subscribe(
-                //     response => {
-                //     const myDate: string = new Date().toISOString();
-                //     console.log(`listenToNotifications: ${JSON.stringify(response, null, 2)}`);
-                //     let msg: MessageDto = MessageModel.empty();
-                //     msg = response;
-                //     msg.dateCreated = myDate;
-                //     msg.dateLastUpdated = myDate;
-                //     msg.notificationId = response['gcm.message_id'];
-                //     this.addMessage(msg);
-                //     this.postEvent('received', response.messageId, response['gcm.message_id'], response.isTestMessage);
-                //     this.localStorageService.setItem('msg', msg).subscribe(response => {
-                //         this.events.publish('notification:receive');
-                //     });
-                //     if (msg.tap) {
-                //         console.log(`[BA:TAP] : ` + JSON.stringify(msg));
-                //         this.localStorageService.setItem('msg', msg).subscribe(response => {
-                //             this.events.publish('notification:tap');
-                //         });
-                //         this.modalMessage(response);
-                //     } else {
-                //         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(response));
-                //         // this.localStorageService.getItem(`msgType`).subscribe(type => {
-                //         this.newLocalNotification(msg, 1);
-                //         // });
-
-                //         this.localStorageService.setItem('msg', msg).subscribe(response => {
-                //             this.events.publish('notification:notap');
-                //         });
-
-                //     }
-                // }
             );
         });
     }
@@ -137,7 +108,7 @@ export class BoardActiveService {
     */
 
     public getEnvironment(): Observable<any> {
-        console.log(`[BA:BaClient] refreshFCMToken()`);
+        console.log(`[BA:BaClient] getEnvironment()`);
 
         return new Observable((observer) => {
             this.localStorageService.getItem('environment').subscribe(env => {
@@ -652,10 +623,14 @@ export class BoardActiveService {
             msg.aps = '';
             msg.messageData = "{\"title\": \"An awesome promotion\",\"phoneNumber\": \"(678) 383-2200\",\"email\": \"info@boardactive.com\",\"storeAddress\": \"800 Battery Ave, SE Two Ballpark Center Suite 3132 Atlanta, GA 30339\",\"promoDateStarts\": \"5/1/19\",\"promoDateEnds\": \"10/1/19\",\"urlQRCode\": \"https://bit.ly/2FhOjiO\",\"urlLandingPage\": \"https://boardactive.com/\",\"urlFacebook\": \"https://www.facebook.com/BoardActive/\",\"urlLinkedIn\": \"https://www.linkedin.com/company/boardactive/\",\"urlTwitter\": \"https://twitter.com/boardactive\",\"urlYoutube\": \"https://www.youtube.com/embed/5Fi6surCFpQ\"}";
             this.addMessage(msg);
+            this.newLocalNotification(msg, 1);
         });
     }
 
     newLocalNotification(msg: MessageDto, type: number) {
+        this.localStorageService.setItem('msg', msg).subscribe(response => {
+            this.events.publish('notification:receive');
+        });
         console.log(`newLocalNotification`);
         switch (type) {
             case 1: // Basic Notification
@@ -663,7 +638,8 @@ export class BoardActiveService {
                 this.localNotifications.schedule({
                     id: msg.id,
                     title: msg.title,
-                    text: msg.body
+                    text: msg.body,
+                    foreground: true
                 });
                 break;
             case 2: // BigPic Notification
@@ -673,6 +649,7 @@ export class BoardActiveService {
                     title: msg.title,
                     text: msg.body,
                     attachments: [msg.imageUrl],
+                    foreground: true
                 });
                 break;
             case 3: // ActionButton Notification
@@ -681,6 +658,7 @@ export class BoardActiveService {
                     id: msg.id,
                     title: msg.title,
                     text: msg.body,
+                    foreground: true,
                     attachments: [msg.imageUrl],
                     actions: [
                         { id: 'yes', title: 'Yes' },
@@ -693,7 +671,8 @@ export class BoardActiveService {
                 this.localNotifications.schedule({
                     id: msg.id,
                     title: msg.title,
-                    text: msg.body
+                    text: msg.body,
+                    foreground: true
                 });
                 break;
             case 5: // Inbox Notification
@@ -701,20 +680,24 @@ export class BoardActiveService {
                 this.localNotifications.schedule({
                     id: msg.id,
                     title: msg.title,
-                    text: msg.body
+                    text: msg.body,
+                    foreground: true
                 });
                 break;
             default:
                 this.localNotifications.schedule({
                     id: msg.id,
                     title: msg.title,
-                    text: msg.body
+                    text: msg.body,
+                    foreground: true
                 });
         }
     }
 
     addMessage(msg: MessageDto) {
         console.log(`addMessage`);
+        // const myDate: string = new Date().toISOString();
+
         let messages: MessageDto[] = [];
         this.localStorageService.getItem('messages').subscribe(data => {
             if (data) {
@@ -725,6 +708,30 @@ export class BoardActiveService {
             this.localStorageService.setItem('messages', messages).subscribe((data) => {
                 console.log(`addMessage() setItem: ${JSON.stringify(data, null, 2)}`);
                 this.events.publish('notification:receive');
+                // const log = {
+                //     name: 'addMessage' + '-',
+                //     timestamp: myDate,
+                //     object: event,
+                //     content: JSON.stringify(msg, null, 2)
+                // };
+                // this.addLogDB(log).then(result => {
+                // });
+            });
+        });
+    }
+
+    addLogDB(logentry: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            console.log(`addLocalLog`);
+            let logEntries = [];
+            this.localStorageService.getItem('logDB').subscribe(log => {
+                if (log) {
+                    logEntries = log;
+                }
+                logEntries.push(logentry);
+                this.localStorageService.setItem('logDB', logEntries).subscribe(() => {
+                });
+                resolve(logEntries);
             });
         });
     }

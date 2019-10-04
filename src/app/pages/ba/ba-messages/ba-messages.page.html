@@ -3,38 +3,24 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <!-- <ion-icon
-      (click)="signOut()"
-      src="assets/svg/ba-log-out.svg"
-      expand="icon-only"
-      slot="end"
-    >
-    </ion-icon> -->
     <h2 class="fw700" (click)="developerMode()" no-margin>Message Inbox</h2>
   </ion-toolbar>
   <ion-toolbar *ngIf="development" color="dark">
     <ion-row padding-horizontal>
-      <ion-button size="small" color="tertiary" (click)="putMe()"
-        >putMe</ion-button
-      >
-      <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()"
-        >CLR</ion-button
-      >
-      <ion-button
-        *ngIf="!showLog"
-        size="small"
-        color="tertiary"
-        (click)="viewLog(true)"
-        >LOG</ion-button
-      >
-      <ion-button
-        *ngIf="showLog"
-        size="small"
-        color="primary"
-        (click)="viewLog(false)"
-        >HIDE</ion-button
-      >
-      <p *ngIf="showLog" text-center>
+      <!-- <ion-button size="small" color="tertiary" (click)="putMe()">putMe</ion-button> -->
+      <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()">CLR</ion-button>
+      <ion-button size="small" color="{{showInbox ? 'success' : 'warning'}}" (click)="viewSwap('inbox')">INBOX
+      </ion-button>
+
+      <ion-button size="small" color="{{showLog ? 'success' : 'warning'}}" (click)="viewSwap('log')">LOG</ion-button>
+
+      <ion-button size="small" color="{{showMap ? 'success' : 'warning'}}" (click)="viewSwap('map')">MAP</ion-button>
+
+      <ion-button *ngIf="showLog" size="small" color="{{log_events_run ? 'danger' : 'success'}}" (click)="loggingRun()">
+        <ion-icon name="{{log_events_run ? 'pause' : 'play'}}"></ion-icon>
+      </ion-button>
+
+      <p *ngIf="showLog" class="activity" text-center>
         <strong>Activity:</strong> {{ motionActivity }}
         <strong>Distance:</strong> {{ odometer }}
       </p>
@@ -42,23 +28,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="main" *ngIf="!showLog">
+<ion-content class="main" *ngIf="showInbox">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content
-      pullingIcon="arrow-dropdown"
-      pullingText="Pull to refresh"
-      refreshingSpinner="circles"
-      refreshingText="Refreshing..."
-    >
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
-  <!-- only show clear inbox if more than 2 -->
-  <div
-    *ngIf="messages && messages.length > 2"
-    text-right
-    margin-horizontal
-    margin-vertical
-  >
+  <div *ngIf="messages && messages.length > 2" text-right margin-horizontal margin-vertical>
     <small (click)="presentAlertConfirm()" class="fw700 text-danger">
       Clear inbox
     </small>
@@ -68,10 +44,8 @@
       <ion-col padding-horizontal padding-vertical>
         <p no-margin class="fw600 text-primary mb-1">{{ item.title }}</p>
         <p no-margin class="text-primary mb-1">{{ item.body }}</p>
-        <small class="text-secondary"
-          >Received on {{ item.dateCreated | date: "MMMM d" }} at
-          {{ item.dateCreated | date: "H:mm:ss" }}</small
-        >
+        <small class="text-secondary">Received on {{ item.dateCreated | date: "MMMM d" }} at
+          {{ item.dateCreated | date: "H:mm:ss" }}</small>
       </ion-col>
     </ion-item>
   </div>
@@ -79,15 +53,13 @@
 
 <ion-content class="main" *ngIf="showLog">
   <div class="logger">
-    <div *ngFor="let event of log_events">
+    <div *ngFor="let event of log_events_db">
       <ion-row>
         <ion-col>
           <ion-item>
             <ion-label>
               <p>
-                <small class="title"
-                  ><strong>[event]&nbsp;{{ event.name }}</strong></small
-                >
+                <small class="title"><strong>[event]&nbsp;{{ event.name }}</strong></small>
               </p>
               <p>
                 <small class="timestamp">{{ event.timestamp }}</small>

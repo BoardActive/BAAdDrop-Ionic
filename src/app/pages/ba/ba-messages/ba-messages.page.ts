@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Platform, Events, AlertController, IonContent } from '@ionic/angular';
 import { UtilService } from '../../../services/util/util.service';
 import { BoardActiveService } from '../../../services/boardactive/board-active.service';
@@ -20,8 +20,10 @@ import { MessageDto } from 'src/app/models/message.model';
   templateUrl: './ba-messages.page.html',
   styleUrls: ['./ba-messages.page.scss'],
 })
-export class BaMessagesPage implements OnInit {
-  @ViewChild(IonContent, null) content: IonContent;
+export class BaMessagesPage implements OnInit, AfterViewInit {
+  // @ViewChild(IonContent, null) content: IonContent;
+  @ViewChild('map', { static: false }) mapElement: ElementRef;
+
   public development: boolean = false;
   public isRendering: boolean = true;
   public developer: boolean = false;
@@ -39,8 +41,10 @@ export class BaMessagesPage implements OnInit {
   debug: boolean;
   provider: any;
 
-  log_events: any;
-  
+  forground: boolean;
+  log_events_run: boolean = true;
+  log_events_db: any;
+
   // UI State
   public menuActive: boolean;
   public motionActivity: string;
@@ -48,7 +52,9 @@ export class BaMessagesPage implements OnInit {
 
   messages: MessageDto[];
 
+  showInbox: boolean = true;
   showLog: boolean = false;
+  showMap: boolean = false;
 
   constructor(
     private baService: BoardActiveService,
@@ -61,8 +67,10 @@ export class BaMessagesPage implements OnInit {
     private alertController: AlertController,
     private events: Events
   ) {
+    this.forground = true
+    this.log_events_db = [];
 
-    this.log_events = [];
+    this.addEvent('Start Logging', new Date(), 'Now logging events');
 
     this.platform.ready().then(() => {
       if (this.platform.is('cordova')) {
@@ -96,7 +104,7 @@ export class BaMessagesPage implements OnInit {
     });
 
     this.localStorageService.getItem('UserEmail').subscribe(email => {
-      if(email === 'tom@axiomaim.com') {
+      if (email === 'tom@axiomaim.com') {
         this.developer = true;
       }
     })
@@ -118,6 +126,12 @@ export class BaMessagesPage implements OnInit {
 
     this.getData();
 
+  }
+
+  ngAfterViewInit() {
+    console.log('ionViewDidLoad HomePage');
+    // this.configureMap();
+    // this.configureBackgroundGeolocation();
   }
 
   ionViewDidEnter() {
@@ -252,7 +266,7 @@ export class BaMessagesPage implements OnInit {
   * @event activitychange
   */
   onActivityChange(event: MotionActivityEvent) {
-    console.log('[event] activitychange: ', event);
+    console.log('[event] activitychange: ', JSON.stringify(event, null, 2));
     this.zone.run(() => {
       this.addEvent('activitychange', new Date(), `${event.activity}:${event.confidence}%`);
       this.motionActivity = `${event.activity}:${event.confidence}%`;
@@ -301,18 +315,42 @@ export class BaMessagesPage implements OnInit {
   */
   private addEvent(name, date, event) {
     const timestamp = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    let log: any;
+    if (this.log_events_run) {
 
-    this.log_events.unshift({
-      name: name,
-      timestamp: timestamp,
-      object: event,
-      content: JSON.stringify(event, null, 2)
-    });
+      if (this.forground) {
+        log = {
+          name: name + '+',
+          timestamp: timestamp,
+          object: event,
+          content: JSON.stringify(event, null, 2)
+        };
+      } else {
+        log = {
+          name: name + '-',
+          timestamp: timestamp,
+          object: event,
+          content: JSON.stringify(event, null, 2)
+        };
+      }
+    }
+
+
+    if (this.log_events_run) {
+      // this.baService.addLogDB(log).then(logEntries => {
+      //   console.log(`logEntries: ${JSON.stringify(logEntries, null, 2)}`);
+      //   this.log_events_db = logEntries;
+      //   this.log_events_db = this.log_events_db.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      // });
+      this.log_events_db.unshift(log);
+      // this.log_events_db = this.log_events_db.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    }
   }
 
   putMe() {
     this.baService.putMe().subscribe(response => {
       console.log(JSON.stringify(response, null, 2));
+      this.addEvent('putMe()', new Date(), response);
     });
   }
 
@@ -325,7 +363,7 @@ export class BaMessagesPage implements OnInit {
   getData() {
     this.localStorageService.getItem('messages').subscribe(data => {
       this.messages = data;
-      this.messages = this.messages.sort((a,b) => new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime());
+      this.messages = this.messages.sort((a, b) => new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime());
       console.log(`getData() messages: ${JSON.stringify(this.messages, null, 2)}`);
     });
   }
@@ -333,7 +371,11 @@ export class BaMessagesPage implements OnInit {
   clearMsg() {
     this.cntNotifications = 0;
     if (this.showLog) {
-      this.log_events = [];
+      const logEntries = [];
+      this.localStorageService.setItem('logDB', logEntries).subscribe(() => {
+        this.log_events_db = logEntries;
+      });
+
     } else {
       this.localStorageService.removeItem('msgCnt');
       this.localStorageService.removeItem('msg');
@@ -397,8 +439,29 @@ export class BaMessagesPage implements OnInit {
     await alert.present();
   }
 
-  viewLog(show: boolean) {
-    this.showLog = show;
+  viewSwap(view: any) {
+    switch (view) {
+      case 'inbox': {
+        this.showInbox = true;
+        this.showLog = false;
+        this.showMap = false;
+        break;
+      }
+      case 'log': {
+        this.showInbox = false;
+        this.showLog = true;
+        this.showMap = false;
+        break;
+      }
+      case 'map': {
+        // this.showInbox = false;
+        // this.showLog = false;
+        // this.showMap = true;
+        this.utilService.navigate('/ba-map', false);
+        break;
+      }
+    }
+
   }
 
   developerMode() {
@@ -411,4 +474,24 @@ export class BaMessagesPage implements OnInit {
     }
   }
 
+  loggingRun() {
+    if (this.log_events_run) {
+      this.addEvent('Pause Logging', new Date(), 'Not logging events');
+      this.log_events_run = false;
+    } else {
+      this.log_events_run = true;
+      this.addEvent('Start Logging', new Date(), 'Now logging events');
+    }
+  }
+
+
+
+
+  getLogDB() {
+    this.localStorageService.getItem('logDB').subscribe(data => {
+      console.log(`getLogDB: ${JSON.stringify(data, null, 2)}`)
+      this.log_events_db = data;
+      this.log_events_db = this.log_events_db.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    })
+  }
 }

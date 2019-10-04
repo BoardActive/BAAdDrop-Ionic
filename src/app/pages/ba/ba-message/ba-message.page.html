@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div padding-horizontal class="mb-4">
+    <div padding-horizontal class="mb-4" *ngIf="messageData">
       <div class="mb-1">
         <p class="hb-small-caps text-secondary" no-margin>Dates</p>
       </div>
@@ -61,9 +61,9 @@
         Ends on <span class="bold">{{ messageData.promoDateEnds | date }}</span>
       </p>
     </div>
-    <div padding-horizontal class="mb-2">
+    <div padding-horizontal class="mb-2" *ngIf="messageData"> 
       <div class="mb-1">
-        <p class="hb-small-caps text-secondary" no-margin>Concact</p>
+        <p class="hb-small-caps text-secondary" no-margin>Contact</p>
       </div>
 
       <a
@@ -94,7 +94,7 @@
       </a>
     </div>
 
-    <div padding-horizontal class="mb-4">
+    <div padding-horizontal class="mb-4" *ngIf="messageData">
       <div class="mb-1">
         <p class="hb-small-caps text-secondary" no-margin>Social</p>
       </div>
