@@ -11,6 +11,7 @@ import BackgroundGeolocation, {
   MotionChangeEvent,
   ConnectivityChangeEvent
 } from '../../../services/cordova-background-geolocation';
+import { BoardActiveService } from '../../../services/boardactive/board-active.service';
 
 // Google maps <script> is loaded in main index.html
 declare var google;
@@ -65,7 +66,8 @@ export class BaMapPage implements OnInit, AfterViewInit {
     private utilService: UtilService,
     private platform: Platform,
     private zone: NgZone,
-    private device: Device
+    private device: Device,
+    private baService: BoardActiveService
   ) { 
     this.platform.ready().then(this.onDeviceReady.bind(this));
 
@@ -78,7 +80,7 @@ export class BaMapPage implements OnInit, AfterViewInit {
     this.stopTimeout = 1;
     this.stopOnTerminate = false;
     this.startOnBoot = true;
-    this.debug = true;
+    this.debug = false;
 
     // UI members.
     this.motionActivity = 'Activity';
@@ -87,7 +89,14 @@ export class BaMapPage implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.baService.init().then(response => {
+      console.log(`init(): ${JSON.stringify(response, null, 2)}`);
+      this.baService.putMe().subscribe(data => {
+        console.log(`putMe(): ${JSON.stringify(data, null, 2)}`);
+      });
+    });
   }
+  
 
 
   ionViewDidLoad() {
@@ -164,8 +173,14 @@ export class BaMapPage implements OnInit, AfterViewInit {
   */
   onLocation(location:Location) {
     console.log('[event] location ', location);
+    const lat: any = location.coords.latitude.toString();
+    const lng: any = location.coords.longitude.toString();
+
     this.zone.run(() => {
       this.odometer = (location.odometer/1000).toFixed(1) + 'km';
+      this.baService.postLocation(lat, lng).subscribe((res) => {
+        const eventMsg = 'BA Location: response';
+      });
     });
 
     this.updateCurrentLocationMarker(location);
