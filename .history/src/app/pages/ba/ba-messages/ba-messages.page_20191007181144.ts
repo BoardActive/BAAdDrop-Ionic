@@ -256,8 +256,8 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
         this.addEvent(eventMsg, new Date(location.timestamp), res);
         if(this.debug) {
           this.localNotifications.schedule({
-            title: 'BA Location: postLocation()',
-            text: `${lat}, ${lng}`,
+            title: 'BA Location: response',
+            text: `LAT: ${lat} LNG: ${lng}`,
             foreground: true
           })
         }

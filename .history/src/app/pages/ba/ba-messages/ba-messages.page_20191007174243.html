@@ -19,15 +19,16 @@
       <ion-button *ngIf="showLog" size="small" color="{{log_events_run ? 'danger' : 'success'}}" (click)="loggingRun()">
         <ion-icon name="{{log_events_run ? 'pause' : 'play'}}"></ion-icon>
       </ion-button>
-      <ion-buttons end>
-        <ion-label>debug</ion-label>
-        <ion-toggle [(ngModel)]="debug" (ionChange)="onSetConfig('debug')"></ion-toggle>
-      </ion-buttons>
 
       <p *ngIf="showLog" class="activity" text-center>
         <strong>Activity:</strong> {{ motionActivity }}
         <strong>Distance:</strong> {{ odometer }}
       </p>
+
+      <ion-buttons end>
+        <ion-label>debug</ion-label>
+        <ion-toggle [(ngModel)]="debug" (ionChange)="onSetConfig('debug')"></ion-toggle>
+      </ion-buttons>
 
       <!-- <ion-buttons end>
         <ion-toggle [(ngModel)]="enabled" (ionChange)="onToggleEnabled()" style="display:block;"></ion-toggle>

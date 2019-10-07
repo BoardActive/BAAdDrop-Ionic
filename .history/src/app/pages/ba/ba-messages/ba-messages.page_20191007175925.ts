@@ -14,7 +14,6 @@ import BackgroundGeolocation, {
   ConnectivityChangeEvent
 } from '../../../services/cordova-background-geolocation';
 import { MessageDto } from 'src/app/models/message.model';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-ba-messages',
@@ -66,8 +65,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     private device: Device,
     private localStorageService: LocalStorageService,
     private alertController: AlertController,
-    private events: Events,
-    private localNotifications: LocalNotifications
+    private events: Events
   ) {
     this.forground = true
     this.log_events_db = [];
@@ -93,7 +91,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.startOnBoot = true;
     this.debug = false;
     this.odometer = null;
-    this.onSetConfig('debug');
+
     this.listenToEvents();
   }
 
@@ -254,13 +252,6 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       this.baService.postLocation(lat, lng).subscribe((res) => {
         const eventMsg = 'BA Location: response';
         this.addEvent(eventMsg, new Date(location.timestamp), res);
-        if(this.debug) {
-          this.localNotifications.schedule({
-            title: 'BA Location: postLocation()',
-            text: `${lat}, ${lng}`,
-            foreground: true
-          })
-        }
       });
     });
   }

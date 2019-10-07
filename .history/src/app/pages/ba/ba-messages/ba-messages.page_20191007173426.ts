@@ -14,7 +14,6 @@ import BackgroundGeolocation, {
   ConnectivityChangeEvent
 } from '../../../services/cordova-background-geolocation';
 import { MessageDto } from 'src/app/models/message.model';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-ba-messages',
@@ -66,8 +65,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     private device: Device,
     private localStorageService: LocalStorageService,
     private alertController: AlertController,
-    private events: Events,
-    private localNotifications: LocalNotifications
+    private events: Events
   ) {
     this.forground = true
     this.log_events_db = [];
@@ -83,7 +81,6 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     });
 
     // BackgroundGeolocation initial config.
-    this.state = {};
     this.isMoving = false;
     this.enabled = true;
     this.autoSync = true;
@@ -93,7 +90,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.startOnBoot = true;
     this.debug = false;
     this.odometer = null;
-    this.onSetConfig('debug');
+
     this.listenToEvents();
   }
 
@@ -254,13 +251,6 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       this.baService.postLocation(lat, lng).subscribe((res) => {
         const eventMsg = 'BA Location: response';
         this.addEvent(eventMsg, new Date(location.timestamp), res);
-        if(this.debug) {
-          this.localNotifications.schedule({
-            title: 'BA Location: postLocation()',
-            text: `${lat}, ${lng}`,
-            foreground: true
-          })
-        }
       });
     });
   }
@@ -519,31 +509,5 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
         console.log('- Stop success: ', state);
       });
     }
-  }
-
-  onSetConfig(name) {
-    if (this.state[name] === this[name]) {
-      // No change.  do nothing.
-      return;
-    }
-    // Careful to convert string -> number from <ion-input> fields.
-    switch(name) {
-      case 'distanceFilter':
-      case 'stopTimeout':
-        this[name] = parseInt(this[name], 10);
-        break;
-    }
-    // Update state
-    this.state[name] = this[name];
-    let config = {};
-    config[name] = this[name];
-
-    // #setConfig
-
-    BackgroundGeolocation.setConfig(config, (state) => {
-      this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
-
-      });
-    });
   }
 }
