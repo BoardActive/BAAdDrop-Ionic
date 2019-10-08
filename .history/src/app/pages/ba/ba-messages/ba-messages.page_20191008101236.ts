@@ -93,7 +93,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.startOnBoot = true;
     this.debug = false;
     this.odometer = null;
-    // this.onSetConfig('debug');
+    this.onSetConfig('debug');
     this.listenToEvents();
   }
 
