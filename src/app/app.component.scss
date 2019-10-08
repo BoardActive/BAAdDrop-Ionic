@@ -1,9 +1,10 @@
 // PROFILE -- Sidemenu Layout 1 styling START
 .sidemenu-1 {
-
   .off-action {
-    .item-content {
-      background: var(--icon-color-light) !important;
+    background: none !important;
+    .item-native {
+      background: none !important;
+      // background: var(--icon-color-light) !important;
     }
   }
 

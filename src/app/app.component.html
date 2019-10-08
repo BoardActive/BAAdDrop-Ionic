@@ -2,7 +2,7 @@
   <ion-split-pane>
     <ion-menu class="sidemenu-1" side="start" type="overlay">
       <ion-content class="contentBg">
-        <div>
+        <div class="pt-4">
           <ion-card no-padding no-margin slot="fixed" class="driverCard fixed">
             <ion-item lines="none" padding-none>
               <div class="driverProfileImage">
@@ -28,16 +28,18 @@
           </ion-button>
         </div>
         <ion-list>
-          <p class="text-secondary">For Developers</p>
-          <ion-menu-toggle
-            auto-hide="false"
-            *ngFor="let item of appMenu"
-            (click)="menuAction(item)"
-          >
-            <p class="text-primary bold">
-              {{ item.title }}
-            </p>
-          </ion-menu-toggle>
+          <div class="pt-2 pb-2">
+            <p class="text-secondary hb-small-caps">For Developers</p>
+            <ion-menu-toggle
+              auto-hide="false"
+              *ngFor="let item of appMenu"
+              (click)="menuAction(item)"
+            >
+              <p class="text-primary bold">
+                {{ item.title }}
+              </p>
+            </ion-menu-toggle>
+          </div>
         </ion-list>
 
         <div style="margin: 32px 0;">
