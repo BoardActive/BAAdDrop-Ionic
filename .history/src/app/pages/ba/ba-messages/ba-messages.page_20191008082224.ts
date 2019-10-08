@@ -541,10 +541,8 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     // #setConfig
 
     BackgroundGeolocation.setConfig(config, (state) => {
-      if(this.debug) {
-        this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
-        });
-      }
+      // this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
+      // });
     });
   }
 }

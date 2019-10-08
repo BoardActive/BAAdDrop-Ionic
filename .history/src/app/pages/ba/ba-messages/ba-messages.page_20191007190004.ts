@@ -527,12 +527,12 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       return;
     }
     // Careful to convert string -> number from <ion-input> fields.
-    // switch(name) {
-    //   case 'distanceFilter':
-    //   case 'stopTimeout':
-    //     this[name] = parseInt(this[name], 10);
-    //     break;
-    // }
+    switch(name) {
+      case 'distanceFilter':
+      case 'stopTimeout':
+        this[name] = parseInt(this[name], 10);
+        break;
+    }
     // Update state
     this.state[name] = this[name];
     let config = {};
@@ -541,10 +541,9 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     // #setConfig
 
     BackgroundGeolocation.setConfig(config, (state) => {
-      if(this.debug) {
-        this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
-        });
-      }
+      this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
+
+      });
     });
   }
 }
