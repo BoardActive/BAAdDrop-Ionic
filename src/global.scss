@@ -245,7 +245,7 @@ ion-title {
 
 //small caps by hunter.. didnt want to override another class
 .hb-small-caps {
-  font-size: 10px;
+  font-size: 10px !important;
   line-height: 13px;
   font-weight: 600;
   text-transform: uppercase;
@@ -254,23 +254,23 @@ ion-title {
 }
 
 .text-primary {
-  color: var(--ion-text-primary);
+  color: var(--ion-text-primary) !important;
 }
 
 .text-secondary {
-  color: var(--ion-text-secondary);
+  color: var(--ion-text-secondary) !important;
 }
 
 .text-disabled {
-  color: var(--ion-text-disabled);
+  color: var(--ion-text-disabled) !important;
 }
 
 .text-dark {
-  color: var(--ion-color-dark);
+  color: var(--ion-color-dark) !important;
 }
 
 .text-danger {
-  color: var(--ion-color-danger);
+  color: var(--ion-color-danger) !important;
 }
 
 ion-content {

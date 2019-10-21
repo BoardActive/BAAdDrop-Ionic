@@ -46,4 +46,8 @@ constructor(
 
     })
   }
+
+  cancel() {
+    this.utilService.navigate('/ba-messages', false);
+  }
 }
