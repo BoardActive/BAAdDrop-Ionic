@@ -233,7 +233,7 @@ export class BoardActiveService {
     /*
     PUT /me
     */
-    putMe(stock?: any): Observable<any> {
+    putMe(): Observable<any> {
         return new Observable((observer) => {
             this.getEnvironment().subscribe(setUrl => {
                 const url = setUrl + '/me';
@@ -245,12 +245,9 @@ export class BoardActiveService {
                     const body = {
                         email: email,
                         deviceOS: deviceOS,
-                        deviceOSVersion: deviceOSVersion,
-                        attributes: {
-                            stock : stock
-                        }
+                        deviceOSVersion: deviceOSVersion
                     };
-
+                    
                     console.log(`[BA:putMe] body: ${JSON.stringify(body, null, 2)}`);
 
                     this.generateHeaders().then(httpHeaders => {

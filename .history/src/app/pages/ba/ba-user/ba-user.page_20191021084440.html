@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <h2 class="fw700" padding-top padding-horizontal>User Attributes</h2>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content no-padding>
+  <div class="main">
+    <ion-card>
+      <ion-card-content>
+        <ion-row padding-top>
+          <ion-col text-left (click)="developerMode()">
+            <h1 no-margin><strong>BoardActive</strong> App Login</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col text-left>
+            <ion-input
+              clearInput
+              type="email"
+              placeholder="Email"
+              [(ngModel)]="email"
+              class="input"
+              padding-horizontal
+              clear-input="true"
+            ></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col text-left>
+            <ion-input
+              clearInput
+              type="password"
+              placeholder="Password"
+              [(ngModel)]="password"
+              class="input"
+              padding-horizontal
+              clear-input="true"
+            ></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row padding-vertical>
+          <ion-col>
+            <ion-button
+              no-margin
+              expand="block"
+              color="primary"
+              (click)="signIn()"
+              class="btn-color"
+              ><strong>Login</strong></ion-button
+            >
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="developer">
+          <ion-col>
+            <ion-item lines="none">
+              <ion-label>Development Mode</ion-label>
+              <ion-checkbox slot="start" [(ngModel)]="developer"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

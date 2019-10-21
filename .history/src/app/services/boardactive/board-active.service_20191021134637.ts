@@ -233,7 +233,7 @@ export class BoardActiveService {
     /*
     PUT /me
     */
-    putMe(stock?: any): Observable<any> {
+    putMe(): Observable<any> {
         return new Observable((observer) => {
             this.getEnvironment().subscribe(setUrl => {
                 const url = setUrl + '/me';
@@ -246,8 +246,19 @@ export class BoardActiveService {
                         email: email,
                         deviceOS: deviceOS,
                         deviceOSVersion: deviceOSVersion,
-                        attributes: {
-                            stock : stock
+                        userAttributes: {
+                            stock : {
+                                name: '',
+                                email: '',
+                                phone: '',
+                                dateBorn: '',
+                                gender: '',
+                                facebookUrl: '',
+                                linkedInUrl: '',
+                                twitterUrl: '',
+                                instagramUrl: '',
+                                avatarUrl: ''
+                            }
                         }
                     };
 

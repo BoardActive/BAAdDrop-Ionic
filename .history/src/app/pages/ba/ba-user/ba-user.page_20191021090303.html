@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-toolbar>
+    <h2 class="fw700" padding-top padding-horizontal>User Attributes</h2>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content no-padding>
+  <div class="main">
+    <ion-card>
+      <ion-card-content>
+        <ion-row padding-top>
+          <ion-col text-left>
+            <h1 no-margin><strong>BoardActive</strong> App Login</h1>
+          </ion-col>
+        </ion-row>
+        <!--    
+              name
+              email
+              phone
+              dateBorn
+              gender
+              facebookUrl
+              linkedInUrl
+              twitterUrl
+              instagramUrl
+              avatarUrl
+            -->
+        <ion-row>
+          <ion-col text-left>
+            <ion-input clearInput type="text" placeholder="Name" [(ngModel)]="name" class="input" padding-horizontal
+              clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col text-left>
+            <ion-input clearInput type="email" placeholder="Email" [(ngModel)]="email" class="input" padding-horizontal
+              clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col text-left>
+            <ion-input clearInput type="tel" placeholder="Phone" [(ngModel)]="phone" class="input" padding-horizontal
+              clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col text-left>
+            <ion-item>
+              <ion-label position="floating">Birthday</ion-label>
+              <ion-datetime displayFormat="MM/DD/YYYY" (ngModel)]="dateBorn"></ion-datetime>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col text-left>
+            <ion-item>
+              <ion-label>Gender</ion-label>
+              <ion-select placeholder="Select One" [(ngModel)]="gender">
+                <ion-select-option value="f">Female</ion-select-option>
+                <ion-select-option value="m">Male</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col text-left>
+            <ion-input clearInput type="text" placeholder="Facebook Url" [(ngModel)]="facebookUrl" class="input"
+              padding-horizontal clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col text-left>
+            <ion-input clearInput type="text" placeholder="LinkedIn Url" [(ngModel)]="linkedInUrl" class="input"
+              padding-horizontal clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col text-left>
+            <ion-input clearInput type="text" placeholder="Twitter Url" [(ngModel)]="twitterUrl" class="input"
+              padding-horizontal clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col text-left>
+            <ion-input clearInput type="text" placeholder="Avatar Url" [(ngModel)]="avatarUrl" class="input"
+              padding-horizontal clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col text-left>
+            <ion-input clearInput type="text" placeholder="Facebook Url" [(ngModel)]="facebookUrl" class="input"
+              padding-horizontal clear-input="true"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row padding-vertical>
+          <ion-col>
+            <ion-button no-margin expand="block" color="primary" (click)="save()" class="btn-color">
+              <strong>Save</strong></ion-button>
+          </ion-col>
+        </ion-row>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

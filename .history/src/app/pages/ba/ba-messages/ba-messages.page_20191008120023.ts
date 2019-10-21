@@ -76,7 +76,6 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
     this.platform.ready().then(() => {
       if (this.platform.is('cordova')) {
-        this.onSetConfig('debug');
         console.log(`onDeviceReady: ${null}`)
         this.onDeviceReady.bind(this)
         this.onDeviceReady();
@@ -94,6 +93,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.startOnBoot = true;
     this.debug = false;
     this.odometer = null;
+    // this.onSetConfig('debug');
     this.listenToEvents();
   }
 
@@ -526,6 +526,13 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       // No change.  do nothing.
       return;
     }
+    // Careful to convert string -> number from <ion-input> fields.
+    // switch(name) {
+    //   case 'distanceFilter':
+    //   case 'stopTimeout':
+    //     this[name] = parseInt(this[name], 10);
+    //     break;
+    // }
     // Update state
     this.state[name] = this[name];
     let config = {};

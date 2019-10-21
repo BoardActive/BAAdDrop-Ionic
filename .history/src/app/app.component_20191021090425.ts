@@ -72,9 +72,6 @@ export class AppComponent {
           alert(`${JSON.stringify(headers, null, 2)}`);
         });
         break;
-      case 4:
-        this.utilService.navigate('/ba-user', true);
-        break;
     }
   }
   sendWelcomeMessage(type: any) {

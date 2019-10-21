@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div padding-horizontal class="mb-4" *ngIf="messageData.promoDateStarts">
+    <div padding-horizontal class="mb-4" *ngIf="messageData[0]">
       <div class="mb-1">
         <p class="hb-small-caps text-secondary" no-margin>Dates</p>
       </div>
@@ -61,7 +61,7 @@
         Ends on <span class="bold">{{ messageData.promoDateEnds | date }}</span>
       </p>
     </div>
-    <div padding-horizontal class="mb-2" *ngIf="messageData.phoneNumber"> 
+    <div padding-horizontal class="mb-2" *ngIf="messageData[0]"> 
       <div class="mb-1">
         <p class="hb-small-caps text-secondary" no-margin>Contact</p>
       </div>
@@ -94,7 +94,7 @@
       </a>
     </div>
 
-    <div padding-horizontal class="mb-4" *ngIf="messageData.urlFacebook">
+    <div padding-horizontal class="mb-4" *ngIf="messageData[0]">
       <div class="mb-1">
         <p class="hb-small-caps text-secondary" no-margin>Social</p>
       </div>

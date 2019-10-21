@@ -72,7 +72,7 @@ export class AppComponent {
           alert(`${JSON.stringify(headers, null, 2)}`);
         });
         break;
-      case 4:
+      case 3:
         this.utilService.navigate('/ba-user', true);
         break;
     }

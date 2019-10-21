@@ -246,7 +246,7 @@ export class BoardActiveService {
                         email: email,
                         deviceOS: deviceOS,
                         deviceOSVersion: deviceOSVersion,
-                        attributes: {
+                        userAttributes: {
                             stock : stock
                         }
                     };

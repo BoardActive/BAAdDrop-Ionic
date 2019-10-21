@@ -32,7 +32,7 @@ export class AppComponent {
     {
       title: 'User Attributes',
       icon: 'time',
-      menuItem: 4
+      menuItem: 3
     }
   ];
 
@@ -71,9 +71,6 @@ export class AppComponent {
         this.baService.generateHeaders().then(headers => {
           alert(`${JSON.stringify(headers, null, 2)}`);
         });
-        break;
-      case 4:
-        this.utilService.navigate('/ba-user', true);
         break;
     }
   }
