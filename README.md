@@ -14,3 +14,5 @@
 ### Then, to update ionic changes in the xcode app: 
   * ionic project: ``ionic cordova prepare ios``
 
+
+
