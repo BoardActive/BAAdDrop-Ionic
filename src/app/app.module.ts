@@ -16,11 +16,13 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { BoardActiveService } from './services/boardactive/board-active.service';
 import { FCMService } from './services/fcm/fcm.service';
-import { Firebase } from '@ionic-native/firebase/ngx';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from './services/local-storage/local-storage.service';
 
 import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,8 +43,8 @@ import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     BoardActiveService,
     AppVersion,
-    Firebase,
     Device,
+    FirebaseX,
     FCMService,
     LocalNotifications,
     LocalStorageService

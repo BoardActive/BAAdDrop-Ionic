@@ -8,7 +8,6 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => import('./pages/ba/login/login.module').then( m => m.LoginPageModule)},
   { path: 'ba-apps', loadChildren: () => import('./pages/ba/ba-apps/ba-apps.module').then( m => m.BaAppsPageModule)},
   { path: 'ba-message', loadChildren: () => import('./pages/ba/ba-message/ba-message.module').then( m => m.BaMessagePageModule)},
-  { path: 'ba-map', loadChildren: './pages/ba/ba-map/ba-map.module#BaMapPageModule' },
   { path: 'ba-user', loadChildren: './pages/ba/ba-user/ba-user.module#BaUserPageModule' },
 ];
 

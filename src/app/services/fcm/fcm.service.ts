@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firebase } from '@ionic-native/firebase/ngx';
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { Platform } from '@ionic/angular';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 
@@ -9,7 +9,7 @@ import { LocalStorageService } from '../../services/local-storage/local-storage.
 export class FCMService {
 
   constructor(
-    private fcm: Firebase,
+    private fcm: FirebaseX,
     private platform: Platform,
     private localStorageService: LocalStorageService
   ) {
@@ -88,7 +88,7 @@ export class FCMService {
   }
   
   listenToNotifications() {
-    return this.fcm.onNotificationOpen();
+    return this.fcm.onMessageReceived();
   }
   
 
