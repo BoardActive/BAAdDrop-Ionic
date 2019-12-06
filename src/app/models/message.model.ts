@@ -34,7 +34,7 @@ export class MessageModel {
         this.isRead = isRead;
     }
 
-    public id: number
+    public id: number;
     public isTestMessage: any;
     public body: any;
     public messageId: any;

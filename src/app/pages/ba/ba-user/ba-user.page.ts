@@ -1,19 +1,6 @@
 import { Component, OnInit, ɵɵi18nAttributes } from '@angular/core';
-import { BoardActiveService } from '../../../services/boardactive/board-active.service';
+import { BoardActiveService, Attributes } from '../../../services/boardactive/board-active.service';
 import { UtilService } from '../../../services/util/util.service';
-
-export class attributes {
-  name: any;
-  email: any;
-  phone: any;
-  dateBorn: any;
-  gender: any;
-  facebookUrl: any;
-  linkedInUrl: any;
-  twitterUrl: any;
-  instagramUrl: any;
-  avatarUrl: any;
-}
 
 @Component({
   selector: 'app-ba-user',
@@ -21,7 +8,7 @@ export class attributes {
   styleUrls: ['./ba-user.page.scss'],
 })
 export class BaUserPage implements OnInit {
-stock: attributes = new attributes();
+stock: Attributes = new Attributes;
 
 constructor(
   private boardActiveService: BoardActiveService,

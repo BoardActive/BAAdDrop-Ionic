@@ -1,3 +1,4 @@
+import { Platform } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { FCMService } from '../fcm/fcm.service';
@@ -5,11 +6,35 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ModalController } from '@ionic/angular';
 import { BaMessagePage } from '../../pages/ba/ba-message/ba-message.page';
 import { Device } from '@ionic-native/device/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Observable } from 'rxjs';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import { tap } from 'rxjs/operators';
+import { AttributesDto, AttributesModel } from '../../models/attributes.model';
+
+export class Attributes {
+    name?: any; 
+    email?: any; 
+    phone?: any; 
+    dateBorn?: any; 
+    gender?: any; 
+    facebookUrl?: any; 
+    linkedInUrl?: any; 
+    twitterUrl?: any; 
+    instagramUrl?: any; 
+    avatarUrl?: any; 
+    deviceOS?: any; 
+    deviceOSVersion?: any; 
+    deviceType?: any; 
+    dateLocationRequested?: any; 
+    dateNotificationRequested?: any; 
+    locationPermission?: any;
+    notificationPermission?: any;
+    demoAppUser?: any;
+    deviceToken?: any;  
+}
 
 export const Config = {
     API_URL: {
@@ -33,9 +58,11 @@ export class BoardActiveService {
     public promotions: any[];
 
     constructor(
+        private platform: Platform,
         private http: HttpClient,
         private fcmProvider: FCMService,
         private device: Device,
+        private diagnostic: Diagnostic,
         private modalCtrl: ModalController,
         private appVersion: AppVersion,
         private localNotifications: LocalNotifications,
@@ -233,7 +260,34 @@ export class BoardActiveService {
     /*
     PUT /me
     */
-    putMe(stock?: any): Observable<any> {
+    putMe(setAttributes?: Attributes): Observable<any> {
+        var attributes: Attributes = {};
+        if(setAttributes) {
+            if(setAttributes.name) {attributes.name = setAttributes.name};
+            if(setAttributes.email) {attributes.email = setAttributes.email};
+            if(setAttributes.phone) {attributes.phone = setAttributes.phone};
+            if(setAttributes.dateBorn) {attributes.dateBorn = setAttributes.dateBorn};
+            if(setAttributes.gender) {attributes.gender = setAttributes.gender};
+            if(setAttributes.facebookUrl) {attributes.facebookUrl = setAttributes.facebookUrl};
+            if(setAttributes.linkedInUrl) {attributes.linkedInUrl = setAttributes.linkedInUrl};
+            if(setAttributes.twitterUrl) {attributes.twitterUrl = setAttributes.twitterUrl};
+            if(setAttributes.instagramUrl) {attributes.instagramUrl = setAttributes.instagramUrl};
+            if(setAttributes.avatarUrl) {attributes.avatarUrl = setAttributes.avatarUrl};
+        }
+
+        if(this.platform.is('cordova')) {
+            //Set Automatic User Attributes
+            attributes.deviceOS = this.device.platform;
+            attributes.deviceOSVersion = this.device.version;
+            attributes.deviceType = this.device.model;
+            attributes.locationPermission = this.diagnostic.isLocationEnabled;
+            attributes.notificationPermission = this.diagnostic.isRemoteNotificationsEnabled;
+            attributes.demoAppUser = null;
+            attributes.deviceToken  = null;
+        }
+
+        console.log(`attributes: ${JSON.stringify(attributes, null, 2)}`);
+
         return new Observable((observer) => {
             this.getEnvironment().subscribe(setUrl => {
                 const url = setUrl + '/me';
@@ -247,7 +301,7 @@ export class BoardActiveService {
                         deviceOS: deviceOS,
                         deviceOSVersion: deviceOSVersion,
                         attributes: {
-                            stock : stock
+                            stock : attributes
                         }
                     };
 
@@ -382,6 +436,7 @@ export class BoardActiveService {
         DeviceToken?: string,
         DeviceOS?: string,
         DeviceOSVersion?: string,
+        DeviceType?: string,
         AppTest?: string
     ): Promise<any> {
         return new Promise((resolve, reject) => {
@@ -430,6 +485,7 @@ export class BoardActiveService {
 
             DeviceOS = this.device.platform;
             DeviceOSVersion = this.device.version;
+            DeviceType = this.device.model;
 
             const Promise_AppTest = new Promise(resolve => {
                 this.localStorageService.getItem('AppTest').subscribe(appTest => {
@@ -458,6 +514,7 @@ export class BoardActiveService {
                     .set('X-BoardActive-Device-Token', `${DeviceToken}`)
                     .set('X-BoardActive-Device-OS', `${DeviceOS}`)
                     .set('X-BoardActive-Device-OS-Version', `${DeviceOSVersion}`)
+                    .set('X-BoardActive-Device-Type', `${DeviceType}`)
                     .set('X-BoardActive-Is-Test-App', `${AppTest}`);
                 // headers = headers.append('X-BoardActive-App-Key', `${AppKey}`);
                 // headers = headers.append('X-BoardActive-App-Id', `${AppID}`);

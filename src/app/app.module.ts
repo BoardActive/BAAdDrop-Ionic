@@ -14,6 +14,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Device } from '@ionic-native/device/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { BoardActiveService } from './services/boardactive/board-active.service';
 import { FCMService } from './services/fcm/fcm.service';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
@@ -44,6 +45,7 @@ import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
     BoardActiveService,
     AppVersion,
     Device,
+    Diagnostic,
     FirebaseX,
     FCMService,
     LocalNotifications,
