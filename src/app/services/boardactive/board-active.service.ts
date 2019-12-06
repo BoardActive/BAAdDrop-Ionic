@@ -12,7 +12,6 @@ import { Observable } from 'rxjs';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import { tap } from 'rxjs/operators';
-import { AttributesDto, AttributesModel } from '../../models/attributes.model';
 
 export class Attributes {
     name?: any; 
