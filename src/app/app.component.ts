@@ -33,6 +33,11 @@ export class AppComponent {
       title: 'User Attributes',
       icon: 'time',
       menuItem: 4
+    },
+    {
+      title: 'Device Attributes',
+      icon: 'time',
+      menuItem: 5
     }
   ];
 
@@ -74,6 +79,11 @@ export class AppComponent {
         break;
       case 4:
         this.utilService.navigate('/ba-user', true);
+        break;
+      case 5:
+        this.baService.defaultAttributes().then(data => {
+          alert(`${JSON.stringify(data, null, 2)}`);
+        });
         break;
     }
   }

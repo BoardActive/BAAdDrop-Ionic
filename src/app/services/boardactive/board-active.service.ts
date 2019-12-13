@@ -2,7 +2,11 @@ import { Platform } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { FCMService } from '../fcm/fcm.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
+import {
+    HttpTestingController,
+    HttpClientTestingModule
+  } from '@angular/common/http/testing';
 import { ModalController } from '@ionic/angular';
 import { BaMessagePage } from '../../pages/ba/ba-message/ba-message.page';
 import { Device } from '@ionic-native/device/ngx';
@@ -13,26 +17,25 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import { tap } from 'rxjs/operators';
 
+declare var cordova;
+
 export class Attributes {
-    name?: any; 
-    email?: any; 
-    phone?: any; 
-    dateBorn?: any; 
-    gender?: any; 
-    facebookUrl?: any; 
-    linkedInUrl?: any; 
-    twitterUrl?: any; 
-    instagramUrl?: any; 
-    avatarUrl?: any; 
-    deviceOS?: any; 
-    deviceOSVersion?: any; 
-    deviceType?: any; 
-    dateLocationRequested?: any; 
-    dateNotificationRequested?: any; 
+    name?: any;
+    email?: any;
+    phone?: any;
+    dateBorn?: any;
+    gender?: any;
+    facebookUrl?: any;
+    linkedInUrl?: any;
+    twitterUrl?: any;
+    instagramUrl?: any;
+    avatarUrl?: any;
+    deviceOS?: any;
+    deviceOSVersion?: any;
+    deviceType?: any;
     locationPermission?: any;
     notificationPermission?: any;
-    demoAppUser?: any;
-    deviceToken?: any;  
+    deviceToken?: any;
 }
 
 export const Config = {
@@ -53,6 +56,7 @@ import { reject } from 'q';
     providedIn: 'root'
 })
 export class BoardActiveService {
+    // sharedPreferences = window.plugins.SharedPreferences.getInstance('settings')
     public isInit: boolean = false;
     public promotions: any[];
 
@@ -69,6 +73,51 @@ export class BoardActiveService {
         private events: Events
     ) {
 
+
+    }
+
+    sharedPreferencesPut(key: any, value: any): Promise<any> {
+        // alert(`TEST sharedPreferencesPut`);
+        return new Promise((resolve, reject) => {
+
+            this.platform.ready().then(() => {
+                var sharedPreferences = (<any>window)["plugins"].SharedPreferences.getInstance("BoardActive")
+                var successCallback = function () {
+                    console.log(`[BA:BoardActive] sharedPreferencesPut ${key} ${value}`);
+                    resolve(key);
+                }
+                var errorCallback = function (err) {
+                    console.error(err)
+                    resolve(err);
+                }
+
+                sharedPreferences.put(key, value, successCallback, errorCallback);
+            });
+
+        });
+    }
+
+    sharedPreferencesGet(key: any, defaultValue?: any): Promise<any> {
+        // alert(`TEST sharedPreferencesGet`);
+        return new Promise((resolve, reject) => {
+
+            this.platform.ready().then(() => {
+                var sharedPreferences = (<any>window)["plugins"].SharedPreferences.getInstance("BoardActive")
+
+                var successCallback = function (value) {
+                    console.log(`[BA:BoardActive] sharedPreferencesGet ${key} ${value}`);
+                    resolve(value);
+                }
+                var errorCallback = function (err) {
+                    console.log(err)
+                    resolve(err);
+                }
+
+                sharedPreferences.get(key, defaultValue, successCallback, errorCallback);
+
+            });
+
+        });
     }
 
     /*
@@ -98,6 +147,7 @@ export class BoardActiveService {
             });
 
             this.fcmProvider.listenToNotifications().pipe(tap(payload => {
+                console.log(`[BA:FCM] : ` + JSON.stringify(payload));
                 const myDate: string = new Date().toISOString();
                 let thisMsg: MessageDto = MessageModel.empty();
                 thisMsg = payload;
@@ -123,7 +173,34 @@ export class BoardActiveService {
                         this.events.publish('notification:notap');
                     });
                 }
-            })).subscribe(
+            })).subscribe(payload => {
+                // console.log(`[BA:FCM] : ` + JSON.stringify(payload));
+                // const myDate: string = new Date().toISOString();
+                // let thisMsg: MessageDto = MessageModel.empty();
+                // thisMsg = payload;
+                // thisMsg.notificationId = payload['gcm.message_id'];
+                // thisMsg.dateCreated = myDate;
+                // thisMsg.dateLastUpdated = myDate;
+                // this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+                // this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                //     this.events.publish('notification:receive');
+                // });
+                // if (thisMsg.tap) {
+                //     this.addMessage(thisMsg);
+                //     console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg));
+                //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                //         this.events.publish('notification:tap');
+                //     });
+                //     this.modalMessage(thisMsg);
+                // } else {
+                //     this.addMessage(thisMsg);
+                //     console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
+                //     this.newLocalNotification(thisMsg, 1);
+                //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                //         this.events.publish('notification:notap');
+                //     });
+                // }
+            }
             );
         });
     }
@@ -261,28 +338,36 @@ export class BoardActiveService {
     */
     putMe(setAttributes?: Attributes): Observable<any> {
         var attributes: Attributes = {};
-        if(setAttributes) {
-            if(setAttributes.name) {attributes.name = setAttributes.name};
-            if(setAttributes.email) {attributes.email = setAttributes.email};
-            if(setAttributes.phone) {attributes.phone = setAttributes.phone};
-            if(setAttributes.dateBorn) {attributes.dateBorn = setAttributes.dateBorn};
-            if(setAttributes.gender) {attributes.gender = setAttributes.gender};
-            if(setAttributes.facebookUrl) {attributes.facebookUrl = setAttributes.facebookUrl};
-            if(setAttributes.linkedInUrl) {attributes.linkedInUrl = setAttributes.linkedInUrl};
-            if(setAttributes.twitterUrl) {attributes.twitterUrl = setAttributes.twitterUrl};
-            if(setAttributes.instagramUrl) {attributes.instagramUrl = setAttributes.instagramUrl};
-            if(setAttributes.avatarUrl) {attributes.avatarUrl = setAttributes.avatarUrl};
+        if (setAttributes) {
+            if (setAttributes.name) { attributes.name = setAttributes.name };
+            if (setAttributes.email) { attributes.email = setAttributes.email };
+            if (setAttributes.phone) { attributes.phone = setAttributes.phone };
+            if (setAttributes.dateBorn) { attributes.dateBorn = setAttributes.dateBorn };
+            if (setAttributes.gender) { attributes.gender = setAttributes.gender };
+            if (setAttributes.facebookUrl) { attributes.facebookUrl = setAttributes.facebookUrl };
+            if (setAttributes.linkedInUrl) { attributes.linkedInUrl = setAttributes.linkedInUrl };
+            if (setAttributes.twitterUrl) { attributes.twitterUrl = setAttributes.twitterUrl };
+            if (setAttributes.instagramUrl) { attributes.instagramUrl = setAttributes.instagramUrl };
+            if (setAttributes.avatarUrl) { attributes.avatarUrl = setAttributes.avatarUrl };
         }
 
-        if(this.platform.is('cordova')) {
+        if (this.platform.is('android') || this.platform.is('ios')) {
             //Set Automatic User Attributes
             attributes.deviceOS = this.device.platform;
             attributes.deviceOSVersion = this.device.version;
             attributes.deviceType = this.device.model;
-            attributes.locationPermission = this.diagnostic.isLocationEnabled;
-            attributes.notificationPermission = this.diagnostic.isRemoteNotificationsEnabled;
-            attributes.demoAppUser = null;
-            attributes.deviceToken  = null;
+
+            this.localStorageService.getItem('token').subscribe(token => {
+                attributes.deviceToken = token;
+                this.diagnostic.isLocationAuthorized().then(data1 => {
+                    attributes.locationPermission = data1;
+                    this.diagnostic.isRemoteNotificationsEnabled().then(data2 => {
+                        attributes.notificationPermission = data2;
+                    });
+                });
+            });
+
+            console.log(`${JSON.stringify(attributes, null, 2)}`);
         }
 
         console.log(`attributes: ${JSON.stringify(attributes, null, 2)}`);
@@ -300,7 +385,7 @@ export class BoardActiveService {
                         deviceOS: deviceOS,
                         deviceOSVersion: deviceOSVersion,
                         attributes: {
-                            stock : attributes
+                            stock: attributes
                         }
                     };
 
@@ -440,70 +525,91 @@ export class BoardActiveService {
     ): Promise<any> {
         return new Promise((resolve, reject) => {
 
+            const Promise_URL = this.getEnvironment().subscribe(setUrl => {
+                this.sharedPreferencesPut('X-BoardActive-App-Url', setUrl).then(_ => {
+                    console.log(`[BA:HttpHeaders] X-BoardActive-App-Url: ${setUrl}`);
+                });
+            });
+
             const Promise_AppKey = new Promise(resolve => {
                 this.localStorageService.getItem('AppKey').subscribe(appKey => {
                     AppKey = AppKey || appKey;
                     console.log(`X-BoardActive-App-Key: ${AppKey}`);
-                    resolve(AppKey);
+                    this.sharedPreferencesPut('X-BoardActive-App-Key', AppKey).then(_ => {
+                        console.log(`[BA:HttpHeaders] X-BoardActive-App-Key: ${AppKey}`);
+                        resolve(AppKey);
+                    });
                 });
             });
-
-            // const Promise_AppKey = this.localStorageService.getItem('AppKey').subscribe(appKey => {
-            //     AppKey = AppKey || appKey;
-            //     console.log(`X-BoardActive-App-Key: ${AppKey}`);
-            //     return AppKey;
-            // });
-
+            
             const Promise_AppID = new Promise(resolve => {
                 this.localStorageService.getItem('AppID').subscribe(appId => {
                     AppID = AppID || appId;
-                    console.log(`X-BoardActive-App-Id: ${AppID}`);
-                    resolve(AppID);
+                    console.log(`[BA:HttpHeaders] X-BoardActive-App-Id: ${AppID}`);
+                    this.sharedPreferencesPut('X-BoardActive-App-Id', AppID).then(_ => {
+                        console.log(`[BA:HttpHeaders] X-BoardActive-App-Id: ${AppID}`);
+                        resolve(AppID);
+                    });        
                 });
             });
 
-            // const Promise_AppID = this.localStorageService.getItem('AppID').subscribe(appId => {
-            //     AppID = AppID || appId;
-            //     console.log(`X-BoardActive-App-Id: ${AppID}`);
-            //     return AppID;
-            // });
-
             const Promise_AppVersionNumber = this.getAppVersionCode().then(appVerNo => {
                 AppVersionNumber = AppVersionNumber || appVerNo;
-                console.log(`X-BoardActive-App-Version: ${AppVersionNumber}`);
-                return AppVersionNumber;
+                console.log(`[BA:HttpHeaders] X-BoardActive-App-Version: ${AppVersionNumber}`);
+                this.sharedPreferencesPut('X-BoardActive-App-Version', AppVersionNumber).then(_ => {
+                    console.log(`[BA:HttpHeaders] X-BoardActive-App-Version: ${AppVersionNumber}`);
+                    return AppVersionNumber;
+                });
             }).catch((error) => {
                 console.log(`AppVersionNumber_err: ${error}`);
             });
 
             const Promise_DeviceToken = this.localStorageService.getItem('token').subscribe(token => {
                 DeviceToken = DeviceToken || token;
-                console.log(`X-BoardActive-App-Token: ${DeviceToken}`);
-                return DeviceToken;
+                console.log(`[BA:HttpHeaders] X-BoardActive-App-Token: ${DeviceToken}`);
+                this.sharedPreferencesPut('X-BoardActive-Device-Token', DeviceToken).then(_ => {
+                    console.log(`[BA:HttpHeaders] X-BoardActive-Device-Token: ${DeviceToken}`);
+                    return DeviceToken;
+                });
             });
 
-            DeviceOS = this.device.platform;
-            DeviceOSVersion = this.device.version;
-            DeviceType = this.device.model;
+            const Promise_DeviceOS = this.sharedPreferencesPut('X-BoardActive-Device-OS', this.device.platform).then(_ => {
+                DeviceOS = this.device.platform;
+                console.log(`[BA:HttpHeaders] X-BoardActive-Device-OS: ${DeviceOS}`);
+            });
+
+            const Promise_DeviceOSVersion = this.sharedPreferencesPut('X-BoardActive-Device-OS-Version', this.device.version).then(_ => {
+                DeviceOSVersion = this.device.version;
+                console.log(`[BA:HttpHeaders] X-BoardActive-OS-Version: ${DeviceOSVersion}`);
+            });
+
+            const Promise_DeviceType = this.sharedPreferencesPut('X-BoardActive-Device-Type', this.device.model).then(_ => {
+                DeviceType = this.device.model;
+                console.log(`[BA:HttpHeaders] X-BoardActive-Device-Type: ${DeviceType}`);
+            });
 
             const Promise_AppTest = new Promise(resolve => {
                 this.localStorageService.getItem('AppTest').subscribe(appTest => {
                     AppTest = AppTest || appTest;
-                    console.log(`X-BoardActive-Is-Test-App: ${AppTest}`);
+                    console.log(`[BA:HttpHeaders] X-BoardActive-Is-Test-App: ${AppTest}`);
+                    this.sharedPreferencesPut('X-BoardActive-Is-Test-App', AppTest).then(_ => {
+                        console.log(`[BA:HttpHeaders] -BoardActive-Is-Test-App: ${AppTest}`);
+                    });
                     resolve(AppTest);
                 });
             });
 
-            // const Promise_AppTest = this.localStorageService.getItem('AppTest').subscribe(appTest => {
-            //     AppTest = AppTest || appTest;
-            //     console.log(`X-BoardActive-Is-Test-App: ${AppTest}`);
-            // });
 
             Promise.all([
+                Promise_URL,
                 Promise_AppKey,
                 Promise_AppID,
                 Promise_AppVersionNumber,
                 Promise_DeviceToken,
+                Promise_AppTest,
+                Promise_DeviceOS,
+                Promise_DeviceOSVersion,
+                Promise_DeviceType,
                 Promise_AppTest
             ]).then(values => {
                 const headers = new HttpHeaders()
@@ -515,13 +621,6 @@ export class BoardActiveService {
                     .set('X-BoardActive-Device-OS-Version', `${DeviceOSVersion}`)
                     .set('X-BoardActive-Device-Type', `${DeviceType}`)
                     .set('X-BoardActive-Is-Test-App', `${AppTest}`);
-                // headers = headers.append('X-BoardActive-App-Key', `${AppKey}`);
-                // headers = headers.append('X-BoardActive-App-Id', `${AppID}`);
-                // headers = headers.append('X-BoardActive-App-Version', `${AppVersionNumber}`);
-                // headers = headers.append('X-BoardActive-Device-Token', `${DeviceToken}`);
-                // headers = headers.append('X-BoardActive-Device-OS', `${DeviceOS}`);
-                // headers = headers.append('X-BoardActive-Device-OS-Version', `${DeviceOSVersion}`);
-                // headers = headers.append('X-BoardActive-Is-Test-App', `${AppTest}`);
                 resolve(headers);
                 console.log(`Promise.all(): ${JSON.stringify(values, null, 2)}`);
             }).catch((error) => {
@@ -793,6 +892,37 @@ export class BoardActiveService {
                 });
                 resolve(logEntries);
             });
+        });
+    }
+
+
+    defaultAttributes(): Promise<any> {
+        var attributes: Attributes = {};
+        return new Promise((resolve, reject) => {
+            if (this.platform.is('android') || this.platform.is('ios')) {
+                //Set Automatic User Attributes
+                attributes.deviceOS = this.device.platform;
+                attributes.deviceOSVersion = this.device.version;
+                attributes.deviceType = this.device.model;
+                this.localStorageService.getItem('token').subscribe(token => {
+                    attributes.deviceToken = token;
+                    this.diagnostic.isLocationAuthorized().then(data1 => {
+                        attributes.locationPermission = data1;
+                        this.diagnostic.isRemoteNotificationsEnabled().then(data2 => {
+                            attributes.notificationPermission = data2;
+                            resolve(attributes);
+                        });
+                    });
+                });
+            } else {
+                //Set Automatic User Attributes
+                attributes.deviceOS = null;
+                attributes.deviceOSVersion = null;
+                attributes.deviceType = null;
+                attributes.locationPermission = null;
+                attributes.notificationPermission = null;
+                resolve(attributes);
+            }
         });
     }
 }

@@ -24,20 +24,28 @@
         <ion-toggle [(ngModel)]="debug" (ionChange)="onSetConfig('debug')"></ion-toggle>
       </ion-buttons>
 
-      <p *ngIf="showLog" class="activity" text-center>
+    </ion-row>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="showLog" color="dark">
+    <ion-row padding-horizontal>
+      <p class="activity" text-center>
         <strong>Activity:</strong> {{ motionActivity }}
         <strong>Distance:</strong> {{ odometer }}
       </p>
-
-      <!-- <ion-buttons end>
-        <ion-toggle [(ngModel)]="enabled" (ionChange)="onToggleEnabled()" style="display:block;"></ion-toggle>
-      </ion-buttons> -->
-  
     </ion-row>
   </ion-toolbar>
+  <div *ngIf="showLog">
+    <ion-toolbar *ngIf="isGod" color="dark">
+      <ion-row padding-horizontal>
+        <ion-button size="small" (click)="loadTestPutMe()">PUT/me</ion-button>
+        <ion-button size="small" (click)="loadTestPostLocations()">POST/locations</ion-button>
+      </ion-row>
+    </ion-toolbar>  
+  </div>
 </ion-header>
 
 <ion-content class="main" *ngIf="showInbox">
+  <ion-progress-bar color="primary" value="{{uploadProgress | async}}"></ion-progress-bar>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
       refreshingText="Refreshing...">

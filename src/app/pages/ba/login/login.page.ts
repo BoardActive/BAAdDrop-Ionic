@@ -80,7 +80,12 @@ public easteregg: number = 0;
     });
 
     this.baService.postLogin(this.email, this.password).subscribe(response => {
+      // console.log(`postLogin(): ${JSON.stringify(response, null, 2)}`);
       const appModel: AppDto = response;
+
+      this.localStorageService.setItem('isGod', appModel.isGod).subscribe(() => {
+      });
+
       if (appModel.apps) {
         this.storage.set('auth', true).then(() => {
           this.localStorageService.setItem('apps', response).subscribe(() => {

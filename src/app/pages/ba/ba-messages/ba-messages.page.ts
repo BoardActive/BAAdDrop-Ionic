@@ -11,10 +11,12 @@ import BackgroundGeolocation, {
   MotionActivityEvent,
   ProviderChangeEvent,
   MotionChangeEvent,
-  ConnectivityChangeEvent
+  ConnectivityChangeEvent,
 } from '../../../services/cordova-background-geolocation';
 import { MessageDto } from 'src/app/models/message.model';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import BackgroundFetch from 'cordova-plugin-background-fetch';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-ba-messages',
@@ -24,6 +26,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 export class BaMessagesPage implements OnInit, AfterViewInit {
   // @ViewChild(IonContent, null) content: IonContent;
   @ViewChild('map', { static: false }) mapElement: ElementRef;
+  public uploadProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   public development: boolean = false;
   public isRendering: boolean = true;
@@ -39,9 +42,11 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
   autoSync: boolean;
   stopOnTerminate: boolean;
   startOnBoot: boolean;
+  enableHeadless: boolean;
   debug: boolean;
   provider: any;
 
+  isGod: boolean = false;
   forground: boolean;
   log_events_run: boolean = true;
   log_events_db: any;
@@ -74,6 +79,10 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
     this.addEvent('Start Logging', new Date(), 'Now logging events');
 
+    this.localStorageService.getItem('isGod').subscribe(response => {
+      this.isGod = response;
+    });
+
     this.platform.ready().then(() => {
       if (this.platform.is('cordova')) {
         this.onSetConfig('debug');
@@ -92,6 +101,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.stopTimeout = 1;
     this.stopOnTerminate = false;
     this.startOnBoot = true;
+    this.enableHeadless = true;
     this.debug = false;
     this.odometer = null;
     this.listenToEvents();
@@ -188,6 +198,8 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
   onDeviceReady() {
     console.log(`- configureBackgroundGeolocation:`);
     this.configureBackgroundGeolocation();
+    this.configureBackgroundFetch();
+
   }
 
   private configureBackgroundGeolocation() {
@@ -220,7 +232,9 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       autoSyncThreshold: 0,
       // Logging / Debug config
       debug: this.debug,
-      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE
+      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+      startOnBoot: true,
+      enableHeadless: true,
     }, (state) => {
       console.log('- BackgroundGeolocation ready: ', state);
       // Set current plugin state upon our view.
@@ -232,11 +246,31 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
         this.stopTimeout = state.stopTimeout;
         this.stopOnTerminate = state.stopOnTerminate;
         this.startOnBoot = state.startOnBoot;
+        this.enableHeadless = state.enableHeadless;
         this.debug = state.debug;
       });
     });
   }
 
+  configureBackgroundFetch() {
+    BackgroundFetch.configure(() => {
+      console.log('[BackgroundFetch] - Received fetch event');
+      BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+    }, (error) => {
+      console.warn('BackgroundFetch error: ', error);
+    }, {
+      minimumFetchInterval: 15, // <-- default is 15
+      // Android config
+      stopOnTerminate: false,
+      startOnBoot: true,
+      enableHeadless: true,
+      requiresCharging: false,
+      requiresDeviceIdle: false,
+      requiresBatteryNotLow: false,
+      requiresStorageNotLow: false,
+      requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE
+    });
+  }
 
   /**
 * @event location
@@ -254,7 +288,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       this.baService.postLocation(lat, lng).subscribe((res) => {
         const eventMsg = 'BA Location: response';
         this.addEvent(eventMsg, new Date(location.timestamp), res);
-        if(this.debug) {
+        if (this.debug) {
           this.localNotifications.schedule({
             title: 'BA Location: postLocation()',
             text: `${lat}, ${lng}`,
@@ -439,9 +473,9 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
           }
         }, {
           text: 'Okay',
-          handler: () => {
-            console.log('Confirm Okay');
+          handler: (data) => {
             this.clearMsg();
+            console.log('Confirm Okay');
           }
         }
       ]
@@ -534,10 +568,157 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     // #setConfig
 
     BackgroundGeolocation.setConfig(config, (state) => {
-      if(this.debug) {
+      if (this.debug) {
         this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
         });
       }
     });
   }
+
+
+  async loadTestPutMe() {
+    this.viewSwap('log')
+
+    const alert = await this.alertController.create({
+      header: 'Load Test /me',
+      message: 'Test Mobile API',
+      inputs: [
+        {
+          name: 'Hits',
+          placeholder: '# of Hits',
+          type: 'number'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: (data) => {
+            let status;
+            this.addEvent(`Start Load Test: `, new Date(), data);
+            let summary = [];
+            var start = performance.now();
+
+            for (let index = 0; index < data.Hits; index++) {
+              this.resetProgress();
+              var t0 = performance.now();
+              this.baService.putMe().subscribe(response => {
+                var t1 = performance.now();
+                this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), response);
+                summary.push((t1 - t0));
+                status = Math.round(100 * data.Hits / index);
+                this.uploadProgress.next(status);
+              });
+            }
+
+            var end = performance.now();
+            this.addEvent(`Summary: ${(end - start)}`, new Date(), null);
+
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async loadTestPostLocations() {
+    this.viewSwap('log')
+
+    const alert = await this.alertController.create({
+      header: 'Load Test /locations',
+      message: 'Test Mobile API',
+      inputs: [
+        {
+          name: 'Hits',
+          placeholder: '# of Hits',
+          type: 'number'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: (data) => {
+            this.addEvent(`Start Load Test: `, new Date(), data);
+            let latitude: string = '33.893286';
+            let longitude: string = '-84.474514';
+
+            let summary = [];
+            var start = performance.now();
+
+            for (let index = 0; index < data.Hits; index++) {
+              var t0 = performance.now();
+              this.baService.postLocation(latitude, longitude).subscribe(response => {
+                var t1 = performance.now();
+                this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), response);
+                summary.push((t1 - t0));
+              });
+            }
+
+            var end = performance.now();
+            this.addEvent(`Summary: ${(end - start)}`, new Date(), null);
+
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+
+  async loadTest(hits) {
+    const fruitsToGet = ['apple', 'grape', 'pear']
+
+    const forLoop = async _ => {
+      console.log('Start')
+
+      for (let index = 0; index < fruitsToGet.length; index++) {
+        var t0 = performance.now();
+        var t1 = performance.now();
+        const fruit = fruitsToGet[index]
+        const numFruit = await this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), null);
+        console.log(numFruit)
+      }
+
+      console.log('End')
+    }
+
+    // let summary = [];
+    // for(var _i = 0; _i < hits; _i++) {
+    //   var t0 = performance.now();
+    //   this.baService.putMe().subscribe(response => {
+    //     var t1 = performance.now();
+    //     const numFruit = await this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), null);
+
+    //     await this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), null);
+    //     summary.push((t1 - t0));
+    //   }); 
+    // }
+
+    // await urls.forEach(async (url, idx) => { 
+    //   const todo = await fetch(url);
+    //   console.log(`Received Todo ${idx+1}:`, todo);
+    // });
+
+    console.log('Finished!');
+  }
+
+  resetProgress() {
+    this.uploadProgress.next(0);
+  }
+
 }
