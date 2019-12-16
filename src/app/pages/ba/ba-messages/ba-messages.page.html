@@ -37,6 +37,7 @@
   <div *ngIf="showLog">
     <ion-toolbar *ngIf="isGod" color="dark">
       <ion-row padding-horizontal>
+        <ion-button size="small" (click)="loadTestGetMe()">GET/me</ion-button>
         <ion-button size="small" (click)="loadTestPutMe()">PUT/me</ion-button>
         <ion-button size="small" (click)="loadTestPostLocations()">POST/locations</ion-button>
       </ion-row>
@@ -45,7 +46,7 @@
 </ion-header>
 
 <ion-content class="main" *ngIf="showInbox">
-  <ion-progress-bar color="primary" value="{{uploadProgress | async}}"></ion-progress-bar>
+  <ion-progress-bar color="primary" value="{{progress}}"></ion-progress-bar>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
       refreshingText="Refreshing...">

@@ -18,7 +18,7 @@ constructor(
 }
 
   ngOnInit() {
-    this.boardActiveService.putMe().subscribe(data => {
+    this.boardActiveService.putMe().then(data => {
       console.log(`user: ${JSON.stringify(data, null, 2)}`);
       const user: any = data;
       this.stock = user.attributes.stock;
@@ -27,7 +27,7 @@ constructor(
   }
 
   save() {
-    this.boardActiveService.putMe(this.stock).subscribe(data => {
+    this.boardActiveService.putMe(this.stock).then(data => {
       console.log(`user: ${JSON.stringify(data, null, 2)}`);
       this.utilService.navigate('/ba-messages', false);
 

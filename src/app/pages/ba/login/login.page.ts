@@ -79,7 +79,7 @@ public easteregg: number = 0;
         
     });
 
-    this.baService.postLogin(this.email, this.password).subscribe(response => {
+    this.baService.postLogin(this.email, this.password).then(response => {
       // console.log(`postLogin(): ${JSON.stringify(response, null, 2)}`);
       const appModel: AppDto = response;
 

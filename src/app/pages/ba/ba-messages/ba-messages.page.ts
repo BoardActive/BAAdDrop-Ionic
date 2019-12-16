@@ -27,6 +27,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
   // @ViewChild(IonContent, null) content: IonContent;
   @ViewChild('map', { static: false }) mapElement: ElementRef;
   public uploadProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public progress: number = 0;
 
   public development: boolean = false;
   public isRendering: boolean = true;
@@ -124,7 +125,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
     this.baService.init().then(response => {
       console.log(`init(): ${JSON.stringify(response, null, 2)}`);
-      this.baService.putMe().subscribe(data => {
+      this.baService.putMe().then(data => {
         console.log(`putMe(): ${JSON.stringify(data, null, 2)}`);
         this.addEvent('putMe()', new Date(), data);
       });
@@ -285,7 +286,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const lng: any = location.coords.longitude.toString();
       this.addEvent(event, new Date(location.timestamp), location);
       // this.baService.handleLocationUpdate(lat, lng);
-      this.baService.postLocation(lat, lng).subscribe((res) => {
+      this.baService.postLocation(lat, lng).then((res) => {
         const eventMsg = 'BA Location: response';
         this.addEvent(eventMsg, new Date(location.timestamp), res);
         if (this.debug) {
@@ -393,7 +394,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
   }
 
   putMe() {
-    this.baService.putMe().subscribe(response => {
+    this.baService.putMe().then(response => {
       console.log(JSON.stringify(response, null, 2));
       this.addEvent('putMe()', new Date(), response);
     });
@@ -575,6 +576,58 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     });
   }
 
+  async loadTestGetMe() {
+    this.viewSwap('log')
+
+    const alert = await this.alertController.create({
+      header: 'Load Test /me',
+      message: 'Test Mobile API',
+      inputs: [
+        {
+          name: 'Hits',
+          placeholder: '# of Hits',
+          type: 'number'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: (data) => {
+            let status;
+            this.addEvent(`Start Load Test: `, new Date(), data);
+            let summary = [];
+            var start = performance.now();
+
+            for (let index = 0; index < data.Hits; index++) {
+              this.resetProgress();
+              var t0 = performance.now();
+              this.baService.getMe().then(response => {
+                var t1 = performance.now();
+                this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), response);
+                summary.push((t1 - t0));
+                status = Math.round(1 * data.Hits / index);
+                this.progress = status;
+                this.uploadProgress.next(status);
+              });
+            }
+
+            var end = performance.now();
+            this.addEvent(`Summary: ${(end - start)}`, new Date(), null);
+
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
 
   async loadTestPutMe() {
     this.viewSwap('log')
@@ -608,11 +661,12 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
             for (let index = 0; index < data.Hits; index++) {
               this.resetProgress();
               var t0 = performance.now();
-              this.baService.putMe().subscribe(response => {
+              this.baService.putMe().then(response => {
                 var t1 = performance.now();
                 this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), response);
                 summary.push((t1 - t0));
-                status = Math.round(100 * data.Hits / index);
+                status = Math.round(1 * data.Hits / index);
+                this.progress = status;
                 this.uploadProgress.next(status);
               });
             }
@@ -661,7 +715,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
             for (let index = 0; index < data.Hits; index++) {
               var t0 = performance.now();
-              this.baService.postLocation(latitude, longitude).subscribe(response => {
+              this.baService.postLocation(latitude, longitude).then(response => {
                 var t1 = performance.now();
                 this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), response);
                 summary.push((t1 - t0));

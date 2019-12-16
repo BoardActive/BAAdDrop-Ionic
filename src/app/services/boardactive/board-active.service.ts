@@ -3,10 +3,6 @@ import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { FCMService } from '../fcm/fcm.service';
 import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
-import {
-    HttpTestingController,
-    HttpClientTestingModule
-  } from '@angular/common/http/testing';
 import { ModalController } from '@ionic/angular';
 import { BaMessagePage } from '../../pages/ba/ba-message/ba-message.page';
 import { Device } from '@ionic-native/device/ngx';
@@ -15,7 +11,7 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Observable } from 'rxjs';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
-import { tap } from 'rxjs/operators';
+import { tap, share } from 'rxjs/operators';
 
 declare var cordova;
 
@@ -88,7 +84,7 @@ export class BoardActiveService {
                 }
                 var errorCallback = function (err) {
                     console.error(err)
-                    resolve(err);
+                    reject(err);
                 }
 
                 sharedPreferences.put(key, value, successCallback, errorCallback);
@@ -110,7 +106,7 @@ export class BoardActiveService {
                 }
                 var errorCallback = function (err) {
                     console.log(err)
-                    resolve(err);
+                    reject(err);
                 }
 
                 sharedPreferences.get(key, defaultValue, successCallback, errorCallback);
@@ -128,7 +124,7 @@ export class BoardActiveService {
     init(): Promise<any> {
         console.log(`[BA:BaClient] init()`);
         return new Promise((resolve, reject) => {
-            this.configureFirebase().subscribe(res => {
+            this.configureFirebase().then(res => {
                 resolve(true);
             });
         });
@@ -137,16 +133,51 @@ export class BoardActiveService {
     /**
      * Configures the Client's Firebase Cloud Messaging notifications
      */
-    private configureFirebase(): Observable<any> {
-        return new Observable((observer) => {
+    private configureFirebase(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            /**
+            * Gets FCM Token ane saves it to persistent storage
+            */
             this.fcmProvider.getToken().then(token => {
                 this.localStorageService.setItem('token', token).subscribe(token => {
-                    observer.next(token);
-                    observer.complete();
+                    resolve(token);
                 });
             });
 
-            this.fcmProvider.listenToNotifications().pipe(tap(payload => {
+            /**
+            * Listener for receiving all messages
+            * The BoardActive server is using the FCM HTTP Endpoint 
+            * POST https://fcm.googleapis.com/fcm/send
+            * // Android
+            *{
+            *    "to": "<FCM_DEVICE_TOKEN>",
+            *    "notification": {
+            *        "title": "Breaking News",
+            *        "body": "New news story available.",
+            *        "click_action": "TOP_STORY_ACTIVITY"
+            *    },
+            *    "data": {
+            *        "story_id": "story_12345"
+            *    }
+            *}
+            * // iOS
+            *{
+            *    "to": "<FCM_DEVICE_TOKEN>",
+            *    "notification": {
+            *        "title": "Breaking News",
+            *        "body": "New news story available.",
+            *        "click_action": "HANDLE_BREAKING_NEWS"
+            *    },
+            *    "data": {
+            *        "story_id": "story_12345"
+            *    }
+            *}
+            *
+            * Background Notification
+            * 
+            * 
+            */
+           this.fcmProvider.listenToNotifications().pipe(tap(payload => {
                 console.log(`[BA:FCM] : ` + JSON.stringify(payload));
                 const myDate: string = new Date().toISOString();
                 let thisMsg: MessageDto = MessageModel.empty();
@@ -273,7 +304,7 @@ export class BoardActiveService {
      */
     handleLocationUpdate(lat: string, lng: string): void {
         console.log(`[BA:handleLocationUpdate] Lat: ${lat} Lng: ${lng}`);
-        this.postLocation(lat, lng).subscribe(response => {
+        this.postLocation(lat, lng).then(response => {
 
         });
     }
@@ -286,32 +317,51 @@ export class BoardActiveService {
     /*
     GET /me
     */
-    getMe(): Observable<any> {
-        return new Observable((observer) => {
+    // getMe(): Observable<any> {
+    //     return new Observable((observer) => {
+    //         this.getEnvironment().subscribe(setUrl => {
+    //             const url = setUrl + '/me';
+    //             console.log(`[BA:getMe] url: ${url}`);
+    //             this.generateHeaders().then(httpHeaders => {
+    //                 console.log(`[BA:getMe] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
+    //                 this.http.get(url, { headers: httpHeaders }).pipe(share()).subscribe(response => {
+    //                     console.log(`[BA:getMe] RESPONSE: ${JSON.stringify(response, null, 2)}`);
+    //                     observer.next(response);
+    //                     observer.complete();
+    //                 }, err => {
+    //                     console.log(`[BA:getMe] ERROR: ${err}`);
+    //                     observer.next(err);
+    //                     observer.complete();
+    //                 });
+    //             });
+    //         })
+    //     });
+    // }
+
+
+    getMe(): Promise<any> {
+        return new Promise((resolve, reject) => {
             this.getEnvironment().subscribe(setUrl => {
                 const url = setUrl + '/me';
                 console.log(`[BA:getMe] url: ${url}`);
                 this.generateHeaders().then(httpHeaders => {
                     console.log(`[BA:getMe] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
-                    this.http.get(url, { headers: httpHeaders }).subscribe(response => {
+                    this.http.get(url, { headers: httpHeaders }).pipe(share()).subscribe(response => {
                         console.log(`[BA:getMe] RESPONSE: ${JSON.stringify(response, null, 2)}`);
-                        observer.next(response);
-                        observer.complete();
+                        resolve(response);
                     }, err => {
                         console.log(`[BA:getMe] ERROR: ${err}`);
-                        observer.next(err);
-                        observer.complete();
+                        reject(err);
                     });
                 });
             })
         });
     }
-
     /*
     PUT /me
     */
-    postLogin(email: any, password: any): Observable<any> {
-        return new Observable((observer) => {
+    postLogin(email: any, password: any): Promise<any> {
+        return new Promise((resolve, reject) => {
             this.getEnvironment().subscribe(setUrl => {
                 const url = setUrl + '/login';
                 console.log(`[BA:postLogin] url: ${url}`);
@@ -322,11 +372,9 @@ export class BoardActiveService {
                 };
 
                 this.http.post(url, body, { params: {}, headers: {} }).subscribe((response) => {
-                    observer.next(response);
-                    observer.complete();
+                    resolve(response);
                 }, err => {
-                    observer.next(err);
-                    observer.complete();
+                    reject(err);
                 });
 
             })
@@ -336,7 +384,8 @@ export class BoardActiveService {
     /*
     PUT /me
     */
-    putMe(setAttributes?: Attributes): Observable<any> {
+    putMe(setAttributes?: Attributes): Promise<any> {
+        // alert(`TEST sharedPreferencesPut`);
         var attributes: Attributes = {};
         if (setAttributes) {
             if (setAttributes.name) { attributes.name = setAttributes.name };
@@ -372,7 +421,7 @@ export class BoardActiveService {
 
         console.log(`attributes: ${JSON.stringify(attributes, null, 2)}`);
 
-        return new Observable((observer) => {
+        return new Promise((resolve, reject) => {
             this.getEnvironment().subscribe(setUrl => {
                 const url = setUrl + '/me';
                 console.log(`[BA:putMe] url: ${url}`);
@@ -393,20 +442,90 @@ export class BoardActiveService {
 
                     this.generateHeaders().then(httpHeaders => {
                         console.log(`[BA:putMe] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
-                        this.http.put(url, body, { headers: httpHeaders }).subscribe(response => {
+                        this.http.put(url, body, { headers: httpHeaders }).pipe(share()).subscribe(response => {
                             console.log(`[BA:putMe] RESPONSE: ${JSON.stringify(response, null, 2)}`);
-                            observer.next(response);
-                            observer.complete();
+                            resolve(response);
                         }, err => {
                             console.log(`[BA:putMe] ERROR: ${err}`);
-                            observer.next(err);
-                            observer.complete();
+                            reject(err);
                         });
                     });
                 });
             })
         });
     }
+
+    // putMe(setAttributes?: Attributes): Observable<any> {
+    //     var attributes: Attributes = {};
+    //     if (setAttributes) {
+    //         if (setAttributes.name) { attributes.name = setAttributes.name };
+    //         if (setAttributes.email) { attributes.email = setAttributes.email };
+    //         if (setAttributes.phone) { attributes.phone = setAttributes.phone };
+    //         if (setAttributes.dateBorn) { attributes.dateBorn = setAttributes.dateBorn };
+    //         if (setAttributes.gender) { attributes.gender = setAttributes.gender };
+    //         if (setAttributes.facebookUrl) { attributes.facebookUrl = setAttributes.facebookUrl };
+    //         if (setAttributes.linkedInUrl) { attributes.linkedInUrl = setAttributes.linkedInUrl };
+    //         if (setAttributes.twitterUrl) { attributes.twitterUrl = setAttributes.twitterUrl };
+    //         if (setAttributes.instagramUrl) { attributes.instagramUrl = setAttributes.instagramUrl };
+    //         if (setAttributes.avatarUrl) { attributes.avatarUrl = setAttributes.avatarUrl };
+    //     }
+
+    //     if (this.platform.is('android') || this.platform.is('ios')) {
+    //         //Set Automatic User Attributes
+    //         attributes.deviceOS = this.device.platform;
+    //         attributes.deviceOSVersion = this.device.version;
+    //         attributes.deviceType = this.device.model;
+
+    //         this.localStorageService.getItem('token').subscribe(token => {
+    //             attributes.deviceToken = token;
+    //             this.diagnostic.isLocationAuthorized().then(data1 => {
+    //                 attributes.locationPermission = data1;
+    //                 this.diagnostic.isRemoteNotificationsEnabled().then(data2 => {
+    //                     attributes.notificationPermission = data2;
+    //                 });
+    //             });
+    //         });
+
+    //         console.log(`${JSON.stringify(attributes, null, 2)}`);
+    //     }
+
+    //     console.log(`attributes: ${JSON.stringify(attributes, null, 2)}`);
+
+    //     return new Observable((observer) => {
+    //         this.getEnvironment().subscribe(setUrl => {
+    //             const url = setUrl + '/me';
+    //             console.log(`[BA:putMe] url: ${url}`);
+    //             this.localStorageService.getItem('UserEmail').subscribe(email => {
+    //                 const deviceOS = this.device.platform;
+    //                 const deviceOSVersion = this.device.version;
+
+    //                 const body = {
+    //                     email: email,
+    //                     deviceOS: deviceOS,
+    //                     deviceOSVersion: deviceOSVersion,
+    //                     attributes: {
+    //                         stock: attributes
+    //                     }
+    //                 };
+
+    //                 console.log(`[BA:putMe] body: ${JSON.stringify(body, null, 2)}`);
+
+    //                 this.generateHeaders().then(httpHeaders => {
+    //                     console.log(`[BA:putMe] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
+    //                     this.http.put(url, body, { headers: httpHeaders }).subscribe(response => {
+    //                         console.log(`[BA:putMe] RESPONSE: ${JSON.stringify(response, null, 2)}`);
+    //                         observer.next(response);
+    //                         observer.complete();
+    //                     }, err => {
+    //                         console.log(`[BA:putMe] ERROR: ${err}`);
+    //                         observer.next(err);
+    //                         observer.complete();
+    //                     });
+    //                 });
+    //             });
+    //         })
+    //     });
+    // }
 
     /*
     POST /me
@@ -429,7 +548,7 @@ export class BoardActiveService {
 
                     this.generateHeaders().then(httpHeaders => {
                         console.log(`[BA:postMe] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
-                        this.http.post(url, body, { headers: httpHeaders }).subscribe(response => {
+                        this.http.post(url, body, { headers: httpHeaders }).pipe(share()).subscribe(response => {
                             console.log(`[BA:postMe] RESPONSE: ${JSON.stringify(response, null, 2)}`);
                             observer.next(response);
                             observer.complete();
@@ -447,10 +566,10 @@ export class BoardActiveService {
     /*
     POST /locations
     */
-    postLocation(latitude: string, longitude: string): Observable<any> {
+    postLocation(latitude: string, longitude: string): Promise<any> {
         console.log(`[BA:postLocation] lat/lng: ${latitude + '' + longitude}`);
 
-        return new Observable((observer) => {
+        return new Promise((resolve, reject) => {
             this.getEnvironment().subscribe(setUrl => {
                 const url = setUrl + '/locations';
                 console.log(`[BA:postLocation] url: ${url}`);
@@ -462,14 +581,12 @@ export class BoardActiveService {
 
                 this.generateHeaders().then(httpHeaders => {
                     console.log(`[BA:postLocation] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
-                    this.http.post(url, body, { headers: httpHeaders }).subscribe(response => {
+                    this.http.post(url, body, { headers: httpHeaders }).pipe(share()).subscribe(response => {
                         console.log(`[BA:postLocation] RESPONSE: ${JSON.stringify(response, null, 2)}`);
-                        observer.next(response);
-                        observer.complete();
+                        resolve(response);
                     }, err => {
                         console.log(`[BA:postLocation] ERROR: ${err}`);
-                        observer.next(err);
-                        observer.complete();
+                        reject(err);
                     });
                 });
             })
@@ -493,7 +610,7 @@ export class BoardActiveService {
 
             this.generateHeaders().then(httpHeaders => {
                 console.log(`[BA:postEvent] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
-                this.http.post(url, body, { headers: httpHeaders }).subscribe(response => {
+                this.http.post(url, body, { headers: httpHeaders }).pipe(share()).subscribe(response => {
                     console.log(`[BA:postEvent] RESPONSE: ${JSON.stringify(response, null, 2)}`);
                 }, err => {
                     console.log(`[BA:postEvent] ERROR: ${err}`);
@@ -541,7 +658,7 @@ export class BoardActiveService {
                     });
                 });
             });
-            
+
             const Promise_AppID = new Promise(resolve => {
                 this.localStorageService.getItem('AppID').subscribe(appId => {
                     AppID = AppID || appId;
@@ -549,7 +666,7 @@ export class BoardActiveService {
                     this.sharedPreferencesPut('X-BoardActive-App-Id', AppID).then(_ => {
                         console.log(`[BA:HttpHeaders] X-BoardActive-App-Id: ${AppID}`);
                         resolve(AppID);
-                    });        
+                    });
                 });
             });
 

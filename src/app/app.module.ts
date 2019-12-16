@@ -28,7 +28,8 @@ import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
     AppComponent,
   ],
   exports: [],
-  entryComponents: [],
+  entryComponents: [
+  ],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 

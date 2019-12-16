@@ -68,7 +68,7 @@ export class AppComponent {
         });
         break;
       case 2:
-        this.baService.putMe().subscribe(device => {
+        this.baService.putMe().then(device => {
           alert(`${JSON.stringify(device, null, 2)}`);
         });
         break;
