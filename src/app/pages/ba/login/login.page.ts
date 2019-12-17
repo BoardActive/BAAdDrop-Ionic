@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { MenuController, Platform } from '@ionic/angular';
 import { BoardActiveService } from '../../../services/boardactive/board-active.service';
 import { UtilService } from '../../../services/util/util.service';
 import { AppDto } from 'src/app/models/app.model';
@@ -18,6 +18,7 @@ public developer: boolean = false;
 public easteregg: number = 0;
 
   constructor(
+    private platform: Platform,
     private baService: BoardActiveService,
     private utilService: UtilService,
     private menuCtrl: MenuController, 
@@ -25,7 +26,14 @@ public easteregg: number = 0;
     private storage: Storage
 
   ) {
-   }
+
+    if (!this.platform.is('cordova')) {
+      // This will only print when on iOS
+      console.log('I am an iOS device!');
+      alert(`Cordova not present`)
+    }
+
+  }
 
   ngOnInit() {
     this.localStorageService.getItem('environment').subscribe(dev => {

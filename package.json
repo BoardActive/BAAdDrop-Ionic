@@ -35,7 +35,6 @@
     "cordova-ios": "^5.1.1",
     "cordova-plugin-androidx": "^1.0.2",
     "cordova-plugin-androidx-adapter": "^1.1.0",
-    "cordova-plugin-app-preferences": "git+https://github.com/vash15/me.apla.cordova.app-preferences.git",
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-awesome-shared-preferences": "git+https://github.com/adriano-di-giovanni/cordova-plugin-shared-preferences.git",
     "cordova-plugin-background-fetch": "^5.6.1",
@@ -85,7 +84,20 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-firebasex": {},
+      "cordova-plugin-firebasex": {
+        "FIREBASE_ANALYTICS_COLLECTION_ENABLED": "true",
+        "FIREBASE_PERFORMANCE_COLLECTION_ENABLED": "true",
+        "FIREBASE_CRASHLYTICS_COLLECTION_ENABLED": "true",
+        "ANDROID_ICON_ACCENT": "#FF00FFFF",
+        "ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION": "17.0.0",
+        "ANDROID_FIREBASE_ANALYTICS_VERSION": "17.2.1",
+        "ANDROID_FIREBASE_MESSAGING_VERSION": "20.0.0",
+        "ANDROID_FIREBASE_CONFIG_VERSION": "19.0.3",
+        "ANDROID_FIREBASE_PERF_VERSION": "19.0.1",
+        "ANDROID_FIREBASE_AUTH_VERSION": "19.1.0",
+        "ANDROID_CRASHLYTICS_VERSION": "2.10.1",
+        "ANDROID_CRASHLYTICS_NDK_VERSION": "2.1.1"
+      },
       "cordova-sqlite-storage": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
