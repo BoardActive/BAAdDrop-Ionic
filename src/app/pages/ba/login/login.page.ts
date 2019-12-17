@@ -27,9 +27,11 @@ public easteregg: number = 0;
 
   ) {
 
-    if (!this.platform.is('cordova')) {
+    if (this.platform.is('cordova')) {
       // This will only print when on iOS
-      console.log('I am an iOS device!');
+      console.log('Cordova present');
+    } else {
+      console.log('Cordova not present');
       alert(`Cordova not present`)
     }
 
