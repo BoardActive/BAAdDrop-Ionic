@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <h2 class="fw700" padding-top padding-horizontal>Custom Attributes</h2>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content no-padding>
+
+  <div>
+    <ion-card>
+      <ion-card-content>
+        <ion-row>
+          <ion-col>
+            <ion-button no-margin expand="block" color="secondary" (click)="addCustomAttribute()" class="btn-color">
+              <strong>Add Custom Attribute</strong></ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-list lines="none">
+          <form [formGroup]="myForm">
+            <ion-item *ngFor="let control of myForm.controls | keyvalue">
+              <ion-label class="pb-2 text-secondary hb-small-caps">{{control.key}}</ion-label>
+              <ion-input required type="text" [formControlName]="control.key"></ion-input>
+            </ion-item>
+          </form>
+        </ion-list>
+
+        <ion-row>
+          <ion-col>
+            <ion-button no-margin expand="block" color="primary" (click)="save()" class="btn-color">
+              <strong>Save</strong></ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="pt-2">
+          <ion-col>
+            <ion-button no-margin expand="block" fill="outline" color="medium" (click)="cancel()" class="btn-color">
+              <p class="text-primary bold">
+                Cancel
+              </p>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="pt-2">
+          <ion-col>
+            <ion-button no-margin expand="block" fill="outline" color="medium" (click)="delete()" class="btn-color">
+              <p class="text-primary bold">
+                Delete
+              </p>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>

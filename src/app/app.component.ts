@@ -35,9 +35,14 @@ export class AppComponent {
       menuItem: 4
     },
     {
-      title: 'Device Attributes',
+      title: 'Custom Attributes',
       icon: 'time',
       menuItem: 5
+    },
+    {
+      title: 'Device Attributes',
+      icon: 'time',
+      menuItem: 6
     }
   ];
 
@@ -81,6 +86,9 @@ export class AppComponent {
         this.utilService.navigate('/ba-user', true);
         break;
       case 5:
+        this.utilService.navigate('/ba-custom', true);
+        break;
+      case 6:
         this.baService.defaultAttributes().then(data => {
           alert(`${JSON.stringify(data, null, 2)}`);
         });

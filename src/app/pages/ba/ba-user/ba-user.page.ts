@@ -1,6 +1,7 @@
-import { Component, OnInit, ɵɵi18nAttributes } from '@angular/core';
-import { BoardActiveService, Attributes } from '../../../services/boardactive/board-active.service';
+import { Component, OnInit } from '@angular/core';
+import { BoardActiveService } from '../../../services/boardactive/board-active.service';
 import { UtilService } from '../../../services/util/util.service';
+import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-ba-user',
@@ -8,11 +9,13 @@ import { UtilService } from '../../../services/util/util.service';
   styleUrls: ['./ba-user.page.scss'],
 })
 export class BaUserPage implements OnInit {
-stock: Attributes = new Attributes;
+  stockAttributes: any = [];
+  customAttributes: any = [];
 
 constructor(
   private boardActiveService: BoardActiveService,
-  private utilService: UtilService
+  private utilService: UtilService,
+  private localStorageService: LocalStorageService
 ) { 
 
 }
@@ -21,17 +24,17 @@ constructor(
     this.boardActiveService.putMe().then(data => {
       console.log(`user: ${JSON.stringify(data, null, 2)}`);
       const user: any = data;
-      this.stock = user.attributes.stock;
+      this.stockAttributes = user.attributes.stock;
+      this.customAttributes = user.attributes.custom;
       console.log(`user.attributes.stock: ${JSON.stringify(user.attributes.stock, null, 2)}`);
-    })
+    });
   }
 
   save() {
-    this.boardActiveService.putMe(this.stock).then(data => {
+    this.boardActiveService.putMe(this.stockAttributes, this.customAttributes).then(data => {
       console.log(`user: ${JSON.stringify(data, null, 2)}`);
       this.utilService.navigate('/ba-messages', false);
-
-    })
+    });
   }
 
   cancel() {

@@ -15,7 +15,7 @@ import { tap, share } from 'rxjs/operators';
 
 declare var cordova;
 
-export class Attributes {
+export class stockAttributes {
     name?: any;
     email?: any;
     phone?: any;
@@ -32,6 +32,11 @@ export class Attributes {
     locationPermission?: any;
     notificationPermission?: any;
     deviceToken?: any;
+}
+
+export class  customAttributes {
+    name?: any;
+    value?: any;
 }
 
 export const Config = {
@@ -384,20 +389,20 @@ export class BoardActiveService {
     /*
     PUT /me
     */
-    putMe(setAttributes?: Attributes): Promise<any> {
+    putMe(stockAttributes?: stockAttributes, customAttributes?: customAttributes[]): Promise<any> {
         // alert(`TEST sharedPreferencesPut`);
-        var attributes: Attributes = {};
-        if (setAttributes) {
-            if (setAttributes.name) { attributes.name = setAttributes.name };
-            if (setAttributes.email) { attributes.email = setAttributes.email };
-            if (setAttributes.phone) { attributes.phone = setAttributes.phone };
-            if (setAttributes.dateBorn) { attributes.dateBorn = setAttributes.dateBorn };
-            if (setAttributes.gender) { attributes.gender = setAttributes.gender };
-            if (setAttributes.facebookUrl) { attributes.facebookUrl = setAttributes.facebookUrl };
-            if (setAttributes.linkedInUrl) { attributes.linkedInUrl = setAttributes.linkedInUrl };
-            if (setAttributes.twitterUrl) { attributes.twitterUrl = setAttributes.twitterUrl };
-            if (setAttributes.instagramUrl) { attributes.instagramUrl = setAttributes.instagramUrl };
-            if (setAttributes.avatarUrl) { attributes.avatarUrl = setAttributes.avatarUrl };
+        var attributes: stockAttributes = {};
+        if (stockAttributes) {
+            if (stockAttributes.name) { attributes.name = stockAttributes.name };
+            if (stockAttributes.email) { attributes.email = stockAttributes.email };
+            if (stockAttributes.phone) { attributes.phone = stockAttributes.phone };
+            if (stockAttributes.dateBorn) { attributes.dateBorn = stockAttributes.dateBorn };
+            if (stockAttributes.gender) { attributes.gender = stockAttributes.gender };
+            if (stockAttributes.facebookUrl) { attributes.facebookUrl = stockAttributes.facebookUrl };
+            if (stockAttributes.linkedInUrl) { attributes.linkedInUrl = stockAttributes.linkedInUrl };
+            if (stockAttributes.twitterUrl) { attributes.twitterUrl = stockAttributes.twitterUrl };
+            if (stockAttributes.instagramUrl) { attributes.instagramUrl = stockAttributes.instagramUrl };
+            if (stockAttributes.avatarUrl) { attributes.avatarUrl = stockAttributes.avatarUrl };
         }
 
         if (this.platform.is('android') || this.platform.is('ios')) {
@@ -434,7 +439,8 @@ export class BoardActiveService {
                         deviceOS: deviceOS,
                         deviceOSVersion: deviceOSVersion,
                         attributes: {
-                            stock: attributes
+                            stock: attributes,
+                            custom: customAttributes
                         }
                     };
 
@@ -1014,7 +1020,7 @@ export class BoardActiveService {
 
 
     defaultAttributes(): Promise<any> {
-        var attributes: Attributes = {};
+        var attributes: stockAttributes = {};
         return new Promise((resolve, reject) => {
             if (this.platform.is('android') || this.platform.is('ios')) {
                 //Set Automatic User Attributes

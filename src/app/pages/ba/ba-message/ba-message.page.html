@@ -61,7 +61,7 @@
         Ends on <span class="bold">{{ messageData.promoDateEnds | date }}</span>
       </p>
     </div>
-    <div padding-horizontal class="mb-2" *ngIf="messageData.phoneNumber"> 
+    <div padding-horizontal class="mb-2" *ngIf="messageData.phoneNumber || messageData.email || messageData.storeAddress || messageData.urlLandingPage"> 
       <div class="mb-1">
         <p class="hb-small-caps text-secondary" no-margin>Contact</p>
       </div>
@@ -94,7 +94,7 @@
       </a>
     </div>
 
-    <div padding-horizontal class="mb-4" *ngIf="messageData.urlFacebook">
+    <div padding-horizontal class="mb-4" *ngIf="messageData.urlFacebook || messageData.urlLinkedIn || messageData.urlTwitter || messageData.urlYoutube">
       <div class="mb-1">
         <p class="hb-small-caps text-secondary" no-margin>Social</p>
       </div>
@@ -119,6 +119,14 @@
           class="icon-mono icon-sm"
         ></ion-icon>
       </a>
+      <a href="{{ messageData.urlYoutube }}" *ngIf="messageData.urlYoutube">
+        <ion-icon
+          name="logo-youtube"
+          no-margin
+          class="icon-mono icon-sm"
+        ></ion-icon>
+      </a>
+
     </div>
 
     <!-- <iframe *ngIf="messageData.urlYoutube" width="100%" height="315" src="{{youtubeUrl}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>         -->
