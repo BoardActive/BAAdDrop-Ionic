@@ -108,8 +108,13 @@ export class BaCustomPage implements OnInit {
   }
 
   save() {
+    let myarray: customAttributes[];
     this.buildAttributes().then(res => {
-      alert(`${JSON.stringify(this.customAttributes, null, 2)}`);
+      let customAttributesMap : Map<string, customAttributes[]> = new Map<string, customAttributes[]>(); 
+      customAttributesMap.set('' , this.customAttributes);
+      alert(JSON.stringify(Object.assign(this.customAttributes), null, 2));
+      // alert(`${JSON.stringify(this.customAttributes, null, 2)}`);
+      // alert(`${JSON.parse(this.customAttributes)}`);
       // this.boardActiveService.putMe(this.stockAttributes, this.customAttributes).then(data => {
       //   // alert(`user: ${JSON.stringify(data, null, 2)}`);
       //   this.utilService.navigate('/ba-messages', false);
@@ -126,9 +131,11 @@ export class BaCustomPage implements OnInit {
         let attribute: customAttributes = {};
         attribute.name = this.getName(control);
         attribute.value = control.value;
+        let name: string = `${this.getName(control)}`;
+        let value: string = `${control.value}`;
+        let item = name + ": " + value;
         // let item: string = "\n" + this.getName(control)  + "\n: \n" +  control.value; + "\n";
         // let item: string = attribute.name  + ": " +  attribute.value;
-        var item = JSON.parse(this.getName(control) , control.value);
         this.customAttributes.push(item);
         // this.customAttributes.push(attribute);
       }
