@@ -110,8 +110,8 @@ export class BaCustomPage implements OnInit {
   save() {
     let myarray: customAttributes[];
     this.buildAttributes().then(res => {
-      let customAttributesMap : Map<string, customAttributes[]> = new Map<string, customAttributes[]>(); 
-      customAttributesMap.set('' , this.customAttributes);
+      let customAttributesMap: Map<string, customAttributes[]> = new Map<string, customAttributes[]>();
+      customAttributesMap.set('', this.customAttributes);
       alert(JSON.stringify(Object.assign(this.customAttributes), null, 2));
       // alert(`${JSON.stringify(this.customAttributes, null, 2)}`);
       // alert(`${JSON.parse(this.customAttributes)}`);
@@ -143,45 +143,35 @@ export class BaCustomPage implements OnInit {
     });
   }
 
-private toArray(obj) {
-  let array = [];
-  Object.keys(obj).forEach(key => {
-    array.push(obj[key]);
-  })
-  return array;
-}
-
-private getName(control: AbstractControl): string | null {
-  let group = <FormGroup>control.parent;
-
-  if (!group) {
-    return null;
+  private toArray(obj) {
+    let array = [];
+    Object.keys(obj).forEach(key => {
+      array.push(obj[key]);
+    })
+    return array;
   }
 
-  let name: string;
+  private getName(control: AbstractControl): string | null {
+    let group = <FormGroup>control.parent;
 
-  Object.keys(group.controls).forEach(key => {
-    let childControl = group.get(key);
-    if (childControl !== control) {
-      return;
+    if (!group) {
+      return null;
     }
-    name = key;
-  });
-  return name;
-}
 
-cancel() {
-  this.utilService.navigate('/ba-messages', false);
-}
+    let name: string;
 
-delete () {
-  this.customAttributes = [];
-  this.buildAttributes().then(res => {
-    this.boardActiveService.putMe(this.stockAttributes, this.customAttributes).then(data => {
-      console.log(`user: ${JSON.stringify(data, null, 2)}`);
-      this.utilService.navigate('/ba-messages', false);
+    Object.keys(group.controls).forEach(key => {
+      let childControl = group.get(key);
+      if (childControl !== control) {
+        return;
+      }
+      name = key;
     });
-  });
-}
+    return name;
+  }
+
+  cancel() {
+    this.utilService.navigate('/ba-messages', false);
+  }
 
 }
