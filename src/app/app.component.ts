@@ -13,6 +13,7 @@ import { UtilService } from './services/util/util.service';
 })
 export class AppComponent {
 
+  public isCordova: boolean = false;
   public appMenu = [
     {
       title: 'Register Phone',
@@ -40,7 +41,7 @@ export class AppComponent {
       menuItem: 5
     },
     {
-      title: 'Device Attributes',
+      title: 'Default SDK Attributes',
       icon: 'time',
       menuItem: 6
     }
@@ -59,8 +60,13 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      if(this.platform.is('cordova')) {
+        this.isCordova = true;
+        this.statusBar.styleDefault();
+        this.splashScreen.hide();  
+      } else {
+        this.isCordova = false;
+      }
     });
   }
 

@@ -26,12 +26,12 @@ export class stockAttributes {
     twitterUrl?: any;
     instagramUrl?: any;
     avatarUrl?: any;
-    deviceOS?: any;
-    deviceOSVersion?: any;
-    deviceType?: any;
-    locationPermission?: any;
-    notificationPermission?: any;
-    deviceToken?: any;
+    deviceOS?: any; // Default Set by SDK         
+    deviceOSVersion?: any; // Default Set by SDK  
+    deviceType?: any; // Default Set by SDK  
+    locationPermission?: any; // Default Set by SDK  
+    notificationPermission?: any; // Default Set by SDK  
+    deviceToken?: any; // Default Set by SDK  
 }
 
 export class  customAttributes {

@@ -1,34 +1,34 @@
 <ion-header>
   <ion-toolbar>
-    <h2 class="fw700" padding-top padding-horizontal>User Attributes</h2>
+    <h2 class="ion-padding-horizontal ion-padding-top fw700">User Attributes</h2>
   </ion-toolbar>
 </ion-header>
 
-<ion-content no-padding>
+<ion-content class="ion-no-padding">
   <div>
     <ion-card>
       <ion-card-content>
         <ion-row>
           <ion-col text-left>
             <ion-label class="pb-2 text-secondary hb-small-caps">Name</ion-label>
-            <ion-input clearInput type="text" placeholder="John Doe" [(ngModel)]="stock.name" class="input"
-              padding-horizontal clear-input="true"></ion-input>
+            <ion-input clearInput type="text" placeholder="John Doe" [(ngModel)]="stock.name" class="ion-padding-horizontal input"
+             clear-input="true"></ion-input>
           </ion-col>
         </ion-row>
 
         <ion-row>
           <ion-col text-left>
             <ion-label class="pb-2 text-secondary hb-small-caps">Email</ion-label>
-            <ion-input clearInput type="email" placeholder="example@aol.com" [(ngModel)]="stock.email" class="input"
-              padding-horizontal clear-input="true"></ion-input>
+            <ion-input clearInput type="email" placeholder="example@aol.com" [(ngModel)]="stock.email" class="ion-padding-horizontal input"
+              clear-input="true"></ion-input>
           </ion-col>
         </ion-row>
 
         <ion-row>
           <ion-col text-left>
             <ion-label class="pb-2 text-secondary hb-small-caps">Phone Number</ion-label>
-            <ion-input clearInput type="tel" placeholder="1-123-456-6789" [(ngModel)]="stock.phone" class="input"
-              padding-horizontal clear-input="true"></ion-input>
+            <ion-input clearInput type="tel" placeholder="1-123-456-6789" [(ngModel)]="stock.phone" class="ion-padding-horizontal input"
+             clear-input="true"></ion-input>
           </ion-col>
         </ion-row>
 
@@ -36,7 +36,7 @@
           <ion-col text-left>
             <ion-label class="pb-2 text-secondary hb-small-caps">Facebook URL</ion-label>
             <ion-input clearInput type="text" placeholder="https://www.facebook.com/" [(ngModel)]="stock.facebookUrl"
-              class="input" padding-horizontal clear-input="true"></ion-input>
+            class="ion-padding-horizontal input" clear-input="true"></ion-input>
           </ion-col>
         </ion-row>
 
@@ -44,7 +44,7 @@
           <ion-col text-left>
             <ion-label class="pb-2 text-secondary hb-small-caps">LinkedIn URL</ion-label>
             <ion-input clearInput type="text" placeholder="https://www.linkedin.com/" [(ngModel)]="stock.linkedInUrl"
-              class="input" padding-horizontal clear-input="true"></ion-input>
+            class="ion-padding-horizontal input" clear-input="true"></ion-input>
           </ion-col>
         </ion-row>
 
@@ -52,7 +52,7 @@
           <ion-col text-left>
             <ion-label class="pb-2 text-secondary hb-small-caps">Twitter URL</ion-label>
             <ion-input clearInput type="text" placeholder="https://www.twitter.com/" [(ngModel)]="stock.twitterUrl"
-              class="input" padding-horizontal clear-input="true"></ion-input>
+            class="ion-padding-horizontal input" clear-input="true"></ion-input>
           </ion-col>
         </ion-row>
 
@@ -60,13 +60,13 @@
           <ion-col text-left>
             <ion-label class="pb-2 text-secondary hb-small-caps">Avatar URL</ion-label>
             <ion-input clearInput type="text" placeholder="https://www.example.com/123" [(ngModel)]="stock.avatarUrl"
-              class="input" padding-horizontal clear-input="true"></ion-input>
+            class="ion-padding-horizontal input" clear-input="true"></ion-input>
           </ion-col>
         </ion-row>
 
         <ion-row>
           <ion-col text-left>
-            <ion-item no-padding>
+            <ion-item class="ion-no-padding">
               <ion-label position="floating" class="text-secondary hb-small-caps">Birthday</ion-label>
               <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="stock.dateBorn"></ion-datetime>
             </ion-item>
@@ -75,7 +75,7 @@
 
         <ion-row class="pb-4 mb-4">
           <ion-col text-left>
-            <ion-item no-padding>
+            <ion-item class="ion-no-padding">
               <ion-label class="text-secondary hb-small-caps">Gender</ion-label>
               <ion-select placeholder="Select One" [(ngModel)]="stock.gender">
                 <ion-select-option value="f">Female</ion-select-option>
@@ -87,14 +87,14 @@
 
         <ion-row>
           <ion-col>
-            <ion-button no-margin expand="block" color="primary" (click)="save()" class="btn-color">
+            <ion-button expand="block" color="primary" (click)="save()" class="ion-no-margin btn-color">
               <strong>Save</strong></ion-button>
           </ion-col>
         </ion-row>
 
         <ion-row class="pt-2">
           <ion-col>
-            <ion-button no-margin expand="block" fill="outline" color="medium" (click)="cancel()" class="btn-color">
+            <ion-button expand="block" fill="outline" color="medium" (click)="cancel()" class="ion-no-margin btn-color">
               <p class="text-primary bold">
                 Cancel
               </p>

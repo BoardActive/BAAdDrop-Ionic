@@ -1,10 +1,10 @@
-<ion-content no-padding>
+<ion-content class="ion-no-padding">
   <div class="main">
     <ion-card>
       <ion-card-content>
-        <ion-row padding-top>
+        <ion-row class="ion-no-margin">
           <ion-col text-left (click)="developerMode()">
-            <h1 no-margin><strong>BoardActive</strong> App Login</h1>
+            <h1 class="ion-no-margin"><strong>BoardActive</strong> App Login</h1>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -15,7 +15,7 @@
               placeholder="Email"
               [(ngModel)]="email"
               class="input"
-              padding-horizontal
+              class="ion-padding-horizontal"
               clear-input="true"
             ></ion-input>
           </ion-col>
@@ -28,7 +28,7 @@
               placeholder="Password"
               [(ngModel)]="password"
               class="input"
-              padding-horizontal
+              class="ion-padding-horizontal"
               clear-input="true"
             ></ion-input>
           </ion-col>
@@ -36,11 +36,10 @@
         <ion-row padding-vertical>
           <ion-col>
             <ion-button
-              no-margin
               expand="block"
               color="primary"
               (click)="signIn()"
-              class="btn-color"
+              class="ion-no-margin btn-color"
               ><strong>Login</strong></ion-button
             >
           </ion-col>

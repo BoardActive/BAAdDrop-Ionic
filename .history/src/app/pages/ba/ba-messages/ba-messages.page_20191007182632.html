@@ -50,9 +50,9 @@
   </div>
   <div *ngFor="let item of messages">
     <ion-item (click)="openMessage(item)" no-padding>
-      <ion-col padding-horizontal padding-vertical>
-        <p no-margin class="fw600 text-primary mb-1">{{ item.title }}</p>
-        <p no-margin class="text-primary mb-1">{{ item.body }}</p>
+      <ion-col class="ion-padding-horizontal ion-padding-vertical">
+        <p class="ion-no-padding fw600 text-primary mb-1">{{ item.title }}</p>
+        <p class="ion-no-padding text-primary mb-1">{{ item.body }}</p>
         <small class="text-secondary">Received on {{ item.dateCreated | date: "MMMM d" }} at
           {{ item.dateCreated | date: "H:mm:ss" }}</small>
       </ion-col>

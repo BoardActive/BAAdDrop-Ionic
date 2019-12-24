@@ -3,16 +3,16 @@
     <!-- <ion-icon (click)='signOut()' src="assets/svg/ba-log-out.svg" expand="icon-only" color="light" mode="md"
         slot="end">
       </ion-icon> -->
-    <h2 class="fw700" padding-top padding-horizontal>Select an App</h2>
+    <h2 class="ion-padding-horizontal ion-padding-top fw700">Select an App</h2>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="main">
-  <ion-item *ngFor="let item of apps" (click)="selectApp(item)" no-padding>
-    <h3 class="link" padding-horizontal>{{ item.name }}</h3>
+  <ion-item *ngFor="let item of apps" (click)="selectApp(item)" class="ion-no-padding">
+    <h3 class="ion-padding-horizontal link">{{ item.name }}</h3>
   </ion-item>
 
-  <ion-row padding-vertical padding-horizontal>
+  <ion-row class="ion-padding-horizontal ion-padding-vertical">
     <div (click)="signOut()" class="text-danger mb-2">Logout</div>
   </ion-row>
 </ion-content>

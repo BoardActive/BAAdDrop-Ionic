@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-toolbar padding-top>
+  <ion-toolbar class="ion-padding-top">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <h2 class="fw700" (click)="developerMode()" no-margin>Message Inbox</h2>
+    <h2 class="ion-no-margin fw700" (click)="developerMode()">Message Inbox</h2>
   </ion-toolbar>
   <ion-toolbar *ngIf="development" color="dark">
-    <ion-row padding-horizontal>
+    <ion-row class="ion-padding-horizontal">
       <!-- <ion-button size="small" color="tertiary" (click)="putMe()">putMe</ion-button> -->
       <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()">CLR</ion-button>
       <ion-button size="small" color="{{showInbox ? 'success' : 'warning'}}" (click)="viewSwap('inbox')">INBOX
@@ -27,7 +27,7 @@
     </ion-row>
   </ion-toolbar>
   <ion-toolbar *ngIf="showLog" color="dark">
-    <ion-row padding-horizontal>
+    <ion-row class="ion-padding-horizontal">
       <p class="activity" text-center>
         <strong>Activity:</strong> {{ motionActivity }}
         <strong>Distance:</strong> {{ odometer }}
@@ -36,7 +36,7 @@
   </ion-toolbar>
   <div *ngIf="showLog">
     <ion-toolbar *ngIf="isGod" color="dark">
-      <ion-row padding-horizontal>
+      <ion-row class="ion-padding-horizontal">
         <ion-button size="small" (click)="loadTestGetMe()">GET/me</ion-button>
         <ion-button size="small" (click)="loadTestPutMe()">PUT/me</ion-button>
         <ion-button size="small" (click)="loadTestPostLocations()">POST/locations</ion-button>
@@ -58,10 +58,10 @@
     </small>
   </div>
   <div *ngFor="let item of messages">
-    <ion-item (click)="openMessage(item)" no-padding>
-      <ion-col padding-horizontal padding-vertical>
-        <p no-margin class="fw600 text-primary mb-1">{{ item.title }}</p>
-        <p no-margin class="text-primary mb-1">{{ item.body }}</p>
+    <ion-item (click)="openMessage(item)" class="ion-no-padding">
+      <ion-col class="ion-padding-horizontal ion-padding-vertical">
+        <p class="ion-no-padding fw600 text-primary mb-1">{{ item.title }}</p>
+        <p class="ion-no-padding text-primary mb-1">{{ item.body }}</p>
         <small class="text-secondary">Received on {{ item.dateCreated | date: "MMMM d" }} at
           {{ item.dateCreated | date: "H:mm:ss" }}</small>
       </ion-col>
