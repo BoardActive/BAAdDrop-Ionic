@@ -18,12 +18,12 @@ export class AppComponent {
     {
       title: 'Register Phone',
       icon: 'wallet',
-      menuItem: 2
+      menuItem: 1
     },
     {
       title: 'View App Token',
       icon: 'home',
-      menuItem: 1
+      menuItem: 2
     },
     {
       title: 'View App Variables',
@@ -60,10 +60,10 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      if(this.platform.is('cordova')) {
+      if (this.platform.is('cordova')) {
         this.isCordova = true;
         this.statusBar.styleDefault();
-        this.splashScreen.hide();  
+        this.splashScreen.hide();
       } else {
         this.isCordova = false;
       }
@@ -72,21 +72,34 @@ export class AppComponent {
 
   // what are all the other cases for? 
   menuAction(item: any) {
+    // alert(`${JSON.stringify(item, null, 2)}`);
     switch (item.menuItem) {
       case 1:
-        this.localStorageService.getItem('token').subscribe(token => {
-          alert(`${token}`);
-        });
+        if (this.platform.is('cordova')) {
+          this.baService.putMe().then(device => {
+            alert(`${JSON.stringify(device, null, 2)}`);
+          });
+        } else {
+          alert(`Cordova not present.`);
+        }
         break;
       case 2:
-        this.baService.putMe().then(device => {
-          alert(`${JSON.stringify(device, null, 2)}`);
-        });
+        if (this.platform.is('cordova')) {
+          this.localStorageService.getItem('token').subscribe(token => {
+            alert(`${token}`);
+          });
+        } else {
+          alert(`Cordova not present.`);
+        }
         break;
       case 3:
-        this.baService.generateHeaders().then(headers => {
-          alert(`${JSON.stringify(headers, null, 2)}`);
-        });
+        if (this.platform.is('cordova')) {
+          this.baService.generateHeaders().then(headers => {
+            alert(`${JSON.stringify(headers, null, 2)}`);
+          });
+        } else {
+          alert(`Cordova not present.`);
+        }
         break;
       case 4:
         this.utilService.navigate('/ba-user', true);

@@ -13,7 +13,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import { tap, share } from 'rxjs/operators';
 
-declare var cordova;
+// declare var cordova;
 
 export class stockAttributes {
     name?: any;
@@ -82,17 +82,19 @@ export class BoardActiveService {
         return new Promise((resolve, reject) => {
 
             this.platform.ready().then(() => {
-                var sharedPreferences = (<any>window)["plugins"].SharedPreferences.getInstance("BoardActive")
-                var successCallback = function () {
-                    console.log(`[BA:BoardActive] sharedPreferencesPut ${key} ${value}`);
-                    resolve(key);
+                if(this.platform.is('cordova')) {
+                    var sharedPreferences = (<any>window)["plugins"].SharedPreferences.getInstance("BoardActive")
+                    var successCallback = function () {
+                        console.log(`[BA:BoardActive] sharedPreferencesPut ${key} ${value}`);
+                        resolve(key);
+                    }
+                    var errorCallback = function (err) {
+                        console.error(err)
+                        reject(err);
+                    }
+    
+                    sharedPreferences.put(key, value, successCallback, errorCallback);    
                 }
-                var errorCallback = function (err) {
-                    console.error(err)
-                    reject(err);
-                }
-
-                sharedPreferences.put(key, value, successCallback, errorCallback);
             });
 
         });
@@ -103,19 +105,20 @@ export class BoardActiveService {
         return new Promise((resolve, reject) => {
 
             this.platform.ready().then(() => {
-                var sharedPreferences = (<any>window)["plugins"].SharedPreferences.getInstance("BoardActive")
+                if(this.platform.is('cordova')) {
+                    var sharedPreferences = (<any>window)["plugins"].SharedPreferences.getInstance("BoardActive")
 
-                var successCallback = function (value) {
-                    console.log(`[BA:BoardActive] sharedPreferencesGet ${key} ${value}`);
-                    resolve(value);
+                    var successCallback = function (value) {
+                        console.log(`[BA:BoardActive] sharedPreferencesGet ${key} ${value}`);
+                        resolve(value);
+                    }
+                    var errorCallback = function (err) {
+                        console.log(err)
+                        reject(err);
+                    }
+
+                    sharedPreferences.get(key, defaultValue, successCallback, errorCallback);
                 }
-                var errorCallback = function (err) {
-                    console.log(err)
-                    reject(err);
-                }
-
-                sharedPreferences.get(key, defaultValue, successCallback, errorCallback);
-
             });
 
         });
@@ -143,101 +146,103 @@ export class BoardActiveService {
             /**
             * Gets FCM Token ane saves it to persistent storage
             */
-            this.fcmProvider.getToken().then(token => {
-                this.localStorageService.setItem('token', token).subscribe(token => {
-                    resolve(token);
+           if(this.platform.is('cordova')) {
+                this.fcmProvider.getToken().then(token => {
+                    this.localStorageService.setItem('token', token).subscribe(token => {
+                        resolve(token);
+                    });
                 });
-            });
 
-            /**
-            * Listener for receiving all messages
-            * The BoardActive server is using the FCM HTTP Endpoint 
-            * POST https://fcm.googleapis.com/fcm/send
-            * // Android
-            *{
-            *    "to": "<FCM_DEVICE_TOKEN>",
-            *    "notification": {
-            *        "title": "Breaking News",
-            *        "body": "New news story available.",
-            *        "click_action": "TOP_STORY_ACTIVITY"
-            *    },
-            *    "data": {
-            *        "story_id": "story_12345"
-            *    }
-            *}
-            * // iOS
-            *{
-            *    "to": "<FCM_DEVICE_TOKEN>",
-            *    "notification": {
-            *        "title": "Breaking News",
-            *        "body": "New news story available.",
-            *        "click_action": "HANDLE_BREAKING_NEWS"
-            *    },
-            *    "data": {
-            *        "story_id": "story_12345"
-            *    }
-            *}
-            *
-            * Background Notification
-            * 
-            * 
-            */
-           this.fcmProvider.listenToNotifications().pipe(tap(payload => {
-                console.log(`[BA:FCM] : ` + JSON.stringify(payload));
-                const myDate: string = new Date().toISOString();
-                let thisMsg: MessageDto = MessageModel.empty();
-                thisMsg = payload;
-                thisMsg.notificationId = payload['gcm.message_id'];
-                thisMsg.dateCreated = myDate;
-                thisMsg.dateLastUpdated = myDate;
-                this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
-                this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                    this.events.publish('notification:receive');
+                /**
+                * Listener for receiving all messages
+                * The BoardActive server is using the FCM HTTP Endpoint 
+                * POST https://fcm.googleapis.com/fcm/send
+                * // Android
+                *{
+                *    "to": "<FCM_DEVICE_TOKEN>",
+                *    "notification": {
+                *        "title": "Breaking News",
+                *        "body": "New news story available.",
+                *        "click_action": "TOP_STORY_ACTIVITY"
+                *    },
+                *    "data": {
+                *        "story_id": "story_12345"
+                *    }
+                *}
+                * // iOS
+                *{
+                *    "to": "<FCM_DEVICE_TOKEN>",
+                *    "notification": {
+                *        "title": "Breaking News",
+                *        "body": "New news story available.",
+                *        "click_action": "HANDLE_BREAKING_NEWS"
+                *    },
+                *    "data": {
+                *        "story_id": "story_12345"
+                *    }
+                *}
+                *
+                * Background Notification
+                * 
+                * 
+                */
+            this.fcmProvider.listenToNotifications().pipe(tap(payload => {
+                    console.log(`[BA:FCM] : ` + JSON.stringify(payload));
+                    const myDate: string = new Date().toISOString();
+                    let thisMsg: MessageDto = MessageModel.empty();
+                    thisMsg = payload;
+                    thisMsg.notificationId = payload['gcm.message_id'];
+                    thisMsg.dateCreated = myDate;
+                    thisMsg.dateLastUpdated = myDate;
+                    this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+                    this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                        this.events.publish('notification:receive');
+                    });
+                    if (thisMsg.tap) {
+                        this.addMessage(thisMsg);
+                        console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg));
+                        this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                            this.events.publish('notification:tap');
+                        });
+                        this.modalMessage(thisMsg);
+                    } else {
+                        this.addMessage(thisMsg);
+                        console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
+                        this.newLocalNotification(thisMsg, 1);
+                        this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                            this.events.publish('notification:notap');
+                        });
+                    }
+                })).subscribe(payload => {
+                    // console.log(`[BA:FCM] : ` + JSON.stringify(payload));
+                    // const myDate: string = new Date().toISOString();
+                    // let thisMsg: MessageDto = MessageModel.empty();
+                    // thisMsg = payload;
+                    // thisMsg.notificationId = payload['gcm.message_id'];
+                    // thisMsg.dateCreated = myDate;
+                    // thisMsg.dateLastUpdated = myDate;
+                    // this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+                    // this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                    //     this.events.publish('notification:receive');
+                    // });
+                    // if (thisMsg.tap) {
+                    //     this.addMessage(thisMsg);
+                    //     console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg));
+                    //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                    //         this.events.publish('notification:tap');
+                    //     });
+                    //     this.modalMessage(thisMsg);
+                    // } else {
+                    //     this.addMessage(thisMsg);
+                    //     console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
+                    //     this.newLocalNotification(thisMsg, 1);
+                    //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                    //         this.events.publish('notification:notap');
+                    //     });
+                    // }
                 });
-                if (thisMsg.tap) {
-                    this.addMessage(thisMsg);
-                    console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg));
-                    this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                        this.events.publish('notification:tap');
-                    });
-                    this.modalMessage(thisMsg);
-                } else {
-                    this.addMessage(thisMsg);
-                    console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
-                    this.newLocalNotification(thisMsg, 1);
-                    this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                        this.events.publish('notification:notap');
-                    });
-                }
-            })).subscribe(payload => {
-                // console.log(`[BA:FCM] : ` + JSON.stringify(payload));
-                // const myDate: string = new Date().toISOString();
-                // let thisMsg: MessageDto = MessageModel.empty();
-                // thisMsg = payload;
-                // thisMsg.notificationId = payload['gcm.message_id'];
-                // thisMsg.dateCreated = myDate;
-                // thisMsg.dateLastUpdated = myDate;
-                // this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
-                // this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                //     this.events.publish('notification:receive');
-                // });
-                // if (thisMsg.tap) {
-                //     this.addMessage(thisMsg);
-                //     console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg));
-                //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                //         this.events.publish('notification:tap');
-                //     });
-                //     this.modalMessage(thisMsg);
-                // } else {
-                //     this.addMessage(thisMsg);
-                //     console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
-                //     this.newLocalNotification(thisMsg, 1);
-                //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                //         this.events.publish('notification:notap');
-                //     });
-                // }
             }
-            );
+
         });
     }
 

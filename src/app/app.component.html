@@ -1,65 +1,89 @@
 <!-- <ion-content *ngIf="!isCordova">
   <div class="ion-margin-start">
-    <h2 no-margin>This app requires cordova. Please run on a mobile device or compatible emulator. 
+    <h2 class="ion-no-margin">This app requires cordova. Please run on a mobile device or compatible emulator. 
     </h2>
   </div>
 </ion-content> -->
 
 <!-- <ion-app *ngIf="isCordova"> -->
+  
 <ion-app>
   <ion-split-pane contentId="main-content">
     <div id="main-content">
-      <ion-menu contentId="my-content" class="sidemenu-1" side="start" type="overlay">
-        <div id="my-content">
-        <ion-content class="contentBg">
-          <div>
-            <ion-card slot="fixed" class="ion-no-padding ion-no-margin driverCard fixed pt-4">
-              <ion-item lines="none" padding-none>
-                <div class="driverProfileImage">
-                  <ion-avatar slot="start" class="profile">
-                    <img src="assets/svg/ba-logo-wht.svg" />
-                  </ion-avatar>
-                  <div class="ion-margin-start">
-                    <h2 class="ion-no-margin text-i fw700">BoardActive</h2>
-                  </div>
+    <ion-menu contentId="my-content" class="sidemenu-1" side="start" type="overlay">
+      <ion-content class="contentBg">
+        <div>          
+          <ion-card slot="fixed" class="ion-no-padding ion-no-margin driverCard fixed pt-4">
+
+            <ion-item lines="none" padding-none>
+              <div class="driverProfileImage">
+                <ion-avatar slot="start" class="profile">
+                  <img src="assets/svg/ba-logo-wht.svg" />
+                </ion-avatar>
+                <div class="ion-margin-start">
+                  <h2 class="ion-no-margin text-i fw700">BoardActive</h2>
                 </div>
-              </ion-item>
-            </ion-card>
-          </div>
-          <div class="ion-padding-horizontal ion-padding-vertical">
-            <ion-button class="ion-no-margin" ion-button color="secondary" fill="outline"
-              (click)="sendWelcomeMessage()">
-              <small>Send Example Message</small>
-            </ion-button>
-          </div>
-          <ion-list>
-            <div class="pt-2 pb-2">
-              <p class="text-secondary hb-small-caps">For Developers</p>
-              <ion-menu-toggle auto-hide="false" *ngFor="let item of appMenu" (click)="menuAction(item)">
-                <p class="text-primary bold">
-                  {{ item.title }}
-                </p>
-              </ion-menu-toggle>
-            </div>
-          </ion-list>
-
-          <div style="margin: 32px 0;">
-            <ion-item class="ion-no-margin off-action" lines="none" (click)="goApps()">
-              <ion-icon item-start src="assets/svg/ba-shuffle.svg" class="icon-sm icon-mono">
-              </ion-icon>
-              <small class="bold text-primary">Change App</small>
+              </div>
             </ion-item>
-
-            <ion-item class="ion-no-margin off-action" lines="none" (click)="logout()">
-              <ion-icon item-start src="assets/svg/ba-log-out.svg" class="icon-sm icon-mono">
-              </ion-icon>
-              <small class="bold text-danger">Logout</small>
-            </ion-item>
+          </ion-card>
+        </div>
+        <div class="ion-margin-horizontal ion-margin-vertical ion-text-right">
+          <ion-button
+            ion-button
+            color="secondary"
+            fill="ion-no-margin outline"
+            (click)="sendWelcomeMessage()"
+          >
+            <small>Send Example Message</small>
+          </ion-button>
+        </div>
+        <ion-list>
+          <div class="pt-2 pb-2">
+            <p class="text-secondary hb-small-caps">For Developers</p>
+            <ion-menu-toggle
+              auto-hide="false"
+              *ngFor="let item of appMenu"
+              (click)="menuAction(item)"
+            >
+              <p class="text-primary bold">
+                {{ item.title }}
+              </p>
+            </ion-menu-toggle>
           </div>
-        </ion-content>
-      </div>
-      </ion-menu>
-      <ion-router-outlet main></ion-router-outlet>
-    </div>
+        </ion-list>
+
+        <div style="margin: 32px 0;">
+          <ion-item
+            class="ion-no-margin off-action"
+            lines="none"
+            (click)="goApps()"
+          >
+            <ion-icon
+              item-start
+              src="assets/svg/ba-shuffle.svg"
+              class="icon-sm icon-mono"
+            >
+            </ion-icon>
+            <small class="bold text-primary">Change App</small>
+          </ion-item>
+
+          <ion-item
+            class="ion-no-margin off-action"
+            lines="none"
+            (click)="logout()"
+          >
+            <ion-icon
+              item-start
+              src="assets/svg/ba-log-out.svg"
+              class="icon-sm icon-mono"
+            >
+            </ion-icon>
+            <small class="bold text-danger">Logout</small>
+          </ion-item>
+        </div>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="my-content"></ion-router-outlet>
+  </div>
   </ion-split-pane>
 </ion-app>

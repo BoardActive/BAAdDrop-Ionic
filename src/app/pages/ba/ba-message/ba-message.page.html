@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar class="ion-padding-top">
-    <ion-buttons slot="start" no-margin>
+    <ion-buttons slot="start" class="ion-margin-start">
       <ion-button
         button-right
         size="small"
@@ -52,9 +52,8 @@
         <span class="bold">{{ messageData.promoDateStarts | date }}</span>
       </p>
       <p
-        class="text08 text-secondary"
+        class="ion-no-margin text08 text-secondary"
         *ngIf="messageData.promoDateEnds"
-        no-margin
       >
         Ends on <span class="bold">{{ messageData.promoDateEnds | date }}</span>
       </p>

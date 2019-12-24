@@ -52,7 +52,7 @@
       refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
-  <div *ngIf="messages && messages.length > 2" text-right margin-horizontal margin-vertical>
+  <div *ngIf="messages && messages.length > 2" class="ion-margin-horizontal ion-margin-vertical ion-text-right">
     <small (click)="presentAlertConfirm()" class="fw700 text-danger">
       Clear inbox
     </small>

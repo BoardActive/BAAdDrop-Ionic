@@ -16,14 +16,15 @@
           </ion-col>
         </ion-row>
 
-        <ion-list lines="none">
-          <form [formGroup]="myForm">
-            <ion-item *ngFor="let control of myForm.controls | keyvalue">
+        <form [formGroup]="myForm">
+          <ion-row *ngFor="let control of myForm.controls | keyvalue">
+            <ion-col text-left>
               <ion-label class="pb-2 text-secondary hb-small-caps">{{control.key}}</ion-label>
-              <ion-input required type="text" [formControlName]="control.key"></ion-input>
-            </ion-item>
-          </form>
-        </ion-list>
+              <ion-input clearInput type="text" placeholder="{{control.key}}" [formControlName]="control.key"
+                class="ion-padding-horizontal input" clear-input="true"></ion-input>
+            </ion-col>
+          </ion-row>
+        </form>
 
         <ion-row>
           <ion-col>
@@ -45,5 +46,4 @@
       </ion-card-content>
     </ion-card>
   </div>
-
 </ion-content>

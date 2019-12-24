@@ -41,23 +41,12 @@ export class BaCustomPage implements OnInit {
     this.boardActiveService.putMe().then(data => {
       console.log(`user: ${JSON.stringify(data, null, 2)}`);
       const user: any = data;
-      // alert(`${JSON.stringify(user, null, 2)}`);
       this.stockAttributes = user.attributes.stock;
       this.customAttributes = user.attributes.custom;
-      // alert(`${JSON.stringify(user.attributes.stock, null, 2)}`);
-      // alert(`${JSON.stringify(user.attributes.custom, null, 2)}`);
-
       Object.keys(this.customAttributes).forEach(key => {
         console.log(key + ": " + this.customAttributes[key]);
         this.myForm.addControl(this.customAttributes[key].name, new FormControl(this.customAttributes[key].value, Validators.required));
       });
-
-      // alert(`${JSON.stringify(this.customAttributes, null, 2)}`);
-      // alert(`object length: ${Object.keys(this.customAttributes).length}`);
-      // for (var _i = 0; _i < Object.keys(this.customAttributes).length; _i++) {
-      //   alert(`${this.customAttributes[_i].name + ' ' + this.customAttributes[_i].value}`);
-      //   this.myForm.addControl(this.customAttributes[_i].name, new FormControl(this.customAttributes[_i].value, Validators.required));
-      // }
       console.log(`user.attributes.stock: ${JSON.stringify(user, null, 2)}`);
     });
 
@@ -74,7 +63,7 @@ export class BaCustomPage implements OnInit {
         {
           name: 'name',
           type: 'text',
-          placeholder: 'Name'
+          placeholder: 'Name *Required'
         },
         {
           name: 'value',
@@ -93,7 +82,9 @@ export class BaCustomPage implements OnInit {
         }, {
           text: 'Ok',
           handler: (data) => {
-            this.myForm.addControl(data.name, new FormControl(data.value, Validators.required));
+            if(data.name) {
+              this.myForm.addControl(data.name, new FormControl(data.value, Validators.required));
+            };
             console.log('Confirm Ok');
           }
         }
@@ -103,43 +94,26 @@ export class BaCustomPage implements OnInit {
     await alert.present();
   }
 
-  removeControl(control) {
-    this.myForm.removeControl(control.key);
-  }
-
   save() {
     let myarray: customAttributes[];
-    this.buildAttributes().then(res => {
-      let customAttributesMap: Map<string, customAttributes[]> = new Map<string, customAttributes[]>();
-      customAttributesMap.set('', this.customAttributes);
-      alert(JSON.stringify(Object.assign(this.customAttributes), null, 2));
-      // alert(`${JSON.stringify(this.customAttributes, null, 2)}`);
-      // alert(`${JSON.parse(this.customAttributes)}`);
-      // this.boardActiveService.putMe(this.stockAttributes, this.customAttributes).then(data => {
-      //   // alert(`user: ${JSON.stringify(data, null, 2)}`);
-      //   this.utilService.navigate('/ba-messages', false);
-      // });  
+    this.buildAttributes().then(customAttributes => {
+      this.boardActiveService.putMe(this.stockAttributes, customAttributes).then(data => {
+        this.utilService.navigate('/ba-messages', false);
+      });  
     });
   }
 
   private buildAttributes(): Promise<any> {
-    this.customAttributes = [];
-
     return new Promise((resolve, reject) => {
+      var item = `{`;
       for (let key in this.myForm.controls) {
         let control: AbstractControl = <FormControl>this.myForm.controls[key];
-        let attribute: customAttributes = {};
-        attribute.name = this.getName(control);
-        attribute.value = control.value;
         let name: string = `${this.getName(control)}`;
         let value: string = `${control.value}`;
-        let item = name + ": " + value;
-        // let item: string = "\n" + this.getName(control)  + "\n: \n" +  control.value; + "\n";
-        // let item: string = attribute.name  + ": " +  attribute.value;
-        this.customAttributes.push(item);
-        // this.customAttributes.push(attribute);
+        item += `\"${name}\": \"${value}\",`;
       }
-      resolve(true);
+      item += `}`;
+      resolve(item);
     });
   }
 
