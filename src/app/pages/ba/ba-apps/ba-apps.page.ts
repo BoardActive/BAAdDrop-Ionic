@@ -14,6 +14,7 @@ import { Storage } from '@ionic/storage';
 export class BaAppsPage implements OnInit {
   public appData: AppDto;
   public apps: any[];
+  public apps1: any[];
 
   constructor(
     private utilService: UtilService,
@@ -31,7 +32,7 @@ export class BaAppsPage implements OnInit {
           console.log(`apps: ${JSON.stringify(data, null, 2)}`);
           this.appData = data;
           this.apps = data.apps;
-          this.apps = this.apps.sort((a,b) => b.name - a.name);
+          this.apps = this.apps.sort((a,b) => (a.name > b.name) ? 1 : -1);
           console.log(`${JSON.stringify(this.appData, null, 2)}`);
         });
       } else {
@@ -58,7 +59,9 @@ export class BaAppsPage implements OnInit {
         this.baService.welcomeNotification(1);
       }   
       this.localStorageService.setItem('AppID', item.id).subscribe(() => {
-        this.utilService.navigate('/ba-messages', false);
+        this.localStorageService.setItem('App', item.name).subscribe(() => {
+          this.utilService.navigate('/ba-messages', false);
+        });
       });
     });
   }

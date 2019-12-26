@@ -12,7 +12,7 @@ import { UtilService } from './services/util/util.service';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-
+  public AppName;
   public isCordova: boolean = false;
   public appMenu = [
     {
@@ -64,6 +64,9 @@ export class AppComponent {
         this.isCordova = true;
         this.statusBar.styleDefault();
         this.splashScreen.hide();
+        this.localStorageService.getItem('App').subscribe(name => {
+          this.AppName = name;
+        });
       } else {
         this.isCordova = false;
       }

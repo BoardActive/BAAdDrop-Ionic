@@ -144,13 +144,13 @@ public class BackgroundGeolocationHeadlessTask  {
 
                 // Would normally read response body here but server does not send one
                 // for 200/201/2xx responses..
-                if (responseCode == 201) {
-                    TSLog.logger.debug("[BA:HeadlessMode] Server Accepted our POST and updated it's records.");
-                } else if (responseCode >= 200 && responseCode < 209) {
-                    TSLog.logger.warn("[BA:HeadlessMode] Server Accepted our POST but did not create a new record, Responses 200, 202-208");
-                } else {
-                    TSLog.logger.warn("[BA:HeadlessMode] Server sent a HTTP Status other than 2xx, check on the endpoint. responseCode: " + responseCode);
-                }
+                // if (responseCode == 201) {
+                //     TSLog.logger.debug("[BA:HeadlessMode] Server Accepted our POST and updated it's records.");
+                // } else if (responseCode >= 200 && responseCode < 209) {
+                //     TSLog.logger.warn("[BA:HeadlessMode] Server Accepted our POST but did not create a new record, Responses 200, 202-208");
+                // } else {
+                //     TSLog.logger.warn("[BA:HeadlessMode] Server sent a HTTP Status other than 2xx, check on the endpoint. responseCode: " + responseCode);
+                // }
 
                 // Print HTTP Status code and POST body
                 TSLog.logger.debug("[BA:HeadlessMode] \nSending 'POST' request to URL : " + AppUrl.replace("\"", ""));

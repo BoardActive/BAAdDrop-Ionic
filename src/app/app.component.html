@@ -27,11 +27,12 @@
             </ion-item>
           </ion-card>
         </div>
-        <div class="ion-margin-horizontal ion-margin-vertical ion-text-right">
+        <div class="ion-margin-horizontal ion-margin-vertical ion-text-center">
           <ion-button
             ion-button
             color="secondary"
-            fill="ion-no-margin outline"
+            class="ion-no-margin"
+            fill="outline"
             (click)="sendWelcomeMessage()"
           >
             <small>Send Example Message</small>
@@ -39,6 +40,7 @@
         </div>
         <ion-list>
           <div class="pt-2 pb-2">
+            <!-- <p class="text-secondary hb-small-caps">{{AppName}}</p> -->
             <p class="text-secondary hb-small-caps">For Developers</p>
             <ion-menu-toggle
               auto-hide="false"
