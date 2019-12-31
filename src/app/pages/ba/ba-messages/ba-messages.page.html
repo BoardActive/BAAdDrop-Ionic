@@ -7,14 +7,11 @@
   </ion-toolbar>
   <ion-toolbar *ngIf="development" color="dark">
     <ion-row class="ion-padding-horizontal">
-      <!-- <ion-button size="small" color="tertiary" (click)="putMe()">putMe</ion-button> -->
       <ion-button size="small" color="tertiary" (click)="presentAlertConfirm()">CLR</ion-button>
       <ion-button size="small" color="{{showInbox ? 'success' : 'warning'}}" (click)="viewSwap('inbox')">INBOX
       </ion-button>
 
       <ion-button size="small" color="{{showLog ? 'success' : 'warning'}}" (click)="viewSwap('log')">LOG</ion-button>
-
-      <!-- <ion-button size="small" color="{{showMap ? 'success' : 'warning'}}" (click)="viewSwap('map')">MAP</ion-button> -->
 
       <ion-button *ngIf="showLog" size="small" color="{{log_events_run ? 'danger' : 'success'}}" (click)="loggingRun()">
         <ion-icon name="{{log_events_run ? 'pause' : 'play'}}"></ion-icon>

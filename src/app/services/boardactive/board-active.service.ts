@@ -394,7 +394,7 @@ export class BoardActiveService {
     /*
     PUT /me
     */
-    putMe(stockAttributes?: stockAttributes, customAttributes?: customAttributes[]): Promise<any> {
+    putMe(stockAttributes?: stockAttributes, customAttributes?: customAttributes): Promise<any> {
         // alert(`TEST sharedPreferencesPut`);
         var attributes: stockAttributes = {};
         if (stockAttributes) {
@@ -439,13 +439,15 @@ export class BoardActiveService {
                     const deviceOS = this.device.platform;
                     const deviceOSVersion = this.device.version;
 
+                    console.log(`[BA:putMe] customAttributes: ${JSON.stringify(customAttributes, null, 2)}`);
+
                     const body = {
                         email: email,
                         deviceOS: deviceOS,
                         deviceOSVersion: deviceOSVersion,
                         attributes: {
                             stock: attributes,
-                            custom: customAttributes
+                            custom: customAttributes['custom']
                         }
                     };
 

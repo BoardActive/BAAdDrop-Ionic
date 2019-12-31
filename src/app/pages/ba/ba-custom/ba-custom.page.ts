@@ -37,17 +37,20 @@ export class BaCustomPage implements OnInit {
     this.myForm = this.formBuilder.group({
 
     });
-
-    this.boardActiveService.putMe().then(data => {
-      console.log(`user: ${JSON.stringify(data, null, 2)}`);
+    let customATTR = [];
+    this.boardActiveService.getMe().then(data => {
       const user: any = data;
       this.stockAttributes = user.attributes.stock;
       this.customAttributes = user.attributes.custom;
-      Object.keys(this.customAttributes).forEach(key => {
-        console.log(key + ": " + this.customAttributes[key]);
-        this.myForm.addControl(this.customAttributes[key].name, new FormControl(this.customAttributes[key].value, Validators.required));
-      });
-      console.log(`user.attributes.stock: ${JSON.stringify(user, null, 2)}`);
+      
+      for (const key in this.customAttributes) {
+        let value = this.customAttributes[key];        
+        if (this.customAttributes.hasOwnProperty(key)) {
+          this.myForm.addControl(key, new FormControl(this.customAttributes[key], Validators.required));
+        }else{
+          console.log(`[test4] else ${value}`);
+        }
+      }
     });
 
   }
@@ -95,7 +98,6 @@ export class BaCustomPage implements OnInit {
   }
 
   save() {
-    let myarray: customAttributes[];
     this.buildAttributes().then(customAttributes => {
       this.boardActiveService.putMe(this.stockAttributes, customAttributes).then(data => {
         this.utilService.navigate('/ba-messages', false);
@@ -105,14 +107,15 @@ export class BaCustomPage implements OnInit {
 
   private buildAttributes(): Promise<any> {
     return new Promise((resolve, reject) => {
-      var item = `{`;
-      for (let key in this.myForm.controls) {
-        let control: AbstractControl = <FormControl>this.myForm.controls[key];
-        let name: string = `${this.getName(control)}`;
-        let value: string = `${control.value}`;
-        item += `\"${name}\": \"${value}\",`;
+      var item;
+      var custom: {[k: string]: any} = {};
+      for (let controller in this.myForm.controls) {
+        let control: AbstractControl = <FormControl>this.myForm.controls[controller];
+        var key = this.getName(control);
+        var value: string = control.value;
+        custom[key] = value;
+        item = { ...item, custom};
       }
-      item += `}`;
       resolve(item);
     });
   }
@@ -147,5 +150,5 @@ export class BaCustomPage implements OnInit {
   cancel() {
     this.utilService.navigate('/ba-messages', false);
   }
-
+    
 }

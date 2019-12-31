@@ -79,7 +79,7 @@ export class AppComponent {
     switch (item.menuItem) {
       case 1:
         if (this.platform.is('cordova')) {
-          this.baService.putMe().then(device => {
+          this.baService.getMe().then(device => {
             alert(`${JSON.stringify(device, null, 2)}`);
           });
         } else {
