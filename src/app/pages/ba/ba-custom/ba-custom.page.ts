@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { UtilService } from '../../../services/util/util.service';
-import { BoardActiveService, customAttributes } from '../../../services/boardactive/board-active.service';
+import { BoardActiveService } from '../../../services/boardactive/board-active.service';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 
 interface custom extends Array<string> {

@@ -13,8 +13,6 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import { tap, share } from 'rxjs/operators';
 
-// declare var cordova;
-
 export class stockAttributes {
     name?: any;
     email?: any;
@@ -32,12 +30,7 @@ export class stockAttributes {
     locationPermission?: any; // Default Set by SDK  
     notificationPermission?: any; // Default Set by SDK  
     deviceToken?: any; // Default Set by SDK  
-}
-
-export class  customAttributes {
-    name?: any;
-    value?: any;
-}
+};
 
 export const Config = {
     API_URL: {
@@ -394,8 +387,7 @@ export class BoardActiveService {
     /*
     PUT /me
     */
-    putMe(stockAttributes?: stockAttributes, customAttributes?: customAttributes): Promise<any> {
-        // alert(`TEST sharedPreferencesPut`);
+    putMe(stockAttributes?: stockAttributes, customAttributes?: any): Promise<any> {
         var attributes: stockAttributes = {};
         if (stockAttributes) {
             if (stockAttributes.name) { attributes.name = stockAttributes.name };
@@ -409,6 +401,10 @@ export class BoardActiveService {
             if (stockAttributes.instagramUrl) { attributes.instagramUrl = stockAttributes.instagramUrl };
             if (stockAttributes.avatarUrl) { attributes.avatarUrl = stockAttributes.avatarUrl };
         }
+
+        if (!customAttributes) {
+            customAttributes = {};
+        } 
 
         if (this.platform.is('android') || this.platform.is('ios')) {
             //Set Automatic User Attributes

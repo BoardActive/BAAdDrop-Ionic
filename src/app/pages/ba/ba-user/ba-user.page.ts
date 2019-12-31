@@ -25,13 +25,11 @@ constructor(
       console.log(`user: ${JSON.stringify(data, null, 2)}`);
       const user: any = data;
       this.stockAttributes = user.attributes.stock;
-      this.customAttributes = user.attributes.custom;
-      console.log(`user.attributes.stock: ${JSON.stringify(user.attributes.stock, null, 2)}`);
     });
   }
 
   save() {
-    this.boardActiveService.putMe(this.stockAttributes, this.customAttributes).then(data => {
+    this.boardActiveService.putMe(this.stockAttributes).then(data => {
       console.log(`user: ${JSON.stringify(data, null, 2)}`);
       this.utilService.navigate('/ba-messages', false);
     });
