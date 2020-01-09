@@ -5,6 +5,7 @@ import { UtilService } from '../../../services/util/util.service';
 import { AppDto } from 'src/app/models/app.model';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import { Storage } from '@ionic/storage';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ public easteregg: number = 0;
     private utilService: UtilService,
     private menuCtrl: MenuController, 
     private localStorageService: LocalStorageService,
-    private storage: Storage
+    private storage: Storage,
+    private loadingController: LoadingController
 
   ) {
 
@@ -62,6 +64,7 @@ public easteregg: number = 0;
   }
 
   signIn() {
+    this.presentLoading();
     if (this.email === 'tom@axiomaim.com') {
       this.developer = true;
       console.log(`developer: ${this.developer}`)
@@ -127,6 +130,18 @@ public easteregg: number = 0;
     } else {
       this.developer = false;
     }
+  }
+
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Signing In',
+      duration: 2000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+
+    console.log('Loading dismissed!');
   }
 
 }

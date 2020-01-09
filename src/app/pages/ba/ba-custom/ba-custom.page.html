@@ -9,7 +9,7 @@
   <div>
     <ion-card>
       <ion-card-content>
-        <ion-row>
+        <!-- <ion-row>
           <ion-col>
             <div class="ion-margin-horizontal ion-margin-vertical ion-text-center">
               <ion-button ion-button color="secondary" class="ion-no-margin" fill="outline"
@@ -17,13 +17,6 @@
                 <small>Add Custom Attribute</small>
               </ion-button>
             </div>
-          </ion-col>
-        </ion-row>
-
-        <!-- <ion-row>
-          <ion-col>
-            <ion-button expand="block" color="secondary" (click)="addCustomAttribute()" class="ion-no-margin btn-color">
-              <strong>Add Custom Attribute</strong></ion-button>
           </ion-col>
         </ion-row> -->
 
@@ -37,7 +30,13 @@
           </ion-row>
         </form>
 
-        <ion-row>
+        <ion-row *ngIf="!customAttributes">
+          <ion-col>
+            <div>There are no Custom Attributes.</div>
+\          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="customAttributes">
           <ion-col>
             <ion-button expand="block" color="primary" (click)="save()" class="ion-no-margin btn-color">
               <strong>Save</strong></ion-button>

@@ -1,6 +1,5 @@
-import { Platform } from '@ionic/angular';
+import { Platform, Events } from '@ionic/angular';
 import { Injectable } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { FCMService } from '../fcm/fcm.service';
 import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
 import { ModalController } from '@ionic/angular';
@@ -66,8 +65,33 @@ export class BoardActiveService {
         private localStorageService: LocalStorageService,
         private events: Events
     ) {
+        // this.listenToEvents();
+    }
 
+    listenToEvents() {
+        this.events.subscribe('notification:receive', () => {
+            this.localStorageService.getItem('msg').subscribe(payload => {
+                this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+            });
+        });
 
+        this.events.subscribe('notification:tap', () => {
+            this.localStorageService.getItem('msg').subscribe(payload => {
+                // alert(`tap: ${JSON.stringify(payload, null, 2)}`)
+            });
+        });
+
+        this.events.subscribe('notification:notap', () => {
+            this.localStorageService.getItem('msg').subscribe(payload => {
+                // alert(`notap: ${JSON.stringify(payload, null, 2)}`)
+            });
+        });
+
+        this.events.subscribe('notification:opened', () => {
+            this.localStorageService.getItem('msg').subscribe(payload => {
+                this.postEvent('opened', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+            });
+        });
     }
 
     sharedPreferencesPut(key: any, value: any): Promise<any> {
@@ -75,7 +99,7 @@ export class BoardActiveService {
         return new Promise((resolve, reject) => {
 
             this.platform.ready().then(() => {
-                if(this.platform.is('cordova')) {
+                if (this.platform.is('cordova')) {
                     var sharedPreferences = (<any>window)["plugins"].SharedPreferences.getInstance("BoardActive")
                     var successCallback = function () {
                         console.log(`[BA:BoardActive] sharedPreferencesPut ${key} ${value}`);
@@ -85,8 +109,8 @@ export class BoardActiveService {
                         console.error(err)
                         reject(err);
                     }
-    
-                    sharedPreferences.put(key, value, successCallback, errorCallback);    
+
+                    sharedPreferences.put(key, value, successCallback, errorCallback);
                 }
             });
 
@@ -98,7 +122,7 @@ export class BoardActiveService {
         return new Promise((resolve, reject) => {
 
             this.platform.ready().then(() => {
-                if(this.platform.is('cordova')) {
+                if (this.platform.is('cordova')) {
                     var sharedPreferences = (<any>window)["plugins"].SharedPreferences.getInstance("BoardActive")
 
                     var successCallback = function (value) {
@@ -139,48 +163,15 @@ export class BoardActiveService {
             /**
             * Gets FCM Token ane saves it to persistent storage
             */
-           if(this.platform.is('cordova')) {
+            if (this.platform.is('cordova')) {
                 this.fcmProvider.getToken().then(token => {
                     this.localStorageService.setItem('token', token).subscribe(token => {
                         resolve(token);
                     });
                 });
 
-                /**
-                * Listener for receiving all messages
-                * The BoardActive server is using the FCM HTTP Endpoint 
-                * POST https://fcm.googleapis.com/fcm/send
-                * // Android
-                *{
-                *    "to": "<FCM_DEVICE_TOKEN>",
-                *    "notification": {
-                *        "title": "Breaking News",
-                *        "body": "New news story available.",
-                *        "click_action": "TOP_STORY_ACTIVITY"
-                *    },
-                *    "data": {
-                *        "story_id": "story_12345"
-                *    }
-                *}
-                * // iOS
-                *{
-                *    "to": "<FCM_DEVICE_TOKEN>",
-                *    "notification": {
-                *        "title": "Breaking News",
-                *        "body": "New news story available.",
-                *        "click_action": "HANDLE_BREAKING_NEWS"
-                *    },
-                *    "data": {
-                *        "story_id": "story_12345"
-                *    }
-                *}
-                *
-                * Background Notification
-                * 
-                * 
-                */
-            this.fcmProvider.listenToNotifications().pipe(tap(payload => {
-                    console.log(`[BA:FCM] : ` + JSON.stringify(payload));
+                this.fcmProvider.onMessageReceived().pipe(tap(payload => {
+                    console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload));
                     const myDate: string = new Date().toISOString();
                     let thisMsg: MessageDto = MessageModel.empty();
                     thisMsg = payload;
@@ -205,6 +196,7 @@ export class BoardActiveService {
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                             this.events.publish('notification:notap');
                         });
+                        // this.modalMessage(thisMsg);
                     }
                 })).subscribe(payload => {
                     // console.log(`[BA:FCM] : ` + JSON.stringify(payload));
@@ -360,6 +352,27 @@ export class BoardActiveService {
             })
         });
     }
+
+    getAttributes(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.getEnvironment().subscribe(setUrl => {
+                const url = setUrl + '/attributes';
+                console.log(`[BA:getAttributes] url: ${url}`);
+                this.generateHeaders().then(httpHeaders => {
+                    console.log(`[BA:getAttributes] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
+                    this.http.get(url, { headers: httpHeaders }).pipe(share()).subscribe(response => {
+                        console.log(`[BA:getAttributes] RESPONSE: ${JSON.stringify(response, null, 2)}`);
+                        resolve(response);
+                    }, err => {
+                        console.log(`[BA:getAttributes] ERROR: ${err}`);
+                        reject(err);
+                    });
+                });
+            })
+        });
+    }
+
+
     /*
     PUT /me
     */
@@ -404,7 +417,7 @@ export class BoardActiveService {
 
         if (!customAttributes) {
             customAttributes = {};
-        } 
+        }
 
         if (this.platform.is('android') || this.platform.is('ios')) {
             //Set Automatic User Attributes

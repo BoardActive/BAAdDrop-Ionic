@@ -17,9 +17,8 @@ interface custom extends Array<string> {
 })
 export class BaCustomPage implements OnInit {
   public myForm: FormGroup;
-  private playerCount: number = 1;
   stockAttributes: any;
-  customAttributes: any;
+  customAttributes: any = [];
   customAtrib: custom[];
 
   public custom: {
@@ -37,20 +36,35 @@ export class BaCustomPage implements OnInit {
     this.myForm = this.formBuilder.group({
 
     });
-    let customATTR = [];
-    this.boardActiveService.getMe().then(data => {
-      const user: any = data;
-      this.stockAttributes = user.attributes.stock;
-      this.customAttributes = user.attributes.custom;
-      
-      for (const key in this.customAttributes) {
-        let value = this.customAttributes[key];        
-        if (this.customAttributes.hasOwnProperty(key)) {
-          this.myForm.addControl(key, new FormControl(this.customAttributes[key], Validators.required));
-        }else{
-          console.log(`[test4] else ${value}`);
+
+    this.boardActiveService.getAttributes().then(data => {
+      console.log(JSON.stringify(data, null, 2));
+      const attributes: any = data;
+
+      for (const key in attributes) {
+        if(!attributes[key].isStock) {
+          console.log(`isStock: ${JSON.stringify(attributes[key], null, 2)}`);
+          this.myForm.addControl(attributes[key].name, new FormControl());
         }
       }
+
+      this.boardActiveService.getMe().then(data => {
+        console.log(JSON.stringify(data, null, 2));
+        const user: any = data;
+        this.stockAttributes = user.attributes.stock;
+        this.customAttributes = user.attributes.custom;
+  
+        for (const attribute in this.customAttributes) {
+          let value = this.customAttributes[attribute];        
+            for (let controller in this.myForm.controls) {
+              let control: AbstractControl = <FormControl>this.myForm.controls[controller];
+              const name = this.getName(control);
+              if(name === attribute) {
+                control.setValue(value);
+              }
+            }
+          }
+      });  
     });
 
   }
@@ -118,14 +132,6 @@ export class BaCustomPage implements OnInit {
       }
       resolve(item);
     });
-  }
-
-  private toArray(obj) {
-    let array = [];
-    Object.keys(obj).forEach(key => {
-      array.push(obj[key]);
-    })
-    return array;
   }
 
   private getName(control: AbstractControl): string | null {

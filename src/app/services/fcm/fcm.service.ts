@@ -87,7 +87,8 @@ export class FCMService {
     });
   }
   
-  listenToNotifications() {
+
+  onMessageReceived() {
     return this.fcm.onMessageReceived();
   }
   
