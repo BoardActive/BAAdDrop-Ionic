@@ -44,7 +44,26 @@ export class BaCustomPage implements OnInit {
       for (const key in attributes) {
         if(!attributes[key].isStock) {
           console.log(`isStock: ${JSON.stringify(attributes[key], null, 2)}`);
-          this.myForm.addControl(attributes[key].name, new FormControl());
+          switch (attributes[key].type) {
+            case "string": {
+              this.myForm.addControl(attributes[key].name, new FormControl({type: "text"}));
+            }
+            case "date": {
+              this.myForm.addControl(attributes[key].name, new FormControl({type: "text"}));              
+            }
+            case "integer": {
+              this.myForm.addControl(attributes[key].name, new FormControl({type: "number"}));
+            }
+            case "double": {
+              this.myForm.addControl(attributes[key].name, new FormControl({type: "number"}));
+            }
+            case "boolean": {
+              this.myForm.addControl(attributes[key].name, new FormControl({type: "number"}));
+            }
+            default: {
+              this.myForm.addControl(attributes[key].name, new FormControl({type: "text"}));
+            }
+          }
         }
       }
 

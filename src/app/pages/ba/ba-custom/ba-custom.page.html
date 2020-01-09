@@ -20,6 +20,16 @@
           </ion-col>
         </ion-row> -->
 
+        <!-- <form [formGroup]="myForm">
+          <ion-row *ngFor="let control of attributes | keyvalue">
+            <ion-col class="ion-text-left">
+              <ion-label class="pb-2 text-secondary hb-small-caps">{{control.name}}</ion-label>
+              <ion-input clearInput type="text" placeholder="{{control.key}}" [formControlName]="control.key"
+                class="ion-padding-horizontal input" clear-input="true"></ion-input>
+            </ion-col>
+          </ion-row>
+        </form> -->
+
         <form [formGroup]="myForm">
           <ion-row *ngFor="let control of myForm.controls | keyvalue">
             <ion-col class="ion-text-left">
