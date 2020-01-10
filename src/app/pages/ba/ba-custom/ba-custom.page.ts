@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { UtilService } from '../../../services/util/util.service';
 import { BoardActiveService } from '../../../services/boardactive/board-active.service';
-import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 
-interface custom extends Array<string> {
-  name: string;
+export class custom {
+  key: string;
+  label: string;
+  type: string;
   value: string;
+  required: boolean
+  data: any;
+  order: number;
 }
 
 @Component({
@@ -16,15 +20,17 @@ interface custom extends Array<string> {
   styleUrls: ['./ba-custom.page.scss'],
 })
 export class BaCustomPage implements OnInit {
+
   public myForm: FormGroup;
   stockAttributes: any;
   customAttributes: any = [];
-  customAtrib: custom[];
+  dynamicForm: any = [];
+  customAtrib: custom[] = [];
 
-  public custom: {
-    name: any,
-    value: any
-  }
+  // public custom: {
+  //   name: any,
+  //   value: any
+  // }
 
   constructor(
     private alertController: AlertController,
@@ -33,62 +39,54 @@ export class BaCustomPage implements OnInit {
     private boardActiveService: BoardActiveService
   ) {
 
+
     this.myForm = this.formBuilder.group({
 
     });
 
-    this.boardActiveService.getAttributes().then(data => {
-      console.log(JSON.stringify(data, null, 2));
-      const attributes: any = data;
-
-      for (const key in attributes) {
-        if(!attributes[key].isStock) {
-          console.log(`isStock: ${JSON.stringify(attributes[key], null, 2)}`);
-          switch (attributes[key].type) {
-            case "string": {
-              this.myForm.addControl(attributes[key].name, new FormControl({type: "text"}));
-            }
-            case "date": {
-              this.myForm.addControl(attributes[key].name, new FormControl({type: "text"}));              
-            }
-            case "integer": {
-              this.myForm.addControl(attributes[key].name, new FormControl({type: "number"}));
-            }
-            case "double": {
-              this.myForm.addControl(attributes[key].name, new FormControl({type: "number"}));
-            }
-            case "boolean": {
-              this.myForm.addControl(attributes[key].name, new FormControl({type: "number"}));
-            }
-            default: {
-              this.myForm.addControl(attributes[key].name, new FormControl({type: "text"}));
-            }
-          }
-        }
-      }
-
-      this.boardActiveService.getMe().then(data => {
-        console.log(JSON.stringify(data, null, 2));
-        const user: any = data;
-        this.stockAttributes = user.attributes.stock;
-        this.customAttributes = user.attributes.custom;
-  
-        for (const attribute in this.customAttributes) {
-          let value = this.customAttributes[attribute];        
-            for (let controller in this.myForm.controls) {
-              let control: AbstractControl = <FormControl>this.myForm.controls[controller];
-              const name = this.getName(control);
-              if(name === attribute) {
-                control.setValue(value);
-              }
-            }
-          }
-      });  
-    });
 
   }
 
   ngOnInit() {
+    this.boardActiveService.getAttributes().then(data => {
+      console.log(JSON.stringify(data, null, 2));
+      const attributes: any = data;
+      let order = 0;
+      for (const item in attributes) {
+        if (!attributes[item].isStock) {
+          let thisCustom: custom = new custom;
+          thisCustom.key = attributes[item].name;
+          thisCustom.label = attributes[item].name;
+          thisCustom.type = attributes[item].type;
+          thisCustom.value = null;
+          thisCustom.required = false;
+          for (const thisAttribute in this.customAttributes) {
+            if (thisAttribute === thisCustom.key) {
+              this.customAtrib[item].data = this.customAttributes[thisAttribute];
+            }
+          }
+          thisCustom.data = null;
+          thisCustom.order = order++;
+          this.customAtrib.push(thisCustom);
+        }
+      }
+
+      this.boardActiveService.getMe().then(data => {
+        const user: any = data;
+        this.stockAttributes = user.attributes.stock;
+        this.customAttributes = user.attributes.custom;
+  
+        for (const thisAttribute in this.customAttributes) {
+          for (const item in this.customAtrib) {
+            if (thisAttribute === this.customAtrib[item].key) {
+              this.customAtrib[item].data = this.customAttributes[thisAttribute];
+            }
+          }
+        }
+      });
+  
+    });
+    
 
   }
 
@@ -118,7 +116,7 @@ export class BaCustomPage implements OnInit {
         }, {
           text: 'Ok',
           handler: (data) => {
-            if(data.name) {
+            if (data.name) {
               this.myForm.addControl(data.name, new FormControl(data.value, Validators.required));
             };
             console.log('Confirm Ok');
@@ -132,48 +130,29 @@ export class BaCustomPage implements OnInit {
 
   save() {
     this.buildAttributes().then(customAttributes => {
+      console.log(`customAttributes save(): ${customAttributes}`);
       this.boardActiveService.putMe(this.stockAttributes, customAttributes).then(data => {
         this.utilService.navigate('/ba-messages', false);
-      });  
+      });
     });
   }
 
   private buildAttributes(): Promise<any> {
     return new Promise((resolve, reject) => {
       var item;
-      var custom: {[k: string]: any} = {};
-      for (let controller in this.myForm.controls) {
-        let control: AbstractControl = <FormControl>this.myForm.controls[controller];
-        var key = this.getName(control);
-        var value: string = control.value;
+      var custom: { [k: string]: any } = {};
+      for (const i in this.customAtrib) {
+        var key = this.customAtrib[i].key;
+        var value = this.customAtrib[i].data;
         custom[key] = value;
-        item = { ...item, custom};
+        item = { ...item, custom };
       }
       resolve(item);
     });
   }
 
-  private getName(control: AbstractControl): string | null {
-    let group = <FormGroup>control.parent;
-
-    if (!group) {
-      return null;
-    }
-
-    let name: string;
-
-    Object.keys(group.controls).forEach(key => {
-      let childControl = group.get(key);
-      if (childControl !== control) {
-        return;
-      }
-      name = key;
-    });
-    return name;
-  }
-
   cancel() {
     this.utilService.navigate('/ba-messages', false);
   }
-    
+
 }

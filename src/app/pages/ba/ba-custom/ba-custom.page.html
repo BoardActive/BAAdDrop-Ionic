@@ -20,17 +20,44 @@
           </ion-col>
         </ion-row> -->
 
-        <!-- <form [formGroup]="myForm">
-          <ion-row *ngFor="let control of attributes | keyvalue">
-            <ion-col class="ion-text-left">
-              <ion-label class="pb-2 text-secondary hb-small-caps">{{control.name}}</ion-label>
-              <ion-input clearInput type="text" placeholder="{{control.key}}" [formControlName]="control.key"
-                class="ion-padding-horizontal input" clear-input="true"></ion-input>
+        <!-- <form [formGroup]="myForm"> -->
+          <ion-row *ngFor="let control of customAtrib">
+            <ion-col class="ion-text-left" *ngIf="control.type === 'string'">
+              <ion-label class="pb-2 text-secondary hb-small-caps">{{control.key}}</ion-label>
+              <ion-input clearInput type="text" placeholder="{{control.key}}"
+              [(ngModel)]="control.data" class="ion-padding-horizontal input" clear-input="true"></ion-input>
             </ion-col>
-          </ion-row>
-        </form> -->
 
-        <form [formGroup]="myForm">
+            <ion-col class="ion-text-left" *ngIf="control.type === 'date'">
+                <ion-label class="pb-2 text-secondary hb-small-caps">{{control.key}}</ion-label>
+                <ion-datetime [(ngModel)]="control.data" class="ion-padding-horizontal input" displayFormat="MM DD YYYY"></ion-datetime>
+            </ion-col>
+
+            <ion-col class="ion-text-left" *ngIf="control.type === 'integer'">
+              <ion-label class="pb-2 text-secondary hb-small-caps">{{control.key}}</ion-label>
+              <ion-input clearInput type="number" placeholder="{{control.key}}"
+              [(ngModel)]="control.data" class="ion-padding-horizontal input" clear-input="true"></ion-input>
+            </ion-col>
+
+            <ion-col class="ion-text-left" *ngIf="control.type === 'double'">
+              <ion-label class="pb-2 text-secondary hb-small-caps">{{control.key}}</ion-label>
+              <ion-input clearInput type="number" placeholder="{{control.key}}"
+              [(ngModel)]="control.data" class="ion-padding-horizontal input" clear-input="true"></ion-input>
+            </ion-col>
+
+            <ion-col class="ion-text-left" *ngIf="control.type === 'boolean'">
+              <ion-label class="pb-2 text-secondary hb-small-caps">{{control.key}}</ion-label>
+              <ion-select [(ngModel)]="control.data" class="ion-padding-horizontal input" placeholder="Select One" 
+              placeholder="{{control.type}}">
+                <ion-select-option [value]="true">True</ion-select-option>
+                <ion-select-option [value]="false">False</ion-select-option>
+              </ion-select>
+            </ion-col>
+
+          </ion-row>
+        <!-- </form> -->
+
+        <!-- <form [formGroup]="myForm">
           <ion-row *ngFor="let control of myForm.controls | keyvalue">
             <ion-col class="ion-text-left">
               <ion-label class="pb-2 text-secondary hb-small-caps">{{control.key}}</ion-label>
@@ -38,7 +65,7 @@
                 class="ion-padding-horizontal input" clear-input="true"></ion-input>
             </ion-col>
           </ion-row>
-        </form>
+        </form> -->
 
         <ion-row *ngIf="!customAttributes">
           <ion-col>

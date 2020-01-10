@@ -13,16 +13,19 @@ import { LocalStorageService } from '../../services/local-storage/local-storage.
 import { tap, share } from 'rxjs/operators';
 
 export class stockAttributes {
-    name?: any;
-    email?: any;
-    phone?: any;
-    dateBorn?: any;
-    gender?: any;
-    facebookUrl?: any;
-    linkedInUrl?: any;
-    twitterUrl?: any;
-    instagramUrl?: any;
-    avatarUrl?: any;
+    // Optional Stock Attributes Set by App
+    name?: any;  //Optional set by App 
+    email?: any; //Optional set by App 
+    phone?: any; //Optional set by App 
+    dateBorn?: any; //Optional set by App 
+    gender?: any; //Optional set by App 
+    facebookUrl?: any; //Optional set by App 
+    linkedInUrl?: any; //Optional set by App 
+    twitterUrl?: any; //Optional set by App 
+    instagramUrl?: any; //Optional set by App 
+    avatarUrl?: any; //Optional set by App 
+    
+    // Stock Attributes Set by SDK
     deviceOS?: any; // Default Set by SDK         
     deviceOSVersion?: any; // Default Set by SDK  
     deviceType?: any; // Default Set by SDK  
