@@ -5,6 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { BoardActiveService } from './services/boardactive/board-active.service';
 import { LocalStorageService } from './services/local-storage/local-storage.service';
 import { UtilService } from './services/util/util.service';
+import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
 
 @Component({
   selector: 'app-root',
@@ -53,7 +54,8 @@ export class AppComponent {
     private statusBar: StatusBar,
     private baService: BoardActiveService,
     private utilService: UtilService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private firebaseCrashlytics: FirebaseCrashlytics
   ) {
     this.initializeApp();
   }
@@ -67,6 +69,8 @@ export class AppComponent {
         this.localStorageService.getItem('App').subscribe(name => {
           this.AppName = name;
         });
+        const crashlytics = this.firebaseCrashlytics.initialise();
+        crashlytics.logException('my caught exception');
       } else {
         this.isCordova = false;
       }
