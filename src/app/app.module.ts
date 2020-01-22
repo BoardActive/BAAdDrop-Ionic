@@ -22,8 +22,6 @@ import { LocalStorageService } from './services/local-storage/local-storage.serv
 
 import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
 
-import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +49,6 @@ import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
     FCMService,
     LocalNotifications,
     LocalStorageService,
-    FirebaseCrashlytics
   ],
   bootstrap: [AppComponent]
 })

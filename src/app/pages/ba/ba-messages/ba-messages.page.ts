@@ -39,6 +39,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
   enabled: boolean;
   isMoving: boolean;
   distanceFilter: number;
+  stationaryRadius: number;
   stopTimeout: number;
   autoSync: boolean;
   stopOnTerminate: boolean;
@@ -99,6 +100,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.enabled = true;
     this.autoSync = true;
     this.distanceFilter = 10;
+    this.stationaryRadius = 25;
     this.stopTimeout = 1;
     this.stopOnTerminate = false;
     this.startOnBoot = true;
@@ -222,6 +224,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       // Geolocation config
       desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,  // <-- highest possible accuracy
       distanceFilter: this.distanceFilter,
+      stationaryRadius: this.stationaryRadius,
       // ActivityRecognition config
       stopTimeout: this.stopTimeout,
       // Application config
@@ -284,6 +287,8 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       this.odometer = (location.odometer / 1000).toFixed(1) + 'km';
       const lat: any = location.coords.latitude.toString();
       const lng: any = location.coords.longitude.toString();
+      this.baService.sharedPreferencesPut('X-BoardActive-Latitude', lat).then();
+      this.baService.sharedPreferencesPut('X-BoardActive-Longitude', lng).then();
       this.addEvent(event, new Date(location.timestamp), location);
       // this.baService.handleLocationUpdate(lat, lng);
       this.baService.postLocation(lat, lng).then((res) => {
@@ -707,8 +712,15 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
           text: 'Okay',
           handler: (data) => {
             this.addEvent(`Start Load Test: `, new Date(), data);
-            let latitude: string = '33.893286';
-            let longitude: string = '-84.474514';
+            let latitude: string;
+            let longitude: string;
+
+            this.baService.sharedPreferencesGet('X-BoardActive-Latitude').then(data => {
+              latitude = data;
+              this.baService.sharedPreferencesGet('X-BoardActive-Longitude').then(data => {
+                longitude = data;
+              });
+            });
 
             let summary = [];
             var start = performance.now();
