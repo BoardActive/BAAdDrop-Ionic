@@ -216,7 +216,6 @@ export class BoardActiveService {
     /*
     Gets the active Environment's root path
     */
-
     public getEnvironment(): Observable<any> {
         console.log(`[BA:BaClient] getEnvironment()`);
 
@@ -289,32 +288,6 @@ export class BoardActiveService {
     * START Springer REST API Calls
     * Reads data from config.xml from the target build settings.
     */
-
-    /*
-    GET /me
-    */
-    // getMe(): Observable<any> {
-    //     return new Observable((observer) => {
-    //         this.getEnvironment().subscribe(setUrl => {
-    //             const url = setUrl + '/me';
-    //             console.log(`[BA:getMe] url: ${url}`);
-    //             this.generateHeaders().then(httpHeaders => {
-    //                 console.log(`[BA:getMe] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
-    //                 this.http.get(url, { headers: httpHeaders }).pipe(share()).subscribe(response => {
-    //                     console.log(`[BA:getMe] RESPONSE: ${JSON.stringify(response, null, 2)}`);
-    //                     observer.next(response);
-    //                     observer.complete();
-    //                 }, err => {
-    //                     console.log(`[BA:getMe] ERROR: ${err}`);
-    //                     observer.next(err);
-    //                     observer.complete();
-    //                 });
-    //             });
-    //         })
-    //     });
-    // }
-
-
     getMe(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.getEnvironment().subscribe(setUrl => {
@@ -457,78 +430,6 @@ export class BoardActiveService {
             })
         });
     }
-
-    // putMe(setAttributes?: Attributes): Observable<any> {
-    //     var attributes: Attributes = {};
-    //     if (setAttributes) {
-    //         if (setAttributes.name) { attributes.name = setAttributes.name };
-    //         if (setAttributes.email) { attributes.email = setAttributes.email };
-    //         if (setAttributes.phone) { attributes.phone = setAttributes.phone };
-    //         if (setAttributes.dateBorn) { attributes.dateBorn = setAttributes.dateBorn };
-    //         if (setAttributes.gender) { attributes.gender = setAttributes.gender };
-    //         if (setAttributes.facebookUrl) { attributes.facebookUrl = setAttributes.facebookUrl };
-    //         if (setAttributes.linkedInUrl) { attributes.linkedInUrl = setAttributes.linkedInUrl };
-    //         if (setAttributes.twitterUrl) { attributes.twitterUrl = setAttributes.twitterUrl };
-    //         if (setAttributes.instagramUrl) { attributes.instagramUrl = setAttributes.instagramUrl };
-    //         if (setAttributes.avatarUrl) { attributes.avatarUrl = setAttributes.avatarUrl };
-    //     }
-
-    //     if (this.platform.is('android') || this.platform.is('ios')) {
-    //         //Set Automatic User Attributes
-    //         attributes.deviceOS = this.device.platform;
-    //         attributes.deviceOSVersion = this.device.version;
-    //         attributes.deviceType = this.device.model;
-
-    //         this.localStorageService.getItem('token').subscribe(token => {
-    //             attributes.deviceToken = token;
-    //             this.diagnostic.isLocationAuthorized().then(data1 => {
-    //                 attributes.locationPermission = data1;
-    //                 this.diagnostic.isRemoteNotificationsEnabled().then(data2 => {
-    //                     attributes.notificationPermission = data2;
-    //                 });
-    //             });
-    //         });
-
-    //         console.log(`${JSON.stringify(attributes, null, 2)}`);
-    //     }
-
-    //     console.log(`attributes: ${JSON.stringify(attributes, null, 2)}`);
-
-    //     return new Observable((observer) => {
-    //         this.getEnvironment().subscribe(setUrl => {
-    //             const url = setUrl + '/me';
-    //             console.log(`[BA:putMe] url: ${url}`);
-    //             this.localStorageService.getItem('UserEmail').subscribe(email => {
-    //                 const deviceOS = this.device.platform;
-    //                 const deviceOSVersion = this.device.version;
-
-    //                 const body = {
-    //                     email: email,
-    //                     deviceOS: deviceOS,
-    //                     deviceOSVersion: deviceOSVersion,
-    //                     attributes: {
-    //                         stock: attributes
-    //                     }
-    //                 };
-
-    //                 console.log(`[BA:putMe] body: ${JSON.stringify(body, null, 2)}`);
-
-    //                 this.generateHeaders().then(httpHeaders => {
-    //                     console.log(`[BA:putMe] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
-    //                     this.http.put(url, body, { headers: httpHeaders }).subscribe(response => {
-    //                         console.log(`[BA:putMe] RESPONSE: ${JSON.stringify(response, null, 2)}`);
-    //                         observer.next(response);
-    //                         observer.complete();
-    //                     }, err => {
-    //                         console.log(`[BA:putMe] ERROR: ${err}`);
-    //                         observer.next(err);
-    //                         observer.complete();
-    //                     });
-    //                 });
-    //             });
-    //         })
-    //     });
-    // }
 
     /*
     POST /me
