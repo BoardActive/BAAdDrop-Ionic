@@ -159,25 +159,26 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
   listenToEvents() {
     this.events.subscribe('notification:receive', () => {
       const eventMsg = 'BA Notification: receive';
-      this.localStorageService.getItem('msg').subscribe(response => {
-        this.addEvent(eventMsg, new Date(), response);
+      this.localStorageService.getItem('msg').subscribe(payload => {
+        this.addEvent(eventMsg, new Date(), payload);
         this.cntNotifications = this.cntNotifications + 1;
-        this.getData();
+                this.getData();
       });
     });
 
     this.events.subscribe('notification:tap', () => {
       const eventMsg = 'BA Notification: tap';
-      this.localStorageService.getItem('msg').subscribe(response => {
-        this.addEvent(eventMsg, new Date(), response);
+      this.localStorageService.getItem('msg').subscribe(payload => {
+        this.addEvent(eventMsg, new Date(), payload);
         this.getData();
       });
     });
 
     this.events.subscribe('notification:notap', () => {
       const eventMsg = 'BA Notification: notap';
-      this.localStorageService.getItem('msg').subscribe(response => {
-        this.addEvent(eventMsg, new Date(), response);
+      this.localStorageService.getItem('msg').subscribe(payload => {
+        this.addEvent(eventMsg, new Date(), payload);
+        // this.baService.postEvent('opened', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
         this.getData();
       });
     });
@@ -186,7 +187,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const eventMsg = 'BA Notification: opened';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+        this.baService.postEvent('opened', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
       });
     });
   }
@@ -415,7 +416,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.localStorageService.getItem('messages').subscribe(data => {
       this.messages = data;
       this.messages = this.messages.sort((a, b) => new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime());
-      console.log(`getData() messages: ${JSON.stringify(this.messages, null, 2)}`);
+      // console.log(`getData() messages: ${JSON.stringify(this.messages, null, 2)}`);
     });
   }
 

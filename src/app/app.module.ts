@@ -22,6 +22,7 @@ import { LocalStorageService } from './services/local-storage/local-storage.serv
 
 import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,

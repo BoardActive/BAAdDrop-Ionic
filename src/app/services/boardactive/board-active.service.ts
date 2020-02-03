@@ -68,33 +68,7 @@ export class BoardActiveService {
         private localStorageService: LocalStorageService,
         private events: Events
     ) {
-        // this.listenToEvents();
-    }
 
-    listenToEvents() {
-        this.events.subscribe('notification:receive', () => {
-            this.localStorageService.getItem('msg').subscribe(payload => {
-                this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
-            });
-        });
-
-        this.events.subscribe('notification:tap', () => {
-            this.localStorageService.getItem('msg').subscribe(payload => {
-                // alert(`tap: ${JSON.stringify(payload, null, 2)}`)
-            });
-        });
-
-        this.events.subscribe('notification:notap', () => {
-            this.localStorageService.getItem('msg').subscribe(payload => {
-                // alert(`notap: ${JSON.stringify(payload, null, 2)}`)
-            });
-        });
-
-        this.events.subscribe('notification:opened', () => {
-            this.localStorageService.getItem('msg').subscribe(payload => {
-                this.postEvent('opened', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
-            });
-        });
     }
 
     sharedPreferencesPut(key: any, value: any): Promise<any> {
@@ -174,35 +148,39 @@ export class BoardActiveService {
                 });
 
                 this.fcmProvider.onMessageReceived().pipe(tap(payload => {
-                    console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload));
+                    console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
+                    console.log(`[BA:FCM] payload['gcm.message_id']: ` + payload['gcm.message_id']);
+                    console.log(`[BA:FCM] gcm payload: ` + JSON.stringify(payload['gcm'], null, 2));
                     const myDate: string = new Date().toISOString();
                     let thisMsg: MessageDto = MessageModel.empty();
                     thisMsg = payload;
                     thisMsg.notificationId = payload['gcm.message_id'];
+                    // thisMsg.notificationId = payload.id;
                     thisMsg.dateCreated = myDate;
                     thisMsg.dateLastUpdated = myDate;
                     this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+                    // this.postEvent('received', payload.messageId, payload.id, payload.isTestMessage);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                         this.events.publish('notification:receive');
                     });
                     if (thisMsg.tap) {
                         this.addMessage(thisMsg);
-                        console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg));
+                        console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                             this.events.publish('notification:tap');
                         });
                         this.modalMessage(thisMsg);
                     } else {
                         this.addMessage(thisMsg);
-                        console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
-                        this.newLocalNotification(thisMsg, 1);
+                        console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
+                        // this.newLocalNotification(thisMsg, 1);
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                             this.events.publish('notification:notap');
                         });
                         // this.modalMessage(thisMsg);
                     }
                 })).subscribe(payload => {
-                    // console.log(`[BA:FCM] : ` + JSON.stringify(payload));
+                    // console.log(`[BA:FCM] : ` + JSON.stringify(payload, null, 2));
                     // const myDate: string = new Date().toISOString();
                     // let thisMsg: MessageDto = MessageModel.empty();
                     // thisMsg = payload;
@@ -215,14 +193,14 @@ export class BoardActiveService {
                     // });
                     // if (thisMsg.tap) {
                     //     this.addMessage(thisMsg);
-                    //     console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg));
+                    //     console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
                     //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                     //         this.events.publish('notification:tap');
                     //     });
                     //     this.modalMessage(thisMsg);
                     // } else {
                     //     this.addMessage(thisMsg);
-                    //     console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg));
+                    //     console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
                     //     this.newLocalNotification(thisMsg, 1);
                     //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                     //         this.events.publish('notification:notap');
@@ -624,6 +602,10 @@ export class BoardActiveService {
     */
     postEvent(name: string, messageId: string, firebaseNotificationId: string, testMsg: string): void {
         this.getEnvironment().subscribe(setUrl => {
+            console.log(`[BA:postEvent] name: ${name}`);
+            console.log(`[BA:postEvent] messageId: ${messageId}`);
+            console.log(`[BA:postEvent] firebaseNotificationId: ${firebaseNotificationId}`);
+            console.log(`[BA:postEvent] testMsg: ${testMsg}`);
             const url = setUrl + '/events';
             console.log(`[BA:postEvent] url: ${url}`);
             const body = {
@@ -638,7 +620,7 @@ export class BoardActiveService {
                 this.http.post(url, body, { headers: httpHeaders }).pipe(share()).subscribe(response => {
                     console.log(`[BA:postEvent] RESPONSE: ${JSON.stringify(response, null, 2)}`);
                 }, err => {
-                    console.log(`[BA:postEvent] ERROR: ${err}`);
+                    console.log(`[BA:postEvent] ERROR: ${JSON.stringify(err, null, 2)}`);
                 });
             });
         })
