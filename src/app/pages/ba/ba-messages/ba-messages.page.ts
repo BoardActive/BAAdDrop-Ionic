@@ -39,6 +39,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
   enabled: boolean;
   isMoving: boolean;
   distanceFilter: number;
+  locationUpdateInterval: number;
   stationaryRadius: number;
   stopTimeout: number;
   autoSync: boolean;
@@ -99,7 +100,8 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.isMoving = false;
     this.enabled = true;
     this.autoSync = true;
-    this.distanceFilter = 10;
+    this.distanceFilter = 15;
+    // this.locationUpdateInterval = 1000;
     this.stationaryRadius = 25;
     this.stopTimeout = 1;
     this.stopOnTerminate = false;
@@ -161,8 +163,9 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const eventMsg = 'BA Notification: receive';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
+        this.baService.postEvent('received', payload.messageId, payload.id, payload.isTestMessage);
         this.cntNotifications = this.cntNotifications + 1;
-                this.getData();
+          this.getData();
       });
     });
 
@@ -178,7 +181,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const eventMsg = 'BA Notification: notap';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
-        // this.baService.postEvent('opened', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+        this.baService.postEvent('opened', payload.messageId, payload.id, payload.isTestMessage);
         this.getData();
       });
     });
@@ -187,7 +190,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const eventMsg = 'BA Notification: opened';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('opened', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+        this.baService.postEvent('opened', payload.messageId, payload.id, payload.isTestMessage);
       });
     });
   }
@@ -226,6 +229,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,  // <-- highest possible accuracy
       distanceFilter: this.distanceFilter,
       stationaryRadius: this.stationaryRadius,
+      // locationUpdateInterval: this.locationUpdateInterval,
       // ActivityRecognition config
       stopTimeout: this.stopTimeout,
       // Application config

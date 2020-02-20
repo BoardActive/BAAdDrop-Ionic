@@ -149,16 +149,13 @@ export class BoardActiveService {
 
                 this.fcmProvider.onMessageReceived().pipe(tap(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
-                    console.log(`[BA:FCM] payload['gcm.message_id']: ` + payload['gcm.message_id']);
-                    console.log(`[BA:FCM] gcm payload: ` + JSON.stringify(payload['gcm'], null, 2));
+                    console.log(`[BA:FCM] payload.id: ` + payload.id);
                     const myDate: string = new Date().toISOString();
                     let thisMsg: MessageDto = MessageModel.empty();
                     thisMsg = payload;
-                    thisMsg.notificationId = payload['gcm.message_id'];
-                    // thisMsg.notificationId = payload.id;
+                    thisMsg.notificationId = payload.id; 
                     thisMsg.dateCreated = myDate;
                     thisMsg.dateLastUpdated = myDate;
-                    this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
                     // this.postEvent('received', payload.messageId, payload.id, payload.isTestMessage);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                         this.events.publish('notification:receive');
@@ -522,6 +519,7 @@ export class BoardActiveService {
                     console.log(`[BA:postEvent] RESPONSE: ${JSON.stringify(response, null, 2)}`);
                 }, err => {
                     console.log(`[BA:postEvent] ERROR: ${JSON.stringify(err, null, 2)}`);
+                    console.log(`[BA:postEvent] ERROR: ${err}`);
                 });
             });
         })
