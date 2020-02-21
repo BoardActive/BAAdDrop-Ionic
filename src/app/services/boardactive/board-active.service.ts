@@ -150,13 +150,20 @@ export class BoardActiveService {
                 this.fcmProvider.onMessageReceived().pipe(tap(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
                     console.log(`[BA:FCM] payload.id: ` + payload.id);
+                    console.log(`[BA:FCM] google.message_id: ` + payload['google.message_id']);
                     const myDate: string = new Date().toISOString();
-                    let thisMsg: MessageDto = MessageModel.empty();
+                    let thisMsg: any;
                     thisMsg = payload;
-                    thisMsg.notificationId = payload.id; 
+                    if (payload['google.message_id']) {
+                        thisMsg.notificationId = payload['google.message_id']; 
+                        console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
+                    } else {
+                        thisMsg.notificationId = payload.id; 
+                        console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
+                    }
                     thisMsg.dateCreated = myDate;
                     thisMsg.dateLastUpdated = myDate;
-                    // this.postEvent('received', payload.messageId, payload.id, payload.isTestMessage);
+                    this.postEvent('received', payload.messageId, thisMsg.notificationId, payload.isTestMessage);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                         this.events.publish('notification:receive');
                     });
@@ -170,7 +177,6 @@ export class BoardActiveService {
                     } else {
                         this.addMessage(thisMsg);
                         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
-                        // this.newLocalNotification(thisMsg, 1);
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                             this.events.publish('notification:notap');
                         });
@@ -512,6 +518,7 @@ export class BoardActiveService {
                 'firebaseNotificationId': firebaseNotificationId,
                 'isTestMessage': testMsg
             };
+            console.log(`[BA:postEvent] body: ${JSON.stringify(body, null, 2)}`);
 
             this.generateHeaders().then(httpHeaders => {
                 console.log(`[BA:postEvent] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
@@ -876,11 +883,11 @@ export class BoardActiveService {
         }
     }
 
-    addMessage(msg: MessageDto) {
+    addMessage(msg: any) {
         console.log(`addMessage`);
         // const myDate: string = new Date().toISOString();
 
-        let messages: MessageDto[] = [];
+        let messages: any[] = [];
         this.localStorageService.getItem('messages').subscribe(data => {
             if (data) {
                 messages = data;
