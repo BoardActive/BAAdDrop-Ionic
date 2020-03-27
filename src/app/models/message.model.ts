@@ -3,12 +3,13 @@ export class MessageModel {
         id: number, 
         isTestMessage: any,
         body: any,
-        messageId: any,
+        baMessageId: any,
+        baNotificationId: any,
         tap: boolean,
         dateCreated: string,
         longitude: any,
         latitude: any,
-        notificationId: any,
+        firebaseNotificationId: any,
         title: any,
         dateLastUpdated: any,
         imageUrl: any,
@@ -20,12 +21,13 @@ export class MessageModel {
         this.id = id;
         this.isTestMessage = isTestMessage;
         this.body = body;
-        this.messageId = messageId;
+        this.baMessageId = baMessageId;
+        this.baNotificationId = baNotificationId;
         this.tap = tap;
         this.dateCreated = dateCreated;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.notificationId = notificationId;
+        this.firebaseNotificationId = firebaseNotificationId;
         this.title = title;
         this.dateLastUpdated = dateLastUpdated;
         this.imageUrl = imageUrl;
@@ -37,12 +39,13 @@ export class MessageModel {
     public id: number;
     public isTestMessage: any;
     public body: any;
-    public messageId: any;
+    public baMessageId: any;
+    public baNotificationId: any;
     public tap: boolean;
     public dateCreated: any;
     public longitude: any;
     public latitude: any;
-    public notificationId: any;
+    public firebaseNotificationId: any;
     public title: any;
     public dateLastUpdated: any;
     public imageUrl: any;
@@ -53,6 +56,7 @@ export class MessageModel {
     public static empty(): MessageModel {
         const myDate: string = new Date().toISOString();
         return new MessageModel(
+            null,
             null,
             null,
             null,
@@ -75,12 +79,13 @@ export class MessageModel {
             id: this.id,
             isTestMessage: this.isTestMessage,
             body: this.body,
-            messageId: this.messageId,
+            baMessageId: this.baMessageId,
+            baNotificationId: this.baNotificationId,
             tap: this.tap,
             dateCreated: this.dateCreated,
             longitude: this.longitude,
             latitude: this.latitude,
-            notificationId: this.notificationId,
+            firebaseNotificationId: this.firebaseNotificationId,
             title: this.title,
             dateLastUpdated: this.dateLastUpdated,
             imageUrl: this.imageUrl,
@@ -95,12 +100,13 @@ export interface MessageDto {
     id: number, 
     isTestMessage: any,
     body: any,
-    messageId: any,
+    baMessageId: any,
+    baNotificationId: any,
     tap: boolean,
     dateCreated: string,
     longitude: any,
     latitude: any,
-    notificationId: any,
+    firebaseNotificationId: any,
     title: any,
     dateLastUpdated: any,
     imageUrl: any,

@@ -163,7 +163,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const eventMsg = 'BA Notification: receive';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.messageId, payload.notificationId, payload.isTestMessage);
+        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
         this.cntNotifications = this.cntNotifications + 1;
           this.getData();
       });
@@ -181,7 +181,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const eventMsg = 'BA Notification: notap';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('opened', payload.messageId, payload.notificationId, payload.isTestMessage);
+        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
         this.getData();
       });
     });
@@ -190,7 +190,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const eventMsg = 'BA Notification: opened';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('opened', payload.messageId, payload.notificationId, payload.isTestMessage);
+        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
       });
     });
   }
@@ -466,7 +466,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
   openMessage(item: any) {
     console.log(`openMessage: ${JSON.stringify(item, null, 2)}`);
-    this.baService.postEvent('opened', item.messageId, item.notificationId, item.isTestMessage);
+    this.baService.postEvent('received', item.baMessageId, item.baNotificationId, item.firebaseNotificationId, item.isTestMessage);
     this.baService.modalMessage(item);
   }
 

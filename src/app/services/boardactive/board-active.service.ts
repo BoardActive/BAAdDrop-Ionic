@@ -37,7 +37,7 @@ export class stockAttributes {
 export const Config = {
     API_URL: {
         APP_URL_PROD: 'https://api.boardactive.com/mobile/v1',
-        APP_URL_DEV: 'https://springer-api.boardactive.com/mobile/v1',
+        APP_URL_DEV: 'https://dev-api.boardactive.com/mobile/v1',
     },
     APP_KEY: {
         APP_KEY_PROD: 'b70095c6-1169-43d6-a5dd-099877b4acb3',
@@ -155,15 +155,16 @@ export class BoardActiveService {
                     let thisMsg: any;
                     thisMsg = payload;
                     if (payload['google.message_id']) {
-                        thisMsg.notificationId = payload['google.message_id']; 
+                        thisMsg.firebaseNotificationId = payload['google.message_id']; 
                         console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
                     } else {
-                        thisMsg.notificationId = payload.id; 
+                        thisMsg.firebaseNotificationId = payload.id; 
                         console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
                     }
                     thisMsg.dateCreated = myDate;
                     thisMsg.dateLastUpdated = myDate;
-                    this.postEvent('received', payload.messageId, thisMsg.notificationId, payload.isTestMessage);
+                    this.postEvent('received', payload.baMessageId, thisMsg.baNotificationId, thisMsg.firebaseNotificationId, payload.isTestMessage);
+                    console.log(`[BA:FCM] thisMsg: ${thisMsg}`);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                         this.events.publish('notification:receive');
                     });
@@ -504,17 +505,19 @@ export class BoardActiveService {
     POST /events
     * @return {!Promise<any>}
     */
-    postEvent(name: string, messageId: string, firebaseNotificationId: string, testMsg: string): void {
+    postEvent(name: string, baMessageId: string, baNotificationId: string, firebaseNotificationId: string, testMsg: string): void {
         this.getEnvironment().subscribe(setUrl => {
             console.log(`[BA:postEvent] name: ${name}`);
-            console.log(`[BA:postEvent] messageId: ${messageId}`);
+            console.log(`[BA:postEvent] baMessageId: ${baMessageId}`);
+            console.log(`[BA:postEvent] baNotificationId: ${baMessageId}`);
             console.log(`[BA:postEvent] firebaseNotificationId: ${firebaseNotificationId}`);
             console.log(`[BA:postEvent] testMsg: ${testMsg}`);
             const url = setUrl + '/events';
             console.log(`[BA:postEvent] url: ${url}`);
             const body = {
                 'name': name,
-                'messageId': messageId,
+                'baMessageId': baMessageId,
+                'baNotificationId': baNotificationId,
                 'firebaseNotificationId': firebaseNotificationId,
                 'isTestMessage': testMsg
             };
@@ -800,12 +803,13 @@ export class BoardActiveService {
             msg = MessageModel.empty();
             msg.id = msgCnt;
             msg.body = 'Congratulations on successfully installing BoardActive’s app!';
-            msg.messageId = '0000002';
+            msg.baMessageId = '0000002';
+            msg.baNotificationId = '0000002';
             msg.tap = false;
             msg.dateCreated = myDate;
             msg.longitude = '';
             msg.latitude = '';
-            msg.notificationId = '0000002';
+            msg.firebaseNotificationId = '0000002';
             msg.title = 'Welcome';
             msg.dateCreated = myDate;
             msg.imageUrl = 'https://ba-us-east-1-develop.s3.amazonaws.com/test-78848f90-30d6-433f-a4b9-80752212dac1';
