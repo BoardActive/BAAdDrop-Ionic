@@ -168,8 +168,11 @@ export class BoardActiveService {
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                         this.events.publish('notification:receive');
                     });
+                    
                     if (thisMsg.tap) {
                         this.addMessage(thisMsg);
+                        this.newLocalNotification(thisMsg, 1);
+
                         console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                             this.events.publish('notification:tap');
@@ -177,6 +180,8 @@ export class BoardActiveService {
                         this.modalMessage(thisMsg);
                     } else {
                         this.addMessage(thisMsg);
+                        this.newLocalNotification(thisMsg, 1);
+
                         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                             this.events.publish('notification:notap');
