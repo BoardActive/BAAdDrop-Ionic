@@ -33,15 +33,15 @@ export class UtilService {
     return re.test(String(email).toLowerCase());
   }
 
-  async presentToast(message, show_button, position, duration) {
-    const toast = await this.toastController.create({
-      message: message,
-      showCloseButton: show_button,
-      position: position,
-      duration: duration
-    });
-    toast.present();
-  }
+  // async presentToast(message, show_button, position, duration) {
+  //   const toast = await this.toastController.create({
+  //     message: message,
+  //     showCloseButton: show_button,
+  //     position: position,
+  //     duration: duration
+  //   });
+  //   toast.present();
+  // }
 
   async openLoader() {
     const loading = await this.loadingController.create({

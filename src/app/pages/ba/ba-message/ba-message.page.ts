@@ -1,7 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NavParams, ModalController, Events } from '@ionic/angular';
+import { NavParams, ModalController } from '@ionic/angular';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
+import { BoardActiveService } from '../../../services/boardactive/board-active.service';
+
+
 @Component({
   selector: 'app-ba-message',
   templateUrl: './ba-message.page.html',
@@ -20,7 +23,7 @@ export class BaMessagePage implements OnInit {
     private modalCtrl: ModalController,
     private navParams: NavParams,
     private localStorageService: LocalStorageService,
-    private events: Events
+    private baService: BoardActiveService
   ) {
     this.message = this.navParams.get('message');
     console.log(`BaMessagePage: ${JSON.stringify(this.message)}`);
@@ -28,7 +31,8 @@ export class BaMessagePage implements OnInit {
 
     // this.youtubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.messageData.urlYoutube);
     this.localStorageService.setItem('msg', this.message).subscribe(response => {
-      this.events.publish('notification:opened');
+      // this.events.publish('notification:opened');
+      this.baService.postEvent('received', this.message.baMessageId, this.message.baNotificationId, this.message.firebaseNotificationId, this.message.isTestMessage);
     });
 
   }

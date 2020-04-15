@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Platform, Events, AlertController, IonContent } from '@ionic/angular';
+import { Platform, AlertController, IonContent } from '@ionic/angular';
 import { UtilService } from '../../../services/util/util.service';
 import { BoardActiveService } from '../../../services/boardactive/board-active.service';
 import { MenuController } from '@ionic/angular';
@@ -74,7 +74,6 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     private device: Device,
     private localStorageService: LocalStorageService,
     private alertController: AlertController,
-    private events: Events,
     private localNotifications: LocalNotifications
   ) {
     this.forground = true
@@ -109,7 +108,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.enableHeadless = true;
     this.debug = false;
     this.odometer = null;
-    this.listenToEvents();
+    // this.listenToEvents();
   }
 
   ngOnInit() {
@@ -158,42 +157,42 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.menuCtrl.enable(true, 'end');
   }
 
-  listenToEvents() {
-    this.events.subscribe('notification:receive', () => {
-      const eventMsg = 'BA Notification: receive';
-      this.localStorageService.getItem('msg').subscribe(payload => {
-        this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
-        this.cntNotifications = this.cntNotifications + 1;
-          this.getData();
-      });
-    });
+  // listenToEvents() {
+  //   this.events.subscribe('notification:receive', () => {
+  //     const eventMsg = 'BA Notification: receive';
+  //     this.localStorageService.getItem('msg').subscribe(payload => {
+  //       this.addEvent(eventMsg, new Date(), payload);
+  //       this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+  //       this.cntNotifications = this.cntNotifications + 1;
+  //         this.getData();
+  //     });
+  //   });
 
-    this.events.subscribe('notification:tap', () => {
-      const eventMsg = 'BA Notification: tap';
-      this.localStorageService.getItem('msg').subscribe(payload => {
-        this.addEvent(eventMsg, new Date(), payload);
-        this.getData();
-      });
-    });
+  //   this.events.subscribe('notification:tap', () => {
+  //     const eventMsg = 'BA Notification: tap';
+  //     this.localStorageService.getItem('msg').subscribe(payload => {
+  //       this.addEvent(eventMsg, new Date(), payload);
+  //       this.getData();
+  //     });
+  //   });
 
-    this.events.subscribe('notification:notap', () => {
-      const eventMsg = 'BA Notification: notap';
-      this.localStorageService.getItem('msg').subscribe(payload => {
-        this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
-        this.getData();
-      });
-    });
+  //   this.events.subscribe('notification:notap', () => {
+  //     const eventMsg = 'BA Notification: notap';
+  //     this.localStorageService.getItem('msg').subscribe(payload => {
+  //       this.addEvent(eventMsg, new Date(), payload);
+  //       this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+  //       this.getData();
+  //     });
+  //   });
 
-    this.events.subscribe('notification:opened', () => {
-      const eventMsg = 'BA Notification: opened';
-      this.localStorageService.getItem('msg').subscribe(payload => {
-        this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
-      });
-    });
-  }
+  //   this.events.subscribe('notification:opened', () => {
+  //     const eventMsg = 'BA Notification: opened';
+  //     this.localStorageService.getItem('msg').subscribe(payload => {
+  //       this.addEvent(eventMsg, new Date(), payload);
+  //       this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+  //     });
+  //   });
+  // }
 
   signOut() {
     this.localStorageService.removeItem('auth');
@@ -580,8 +579,8 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
     BackgroundGeolocation.setConfig(config, (state) => {
       if (this.debug) {
-        this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
-        });
+        // this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
+        // });
       }
     });
   }

@@ -1,4 +1,4 @@
-import { Platform, Events } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { FCMService } from '../fcm/fcm.service';
 import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
@@ -66,7 +66,6 @@ export class BoardActiveService {
         private appVersion: AppVersion,
         private localNotifications: LocalNotifications,
         private localStorageService: LocalStorageService,
-        private events: Events
     ) {
 
     }
@@ -166,7 +165,7 @@ export class BoardActiveService {
                     this.postEvent('received', payload.baMessageId, thisMsg.baNotificationId, thisMsg.firebaseNotificationId, payload.isTestMessage);
                     console.log(`[BA:FCM] thisMsg: ${thisMsg}`);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                        this.events.publish('notification:receive');
+
                     });
                     
                     if (thisMsg.tap) {
@@ -175,7 +174,7 @@ export class BoardActiveService {
 
                         console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                            this.events.publish('notification:tap');
+                            // this.events.publish('notification:tap');
                         });
                         this.modalMessage(thisMsg);
                     } else {
@@ -184,7 +183,7 @@ export class BoardActiveService {
 
                         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                            this.events.publish('notification:notap');
+                            // this.events.publish('notification:notap');
                         });
                         // this.modalMessage(thisMsg);
                     }
@@ -827,7 +826,9 @@ export class BoardActiveService {
 
     newLocalNotification(msg: MessageDto, type: number) {
         this.localStorageService.setItem('msg', msg).subscribe(response => {
-            this.events.publish('notification:receive');
+            // this.events.publish('notification:receive');
+            this.postEvent('received', msg.baMessageId, msg.baNotificationId, msg.firebaseNotificationId, msg.isTestMessage);
+
         });
         console.log(`newLocalNotification`);
         switch (type) {
@@ -905,7 +906,9 @@ export class BoardActiveService {
             console.log(`messages: ${JSON.stringify(messages, null, 2)}`);
             this.localStorageService.setItem('messages', messages).subscribe((data) => {
                 console.log(`addMessage() setItem: ${JSON.stringify(data, null, 2)}`);
-                this.events.publish('notification:receive');
+                this.postEvent('received', msg.baMessageId, msg.baNotificationId, msg.firebaseNotificationId, msg.isTestMessage);
+
+                // this.events.publish('notification:receive');
                 // const log = {
                 //     name: 'addMessage' + '-',
                 //     timestamp: myDate,
