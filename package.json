@@ -111,7 +111,8 @@
         "GOOGLE_API_VERSION": "16.+",
         "APPCOMPAT_VERSION": "28.+",
         "OKHTTP_VERSION": "3.12.+",
-        "EVENTBUS_VERSION": "3.0.0"
+        "EVENTBUS_VERSION": "3.0.0",
+        "BACKGROUND_MODE_LOCATION": "<string>location</string>"
       },
       "cordova-plugin-app-version": {},
       "cordova-plugin-local-notification": {},
