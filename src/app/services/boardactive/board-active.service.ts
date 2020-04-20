@@ -165,7 +165,7 @@ export class BoardActiveService {
                     this.postEvent('received', payload.baMessageId, thisMsg.baNotificationId, thisMsg.firebaseNotificationId, payload.isTestMessage);
                     console.log(`[BA:FCM] thisMsg: ${thisMsg}`);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-
+                        // this.events.publish('notification:receive');
                     });
                     
                     if (thisMsg.tap) {
@@ -826,9 +826,8 @@ export class BoardActiveService {
 
     newLocalNotification(msg: MessageDto, type: number) {
         this.localStorageService.setItem('msg', msg).subscribe(response => {
-            // this.events.publish('notification:receive');
             this.postEvent('received', msg.baMessageId, msg.baNotificationId, msg.firebaseNotificationId, msg.isTestMessage);
-
+            // this.events.publish('notification:receive');
         });
         console.log(`newLocalNotification`);
         switch (type) {
@@ -907,7 +906,6 @@ export class BoardActiveService {
             this.localStorageService.setItem('messages', messages).subscribe((data) => {
                 console.log(`addMessage() setItem: ${JSON.stringify(data, null, 2)}`);
                 this.postEvent('received', msg.baMessageId, msg.baNotificationId, msg.firebaseNotificationId, msg.isTestMessage);
-
                 // this.events.publish('notification:receive');
                 // const log = {
                 //     name: 'addMessage' + '-',

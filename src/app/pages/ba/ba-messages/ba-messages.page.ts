@@ -17,6 +17,7 @@ import { MessageDto } from 'src/app/models/message.model';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import BackgroundFetch from 'cordova-plugin-background-fetch';
 import { BehaviorSubject } from 'rxjs';
+import { Events } from '../../../services/events.service';
 
 @Component({
   selector: 'app-ba-messages',
@@ -74,7 +75,8 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     private device: Device,
     private localStorageService: LocalStorageService,
     private alertController: AlertController,
-    private localNotifications: LocalNotifications
+    private localNotifications: LocalNotifications,
+    private events: Events
   ) {
     this.forground = true
     this.log_events_db = [];
