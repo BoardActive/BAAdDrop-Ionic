@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Platform, Events, AlertController, IonContent } from '@ionic/angular';
+import { Platform, AlertController, IonContent } from '@ionic/angular';
 import { UtilService } from '../../../services/util/util.service';
 import { BoardActiveService } from '../../../services/boardactive/board-active.service';
 import { MenuController } from '@ionic/angular';
@@ -17,6 +17,7 @@ import { MessageDto } from 'src/app/models/message.model';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import BackgroundFetch from 'cordova-plugin-background-fetch';
 import { BehaviorSubject } from 'rxjs';
+import { Events } from '../../../services/events.service';
 
 @Component({
   selector: 'app-ba-messages',
@@ -74,8 +75,8 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     private device: Device,
     private localStorageService: LocalStorageService,
     private alertController: AlertController,
-    private events: Events,
-    private localNotifications: LocalNotifications
+    private localNotifications: LocalNotifications,
+    private events: Events
   ) {
     this.forground = true
     this.log_events_db = [];
@@ -580,8 +581,8 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
     BackgroundGeolocation.setConfig(config, (state) => {
       if (this.debug) {
-        this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
-        });
+        // this.utilService.presentToast(`#setConfig ${name}: ${this[name]}`, null, 'middle', 2000).then(() => {
+        // });
       }
     });
   }

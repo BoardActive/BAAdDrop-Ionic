@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NavParams, ModalController, Events } from '@ionic/angular';
+import { NavParams, ModalController } from '@ionic/angular';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
+import { Events } from '../../../services/events.service';
+
 @Component({
   selector: 'app-ba-message',
   templateUrl: './ba-message.page.html',
@@ -28,7 +30,9 @@ export class BaMessagePage implements OnInit {
 
     // this.youtubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.messageData.urlYoutube);
     this.localStorageService.setItem('msg', this.message).subscribe(response => {
-      this.events.publish('notification:opened');
+      this.events.publish('notification:opened', null);
+      // this.baService.postEvent('opened', this.message.baMessageId, this.message.baNotificationId, this.message.firebaseNotificationId, this.message.isTestMessage);
+
     });
 
   }
