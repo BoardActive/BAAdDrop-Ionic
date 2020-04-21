@@ -148,7 +148,12 @@ export class BoardActiveService {
 
                 this.fcmProvider.onMessageReceived().pipe(tap(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
+                    console.log(`[BA:FCM] gcm payload: ` + JSON.stringify(payload['gcm'], null, 2));
+                    console.log(`[BA:FCM] google payload: ` + JSON.stringify(payload['google'], null, 2));
                     console.log(`[BA:FCM] payload.id: ` + payload.id);
+                    console.log(`[BA:FCM] message_id: ` + payload['message_id']);
+                    console.log(`[BA:FCM] message_id: ` + payload['message_id']);
+                    console.log(`[BA:FCM] gcm.message_id: ` + payload['gcm.message_id']);
                     console.log(`[BA:FCM] google.message_id: ` + payload['google.message_id']);
                     const myDate: string = new Date().toISOString();
                     let thisMsg: any;
