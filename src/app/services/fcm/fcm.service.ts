@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+// import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { Platform } from '@ionic/angular';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ import { LocalStorageService } from '../../services/local-storage/local-storage.
 export class FCMService {
 
   constructor(
-    private fcm: FirebaseX,
+    // private fcm: FirebaseX,
+    private firebaseMessaging: FirebaseMessaging,
     private platform: Platform,
     private localStorageService: LocalStorageService
   ) {
@@ -26,7 +28,7 @@ export class FCMService {
       if (this.platform.is('cordova')) {
         if (this.platform.is('android')) {
           console.log(`[BA:platform_android]`);
-          this.fcm.getToken().then(token => {
+          this.firebaseMessaging.getToken().then(token => {
             console.log(`[BA:__android_fcmToken] : ${token}`);
             this.localStorageService.setItem('token', token);
             resolve(token);
@@ -38,8 +40,8 @@ export class FCMService {
   
         if (this.platform.is('ios')) {
           console.log(`[BA:platform_ios]`);
-          this.fcm.grantPermission().then(res => {
-            this.fcm.getToken().then(token => {
+          this.firebaseMessaging.requestPermission().then(res => {
+            this.firebaseMessaging.getToken().then(token => {
               console.log(`[BA:__ios_fcmToken] : ${token}`);
               this.localStorageService.setItem('token', token);
               resolve(token);
@@ -61,7 +63,7 @@ export class FCMService {
   getTokenRefresh(): Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.platform.is('cordova')) {
-        this.fcm.onTokenRefresh().subscribe(token => {
+        this.firebaseMessaging.onTokenRefresh().subscribe(token => {
           console.log(`[BA:__refresh_fcmToken] : ${token}`);
           this.localStorageService.setItem('token', token);
           resolve(token);
@@ -79,7 +81,7 @@ export class FCMService {
     return new Promise((resolve, reject) => {
       if (this.platform.is('ios')) {
         // token = await this.firebase.getToken();
-        this.fcm.grantPermission().then(res => {
+        this.firebaseMessaging.requestPermission().then(res => {
           console.log(`[BA:__grantPermissions] : ${res}`);
           resolve(res);
         });
@@ -89,7 +91,7 @@ export class FCMService {
   
 
   onMessageReceived() {
-    return this.fcm.onMessageReceived();
+    return this.firebaseMessaging.onMessage();
   }
   
 

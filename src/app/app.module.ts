@@ -16,7 +16,8 @@ import { Device } from '@ionic-native/device/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { BoardActiveService } from './services/boardactive/board-active.service';
 import { FCMService } from './services/fcm/fcm.service';
-import { FirebaseX } from '@ionic-native/firebase-x/ngx';
+// import { FirebaseX } from '@ionic-native/firebase-x/ngx';
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from './services/local-storage/local-storage.service';
 
@@ -46,7 +47,8 @@ import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
     AppVersion,
     Device,
     Diagnostic,
-    FirebaseX,
+    // FirebaseX,
+    FirebaseMessaging,
     FCMService,
     LocalNotifications,
     LocalStorageService,

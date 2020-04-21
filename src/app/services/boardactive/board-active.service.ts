@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import { tap, share } from 'rxjs/operators';
+import { Events } from '../../services/events.service';
 
 export class stockAttributes {
     // Optional Stock Attributes Set by App
@@ -66,6 +67,7 @@ export class BoardActiveService {
         private appVersion: AppVersion,
         private localNotifications: LocalNotifications,
         private localStorageService: LocalStorageService,
+        private events: Events
     ) {
 
     }
@@ -148,29 +150,28 @@ export class BoardActiveService {
 
                 this.fcmProvider.onMessageReceived().pipe(tap(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
-                    console.log(`[BA:FCM] gcm payload: ` + JSON.stringify(payload['gcm'], null, 2));
-                    console.log(`[BA:FCM] google payload: ` + JSON.stringify(payload['google'], null, 2));
-                    console.log(`[BA:FCM] payload.id: ` + payload.id);
-                    console.log(`[BA:FCM] message_id: ` + payload['message_id']);
-                    console.log(`[BA:FCM] message_id: ` + payload['message_id']);
+                    // console.log(`[BA:FCM] gcm.message_id: ` + JSON.stringify(payload['gcm.message_id'], null, 2));
+                    // console.log(`[BA:FCM] google.message_id: ` + JSON.stringify(payload['google.message_id'], null, 2));
                     console.log(`[BA:FCM] gcm.message_id: ` + payload['gcm.message_id']);
-                    console.log(`[BA:FCM] google.message_id: ` + payload['google.message_id']);
+                    console.log(`[BA:FCM] payload.id: ` + payload.id);
+                    console.log(`[BA:FCM] payload.id: ` + payload['id']);
                     const myDate: string = new Date().toISOString();
                     let thisMsg: any;
                     thisMsg = payload;
-                    if (payload['google.message_id']) {
-                        thisMsg.firebaseNotificationId = payload['google.message_id']; 
-                        console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
-                    } else {
-                        thisMsg.firebaseNotificationId = payload.id; 
-                        console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
-                    }
+                    thisMsg.firebaseNotificationId = payload['gcm.message_id']; 
+                    // if (payload['gcm.message_id']) {
+                    //     thisMsg.firebaseNotificationId = payload['gcm.message_id']; 
+                    //     console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
+                    // } else {
+                    //     thisMsg.firebaseNotificationId = payload.id; 
+                    //     console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
+                    // }
                     thisMsg.dateCreated = myDate;
                     thisMsg.dateLastUpdated = myDate;
-                    this.postEvent('received', payload.baMessageId, thisMsg.baNotificationId, thisMsg.firebaseNotificationId, payload.isTestMessage);
-                    console.log(`[BA:FCM] thisMsg: ${thisMsg}`);
+                    // this.postEvent('received', thisMsg.baMessageId, thisMsg.baNotificationId, thisMsg.firebaseNotificationId, thisMsg.isTestMessage);
+                    console.log(`[BA:FCM] thisMsg: ${JSON.stringify(thisMsg, null, 2)}`);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                        // this.events.publish('notification:receive');
+                        this.events.publish('notification:receive', null);
                     });
                     
                     if (thisMsg.tap) {
@@ -179,7 +180,7 @@ export class BoardActiveService {
 
                         console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                            // this.events.publish('notification:tap');
+                            this.events.publish('notification:tap', null);
                         });
                         this.modalMessage(thisMsg);
                     } else {
@@ -188,36 +189,49 @@ export class BoardActiveService {
 
                         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                            // this.events.publish('notification:notap');
+                            this.events.publish('notification:notap', null);
                         });
                         // this.modalMessage(thisMsg);
                     }
                 })).subscribe(payload => {
-                    // console.log(`[BA:FCM] : ` + JSON.stringify(payload, null, 2));
+                    // console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
+                    // // console.log(`[BA:FCM] gcm.message_id: ` + JSON.stringify(payload['gcm.message_id'], null, 2));
+                    // // console.log(`[BA:FCM] google.message_id: ` + JSON.stringify(payload['google.message_id'], null, 2));
+                    // console.log(`[BA:FCM] gcm.message_id: ` + payload['gcm.message_id']);
+                    // console.log(`[BA:FCM] payload.id: ` + payload.id);
+                    // console.log(`[BA:FCM] payload.id: ` + payload['id']);
                     // const myDate: string = new Date().toISOString();
-                    // let thisMsg: MessageDto = MessageModel.empty();
+                    // let thisMsg: any;
                     // thisMsg = payload;
-                    // thisMsg.notificationId = payload['gcm.message_id'];
+                    // if (payload['gcm.message_id']) {
+                    //     thisMsg.firebaseNotificationId = payload['gcm.message_id']; 
+                    // } else {
+                    //     thisMsg.firebaseNotificationId = payload.id; 
+                    // }
                     // thisMsg.dateCreated = myDate;
                     // thisMsg.dateLastUpdated = myDate;
-                    // this.postEvent('received', payload.messageId, payload['gcm.message_id'], payload.isTestMessage);
+                    // this.postEvent('received', payload.baMessageId, thisMsg.baNotificationId, thisMsg.firebaseNotificationId, payload.isTestMessage);
+                    // console.log(`[BA:FCM] thisMsg: ${ JSON.stringify(thisMsg, null, 2)}`);
                     // this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                    //     this.events.publish('notification:receive');
+                    //     // this.events.publish('notification:receive');
                     // });
+                    
                     // if (thisMsg.tap) {
                     //     this.addMessage(thisMsg);
-                    //     console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
+                    //     this.newLocalNotification(thisMsg, 1);
+
                     //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                    //         this.events.publish('notification:tap');
+                    //         // this.events.publish('notification:tap');
                     //     });
                     //     this.modalMessage(thisMsg);
                     // } else {
                     //     this.addMessage(thisMsg);
-                    //     console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
                     //     this.newLocalNotification(thisMsg, 1);
+
                     //     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                    //         this.events.publish('notification:notap');
+                    //         // this.events.publish('notification:notap');
                     //     });
+                    //     // this.modalMessage(thisMsg);
                     // }
                 });
             }
@@ -569,7 +583,7 @@ export class BoardActiveService {
 
             const Promise_URL = this.getEnvironment().subscribe(setUrl => {
                 this.sharedPreferencesPut('X-BoardActive-App-Url', setUrl).then(_ => {
-                    console.log(`[BA:HttpHeaders] X-BoardActive-App-Url: ${setUrl}`);
+                    // console.log(`[BA:HttpHeaders] X-BoardActive-App-Url: ${setUrl}`);
                 });
             });
 
@@ -578,7 +592,7 @@ export class BoardActiveService {
                     AppKey = AppKey || appKey;
                     console.log(`X-BoardActive-App-Key: ${AppKey}`);
                     this.sharedPreferencesPut('X-BoardActive-App-Key', AppKey).then(_ => {
-                        console.log(`[BA:HttpHeaders] X-BoardActive-App-Key: ${AppKey}`);
+                        // console.log(`[BA:HttpHeaders] X-BoardActive-App-Key: ${AppKey}`);
                         resolve(AppKey);
                     });
                 });
@@ -587,9 +601,9 @@ export class BoardActiveService {
             const Promise_AppID = new Promise(resolve => {
                 this.localStorageService.getItem('AppID').subscribe(appId => {
                     AppID = AppID || appId;
-                    console.log(`[BA:HttpHeaders] X-BoardActive-App-Id: ${AppID}`);
+                    // console.log(`[BA:HttpHeaders] X-BoardActive-App-Id: ${AppID}`);
                     this.sharedPreferencesPut('X-BoardActive-App-Id', AppID).then(_ => {
-                        console.log(`[BA:HttpHeaders] X-BoardActive-App-Id: ${AppID}`);
+                        // console.log(`[BA:HttpHeaders] X-BoardActive-App-Id: ${AppID}`);
                         resolve(AppID);
                     });
                 });
@@ -597,7 +611,7 @@ export class BoardActiveService {
 
             const Promise_AppVersionNumber = this.getAppVersionCode().then(appVerNo => {
                 AppVersionNumber = AppVersionNumber || appVerNo;
-                console.log(`[BA:HttpHeaders] X-BoardActive-App-Version: ${AppVersionNumber}`);
+                // console.log(`[BA:HttpHeaders] X-BoardActive-App-Version: ${AppVersionNumber}`);
                 this.sharedPreferencesPut('X-BoardActive-App-Version', AppVersionNumber).then(_ => {
                     console.log(`[BA:HttpHeaders] X-BoardActive-App-Version: ${AppVersionNumber}`);
                     return AppVersionNumber;
@@ -610,30 +624,30 @@ export class BoardActiveService {
                 DeviceToken = DeviceToken || token;
                 console.log(`[BA:HttpHeaders] X-BoardActive-App-Token: ${DeviceToken}`);
                 this.sharedPreferencesPut('X-BoardActive-Device-Token', DeviceToken).then(_ => {
-                    console.log(`[BA:HttpHeaders] X-BoardActive-Device-Token: ${DeviceToken}`);
+                    // console.log(`[BA:HttpHeaders] X-BoardActive-Device-Token: ${DeviceToken}`);
                     return DeviceToken;
                 });
             });
 
             const Promise_DeviceOS = this.sharedPreferencesPut('X-BoardActive-Device-OS', this.device.platform).then(_ => {
                 DeviceOS = this.device.platform;
-                console.log(`[BA:HttpHeaders] X-BoardActive-Device-OS: ${DeviceOS}`);
+                // console.log(`[BA:HttpHeaders] X-BoardActive-Device-OS: ${DeviceOS}`);
             });
 
             const Promise_DeviceOSVersion = this.sharedPreferencesPut('X-BoardActive-Device-OS-Version', this.device.version).then(_ => {
                 DeviceOSVersion = this.device.version;
-                console.log(`[BA:HttpHeaders] X-BoardActive-OS-Version: ${DeviceOSVersion}`);
+                // console.log(`[BA:HttpHeaders] X-BoardActive-OS-Version: ${DeviceOSVersion}`);
             });
 
             const Promise_DeviceType = this.sharedPreferencesPut('X-BoardActive-Device-Type', this.device.model).then(_ => {
                 DeviceType = this.device.model;
-                console.log(`[BA:HttpHeaders] X-BoardActive-Device-Type: ${DeviceType}`);
+                // console.log(`[BA:HttpHeaders] X-BoardActive-Device-Type: ${DeviceType}`);
             });
 
             const Promise_AppTest = new Promise(resolve => {
                 this.localStorageService.getItem('AppTest').subscribe(appTest => {
                     AppTest = AppTest || appTest;
-                    console.log(`[BA:HttpHeaders] X-BoardActive-Is-Test-App: ${AppTest}`);
+                    // console.log(`[BA:HttpHeaders] X-BoardActive-Is-Test-App: ${AppTest}`);
                     this.sharedPreferencesPut('X-BoardActive-Is-Test-App', AppTest).then(_ => {
                         console.log(`[BA:HttpHeaders] -BoardActive-Is-Test-App: ${AppTest}`);
                     });

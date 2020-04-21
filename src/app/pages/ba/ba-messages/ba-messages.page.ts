@@ -110,7 +110,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.enableHeadless = true;
     this.debug = false;
     this.odometer = null;
-    // this.listenToEvents();
+    this.listenToEvents();
   }
 
   ngOnInit() {
@@ -159,42 +159,42 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.menuCtrl.enable(true, 'end');
   }
 
-  // listenToEvents() {
-  //   this.events.subscribe('notification:receive', () => {
-  //     const eventMsg = 'BA Notification: receive';
-  //     this.localStorageService.getItem('msg').subscribe(payload => {
-  //       this.addEvent(eventMsg, new Date(), payload);
-  //       this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
-  //       this.cntNotifications = this.cntNotifications + 1;
-  //         this.getData();
-  //     });
-  //   });
+  listenToEvents() {
+    this.events.subscribe('notification:receive', () => {
+      const eventMsg = 'BA Notification: receive';
+      this.localStorageService.getItem('msg').subscribe(payload => {
+        this.addEvent(eventMsg, new Date(), payload);
+        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+        this.cntNotifications = this.cntNotifications + 1;
+          this.getData();
+      });
+    });
 
-  //   this.events.subscribe('notification:tap', () => {
-  //     const eventMsg = 'BA Notification: tap';
-  //     this.localStorageService.getItem('msg').subscribe(payload => {
-  //       this.addEvent(eventMsg, new Date(), payload);
-  //       this.getData();
-  //     });
-  //   });
+    this.events.subscribe('notification:tap', () => {
+      const eventMsg = 'BA Notification: tap';
+      this.localStorageService.getItem('msg').subscribe(payload => {
+        this.addEvent(eventMsg, new Date(), payload);
+        this.getData();
+      });
+    });
 
-  //   this.events.subscribe('notification:notap', () => {
-  //     const eventMsg = 'BA Notification: notap';
-  //     this.localStorageService.getItem('msg').subscribe(payload => {
-  //       this.addEvent(eventMsg, new Date(), payload);
-  //       this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
-  //       this.getData();
-  //     });
-  //   });
+    this.events.subscribe('notification:notap', () => {
+      const eventMsg = 'BA Notification: notap';
+      this.localStorageService.getItem('msg').subscribe(payload => {
+        this.addEvent(eventMsg, new Date(), payload);
+        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+        this.getData();
+      });
+    });
 
-  //   this.events.subscribe('notification:opened', () => {
-  //     const eventMsg = 'BA Notification: opened';
-  //     this.localStorageService.getItem('msg').subscribe(payload => {
-  //       this.addEvent(eventMsg, new Date(), payload);
-  //       this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
-  //     });
-  //   });
-  // }
+    this.events.subscribe('notification:opened', () => {
+      const eventMsg = 'BA Notification: opened';
+      this.localStorageService.getItem('msg').subscribe(payload => {
+        this.addEvent(eventMsg, new Date(), payload);
+        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+      });
+    });
+  }
 
   signOut() {
     this.localStorageService.removeItem('auth');
