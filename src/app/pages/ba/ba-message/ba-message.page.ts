@@ -25,14 +25,12 @@ export class BaMessagePage implements OnInit {
     private events: Events
   ) {
     this.message = this.navParams.get('message');
-    console.log(`BaMessagePage: ${JSON.stringify(this.message)}`);
+    console.log(`BaMessagePage: ${JSON.stringify(this.message, null, 2)}`);
     this.messageData = JSON.parse(this.message.messageData);
 
-    // this.youtubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.messageData.urlYoutube);
     this.localStorageService.setItem('msg', this.message).subscribe(response => {
+      console.log(`trigger postEvent: ${JSON.stringify(this.message, null, 2)}`);
       this.events.publish('notification:opened', null);
-      // this.baService.postEvent('opened', this.message.baMessageId, this.message.baNotificationId, this.message.firebaseNotificationId, this.message.isTestMessage);
-
     });
 
   }

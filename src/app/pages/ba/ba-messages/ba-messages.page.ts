@@ -166,7 +166,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
         this.addEvent(eventMsg, new Date(), payload);
         this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
         this.cntNotifications = this.cntNotifications + 1;
-          this.getData();
+        this.getData();
       });
     });
 
@@ -182,7 +182,6 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const eventMsg = 'BA Notification: notap';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
         this.getData();
       });
     });
@@ -191,7 +190,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       const eventMsg = 'BA Notification: opened';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+        this.baService.postEvent('opened', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
       });
     });
   }

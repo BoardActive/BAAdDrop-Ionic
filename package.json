@@ -109,8 +109,8 @@
       "cordova-plugin-awesome-shared-preferences": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

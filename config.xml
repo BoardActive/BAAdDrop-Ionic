@@ -21,7 +21,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="orientation" value="portrait" />
     <platform name="android">
-        <resource-file src="google-services.json" target="google-services.json" />
+        <resource-file src="google-services.json" target="app/google-services.json" />
         <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
             <meta-data android:name="com.transistorsoft.locationmanager.license_key" android:value="590c611f662d453a1c7f9e28eb37c47ef0540822e59e31cf461a52aa6a73c2a9" />
         </config-file>

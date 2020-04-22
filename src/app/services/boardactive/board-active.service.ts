@@ -150,15 +150,13 @@ export class BoardActiveService {
 
                 this.fcmProvider.onMessageReceived().pipe(tap(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
-                    // console.log(`[BA:FCM] gcm.message_id: ` + JSON.stringify(payload['gcm.message_id'], null, 2));
-                    // console.log(`[BA:FCM] google.message_id: ` + JSON.stringify(payload['google.message_id'], null, 2));
-                    console.log(`[BA:FCM] gcm.message_id: ` + payload['gcm.message_id']);
-                    console.log(`[BA:FCM] payload.id: ` + payload.id);
-                    console.log(`[BA:FCM] payload.id: ` + payload['id']);
+                    this.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
                     const myDate: string = new Date().toISOString();
-                    let thisMsg: any;
+                    let thisMsg: MessageDto = MessageModel.empty();
                     thisMsg = payload;
-                    thisMsg.firebaseNotificationId = payload['gcm.message_id']; 
+                    thisMsg.firebaseNotificationId = payload['gcm.message_id'];
+                    thisMsg.dateCreated = myDate;
+                    thisMsg.dateLastUpdated = myDate;
                     // if (payload['gcm.message_id']) {
                     //     thisMsg.firebaseNotificationId = payload['gcm.message_id']; 
                     //     console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
@@ -166,10 +164,9 @@ export class BoardActiveService {
                     //     thisMsg.firebaseNotificationId = payload.id; 
                     //     console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
                     // }
-                    thisMsg.dateCreated = myDate;
-                    thisMsg.dateLastUpdated = myDate;
                     // this.postEvent('received', thisMsg.baMessageId, thisMsg.baNotificationId, thisMsg.firebaseNotificationId, thisMsg.isTestMessage);
-                    console.log(`[BA:FCM] thisMsg: ${JSON.stringify(thisMsg, null, 2)}`);
+                    console.log(`[BA:FCM] msg Object: ${JSON.stringify(thisMsg, null, 2)}`);
+                    // this.postEvent('received', thisMsg.baMessageId, thisMsg.baNotificationId, thisMsg.firebaseNotificationId, thisMsg.isTestMessage);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                         this.events.publish('notification:receive', null);
                     });

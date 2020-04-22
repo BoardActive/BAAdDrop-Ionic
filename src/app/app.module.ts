@@ -22,6 +22,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from './services/local-storage/local-storage.service';
 
 import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
+import { Events } from './services/events.service';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { BaMessagePageModule } from './pages/ba/ba-message/ba-message.module';
     FCMService,
     LocalNotifications,
     LocalStorageService,
+    Events
   ],
   bootstrap: [AppComponent]
 })
