@@ -33,6 +33,8 @@
     "cordova-android": "^8.1.0",
     "cordova-background-geolocation-lt": "^3.3.1",
     "cordova-ios": "^5.1.1",
+    "cordova-plugin-androidx": "^1.0.2",
+    "cordova-plugin-androidx-adapter": "^1.1.0",
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-awesome-shared-preferences": "git+https://github.com/adriano-di-giovanni/cordova-plugin-shared-preferences.git",
     "cordova-plugin-background-fetch": "^5.6.1",
@@ -106,7 +108,9 @@
       "cordova.plugins.diagnostic": {
         "ANDROID_SUPPORT_VERSION": "28.+"
       },
-      "cordova-plugin-awesome-shared-preferences": {}
+      "cordova-plugin-awesome-shared-preferences": {},
+      "cordova-plugin-androidx": {},
+      "cordova-plugin-androidx-adapter": {}
     },
     "platforms": [
       "ios",

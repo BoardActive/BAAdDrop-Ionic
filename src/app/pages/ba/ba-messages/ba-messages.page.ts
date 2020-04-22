@@ -464,9 +464,9 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     });
   }
 
-  openMessage(item: any) {
+  openMessage(item: MessageDto) {
     console.log(`openMessage: ${JSON.stringify(item, null, 2)}`);
-    this.baService.postEvent('received', item.baMessageId, item.baNotificationId, item.firebaseNotificationId, item.isTestMessage);
+    // this.baService.postEvent('received', item.baMessageId, item.baNotificationId, item.firebaseNotificationId, item.isTestMessage);
     this.baService.modalMessage(item);
   }
 

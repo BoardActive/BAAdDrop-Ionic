@@ -3,6 +3,7 @@ import { NavParams, ModalController } from '@ionic/angular';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import { Events } from '../../../services/events.service';
+import { MessageDto, MessageModel } from 'src/app/models/message.model';
 
 @Component({
   selector: 'app-ba-message',
@@ -12,7 +13,7 @@ import { Events } from '../../../services/events.service';
 export class BaMessagePage implements OnInit {
   public isRendering: boolean = true;
 
-  public message: any;
+  public message: MessageDto;
   public messageData: any;
     
   public youtubeUrl: SafeResourceUrl;
@@ -24,6 +25,7 @@ export class BaMessagePage implements OnInit {
     private localStorageService: LocalStorageService,
     private events: Events
   ) {
+    this.message = MessageModel.empty();
     this.message = this.navParams.get('message');
     console.log(`BaMessagePage: ${JSON.stringify(this.message, null, 2)}`);
     this.messageData = JSON.parse(this.message.messageData);

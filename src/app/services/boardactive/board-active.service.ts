@@ -150,13 +150,31 @@ export class BoardActiveService {
 
                 this.fcmProvider.onMessageReceived().pipe(tap(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
-                    this.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
                     const myDate: string = new Date().toISOString();
                     let thisMsg: MessageDto = MessageModel.empty();
-                    thisMsg = payload;
-                    thisMsg.firebaseNotificationId = payload['gcm.message_id'];
+                    // thisMsg = payload;
+                    thisMsg.id = payload['id'];
+                    thisMsg.isTestMessage = payload['isTestMessage'];
+                    thisMsg.body = payload['body'];
+                    thisMsg.baMessageId = payload['baMessageId'];
+                    thisMsg.baNotificationId = payload['baNotificationId'];
+                    thisMsg.tap = payload['tap'];
                     thisMsg.dateCreated = myDate;
+                    thisMsg.longitude = payload['longitude'];
+                    thisMsg.latitude = payload['latitude'];
+                    if(payload['google.message_id']) {
+                        thisMsg.firebaseNotificationId = payload['google.message_id'];
+                    }
+                    if(payload['gcm.message_id']) {
+                        thisMsg.firebaseNotificationId = payload['gcm.message_id'];
+                    }
+                    thisMsg.title = payload['title'];
                     thisMsg.dateLastUpdated = myDate;
+                    thisMsg.imageUrl = payload['imageUrl'];
+                    thisMsg.aps = payload['aps'];
+                    thisMsg.messageData = payload['messageData'];
+                    thisMsg.isRead = payload['isRead'];
+
                     // if (payload['gcm.message_id']) {
                     //     thisMsg.firebaseNotificationId = payload['gcm.message_id']; 
                     //     console.log(`[BA:FCM] thisMsg.notificationId: ` + thisMsg.notificationId);
