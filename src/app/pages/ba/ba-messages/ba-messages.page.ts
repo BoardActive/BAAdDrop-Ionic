@@ -161,17 +161,18 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
   listenToEvents() {
     this.events.subscribe('notification:receive', () => {
-      const eventMsg = 'BA Notification: receive';
+      const eventMsg = 'BA publishEvent: event/receive';
+      console.log(`[BA:publishEvent] receive: ${name}`);
       this.localStorageService.getItem('msg').subscribe(payload => {
-        this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
-        this.cntNotifications = this.cntNotifications + 1;
-        this.getData();
+      this.addEvent(eventMsg, new Date(), payload);
+      this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+      this.cntNotifications = this.cntNotifications + 1;
+      this.getData();
       });
     });
 
     this.events.subscribe('notification:tap', () => {
-      const eventMsg = 'BA Notification: tap';
+      const eventMsg = 'BA publishEvent: tap';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
         this.getData();
@@ -179,7 +180,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     });
 
     this.events.subscribe('notification:notap', () => {
-      const eventMsg = 'BA Notification: notap';
+      const eventMsg = 'BA publishEvent: notap';
       this.localStorageService.getItem('msg').subscribe(payload => {
         this.addEvent(eventMsg, new Date(), payload);
         this.getData();
@@ -187,10 +188,11 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     });
 
     this.events.subscribe('notification:opened', () => {
-      const eventMsg = 'BA Notification: opened';
+      const eventMsg = 'BA publishEvent: event/opened';
+      console.log(`[BA:publishEvent] open: ${name}`);
       this.localStorageService.getItem('msg').subscribe(payload => {
-        this.addEvent(eventMsg, new Date(), payload);
-        this.baService.postEvent('opened', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+      this.addEvent(eventMsg, new Date(), payload);
+      this.baService.postEvent('opened', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
       });
     });
   }

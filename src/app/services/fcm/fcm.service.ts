@@ -94,6 +94,9 @@ export class FCMService {
     return this.firebaseMessaging.onMessage();
   }
   
+  onMessageReceivedBackground() {
+    return this.firebaseMessaging.onBackgroundMessage();
+  }
 
 
 }
