@@ -51,7 +51,7 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private baService: BoardActiveService,
+    private boardActiveService: BoardActiveService,
     private utilService: UtilService,
     private localStorageService: LocalStorageService,
   ) {
@@ -79,7 +79,7 @@ export class AppComponent {
     switch (item.menuItem) {
       case 1:
         if (this.platform.is('cordova')) {
-          this.baService.getMe().then(device => {
+          this.boardActiveService.putMe().then(device => {
             alert(`${JSON.stringify(device, null, 2)}`);
           });
         } else {
@@ -97,7 +97,7 @@ export class AppComponent {
         break;
       case 3:
         if (this.platform.is('cordova')) {
-          this.baService.generateHeaders().then(headers => {
+          this.boardActiveService.generateHeaders().then(headers => {
             alert(`${JSON.stringify(headers, null, 2)}`);
           });
         } else {
@@ -111,7 +111,7 @@ export class AppComponent {
         this.utilService.navigate('/ba-custom', true);
         break;
       case 6:
-        this.baService.defaultAttributes().then(data => {
+        this.boardActiveService.defaultAttributes().then(data => {
           alert(`${JSON.stringify(data, null, 2)}`);
         });
         break;
@@ -119,7 +119,7 @@ export class AppComponent {
   }
   sendWelcomeMessage(type: any) {
     type = type || 1; // default to 1
-    this.baService.welcomeNotification(type);
+    this.boardActiveService.welcomeNotification(type);
   }
 
   logout() {

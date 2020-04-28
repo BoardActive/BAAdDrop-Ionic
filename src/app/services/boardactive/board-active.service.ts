@@ -7,7 +7,7 @@ import { BaMessagePage } from '../../pages/ba/ba-message/ba-message.page';
 import { Device } from '@ionic-native/device/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import { tap, share } from 'rxjs/operators';
@@ -25,7 +25,7 @@ export class stockAttributes {
     twitterUrl?: any; //Optional set by App 
     instagramUrl?: any; //Optional set by App 
     avatarUrl?: any; //Optional set by App 
-    
+
     // Stock Attributes Set by SDK
     deviceOS?: any; // Default Set by SDK         
     deviceOSVersion?: any; // Default Set by SDK  
@@ -142,14 +142,18 @@ export class BoardActiveService {
             * Gets FCM Token ane saves it to persistent storage
             */
             if (this.platform.is('cordova')) {
-                this.fcmProvider.getToken().then(token => {
+                this.fcmProvider.getToken().then(token => {                    
                     this.localStorageService.setItem('token', token).subscribe(token => {
-                        resolve(token);
+                        if(token){
+                            resolve(token);
+                        } else {
+                            reject(token);
+                        }
+
                     });
                 });
 
                 this.fcmProvider.onMessageReceived().pipe(tap(payload => {
-                })).subscribe(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
                     const myDate: string = new Date().toISOString();
                     let thisMsg: MessageDto = MessageModel.empty();
@@ -163,10 +167,10 @@ export class BoardActiveService {
                     thisMsg.dateCreated = myDate;
                     thisMsg.longitude = payload['longitude'];
                     thisMsg.latitude = payload['latitude'];
-                    if(payload['google.message_id']) {
+                    if (payload['google.message_id']) {
                         thisMsg.firebaseNotificationId = payload['google.message_id'];
                     }
-                    if(payload['gcm.message_id']) {
+                    if (payload['gcm.message_id']) {
                         thisMsg.firebaseNotificationId = payload['gcm.message_id'];
                     }
                     thisMsg.title = payload['title'];
@@ -177,12 +181,14 @@ export class BoardActiveService {
                     thisMsg.isRead = payload['isRead'];
                     console.log(`[BA:FCM] msg Object: ${JSON.stringify(thisMsg, null, 2)}`);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                        console.log(`[BA: foregroundTask] : ` + JSON.stringify(thisMsg, null, 2));
                         this.events.publish('notification:receive', null);
                     });
-                    
+                    this.newLocalNotification(thisMsg, 1);
+
                     if (thisMsg.tap) {
                         this.addMessage(thisMsg);
-                        this.newLocalNotification(thisMsg, 1);
+                        // this.newLocalNotification(thisMsg, 1);
 
                         console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
@@ -191,7 +197,6 @@ export class BoardActiveService {
                         this.modalMessage(thisMsg);
                     } else {
                         this.addMessage(thisMsg);
-                        this.newLocalNotification(thisMsg, 1);
 
                         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
@@ -199,9 +204,10 @@ export class BoardActiveService {
                         });
                         // this.modalMessage(thisMsg);
                     }
+                })).subscribe(payload => {
                 });
 
-                this.fcmProvider.onMessageReceivedBackground().subscribe(payload => {
+                this.fcmProvider.onMessageReceivedBackground().pipe(tap(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
                     const myDate: string = new Date().toISOString();
                     let thisMsg: MessageDto = MessageModel.empty();
@@ -215,10 +221,10 @@ export class BoardActiveService {
                     thisMsg.dateCreated = myDate;
                     thisMsg.longitude = payload['longitude'];
                     thisMsg.latitude = payload['latitude'];
-                    if(payload['google.message_id']) {
+                    if (payload['google.message_id']) {
                         thisMsg.firebaseNotificationId = payload['google.message_id'];
                     }
-                    if(payload['gcm.message_id']) {
+                    if (payload['gcm.message_id']) {
                         thisMsg.firebaseNotificationId = payload['gcm.message_id'];
                     }
                     thisMsg.title = payload['title'];
@@ -227,15 +233,15 @@ export class BoardActiveService {
                     thisMsg.aps = payload['aps'];
                     thisMsg.messageData = payload['messageData'];
                     thisMsg.isRead = payload['isRead'];
-
                     console.log(`[BA:FCM] msg Object: ${JSON.stringify(thisMsg, null, 2)}`);
                     this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                        console.log(`[BA: backgroundTask] : ` + JSON.stringify(thisMsg, null, 2));
                         this.events.publish('notification:receive', null);
                     });
-                    
-                    if (thisMsg.tap) {
+
+                    if (payload.tap) {
                         this.addMessage(thisMsg);
-                        this.newLocalNotification(thisMsg, 1);
+                        // this.newLocalNotification(thisMsg, 1);
 
                         console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
@@ -244,14 +250,16 @@ export class BoardActiveService {
                         this.modalMessage(thisMsg);
                     } else {
                         this.addMessage(thisMsg);
-                        this.newLocalNotification(thisMsg, 1);
+                        // this.newLocalNotification(thisMsg, 1);
 
                         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                             this.events.publish('notification:notap', null);
                         });
-                        // this.modalMessage(thisMsg);
+                        this.modalMessage(thisMsg);
                     }
+
+                })).subscribe(payload => {
                 });
             }
 
@@ -386,13 +394,11 @@ export class BoardActiveService {
                     email: email,
                     password: password
                 };
-
                 this.http.post(url, body, { params: {}, headers: {} }).subscribe((response) => {
                     resolve(response);
                 }, err => {
                     reject(err);
                 });
-
             })
         });
     }
@@ -529,15 +535,20 @@ export class BoardActiveService {
                     'deviceTime': new Date().toString()
                 };
 
+
+
                 this.generateHeaders().then(httpHeaders => {
                     console.log(`[BA:postLocation] httpHeaders: ${JSON.stringify(httpHeaders, null, 2)}`);
-                    this.http.post(url, body, { headers: httpHeaders }).pipe(share()).subscribe(response => {
-                        console.log(`[BA:postLocation] RESPONSE: ${JSON.stringify(response, null, 2)}`);
-                        resolve(response);
-                    }, err => {
-                        console.log(`[BA:postLocation] ERROR: ${err}`);
-                        reject(err);
-                    });
+                    timer(10000)
+                        .subscribe(val => {
+                            this.http.post(url, body, { headers: httpHeaders }).pipe(share()).subscribe(response => {
+                                console.log(`[BA:postLocation] RESPONSE: ${JSON.stringify(response, null, 2)}`);
+                                resolve(response);
+                            }, err => {
+                                console.log(`[BA:postLocation] ERROR: ${err}`);
+                                reject(err);
+                            });
+                        });
                 });
             })
         });

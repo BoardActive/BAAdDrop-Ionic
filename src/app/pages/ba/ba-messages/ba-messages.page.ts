@@ -67,7 +67,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
   showMap: boolean = false;
 
   constructor(
-    private baService: BoardActiveService,
+    private boardActiveService: BoardActiveService,
     private utilService: UtilService,
     private menuCtrl: MenuController,
     private platform: Platform,
@@ -128,11 +128,13 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       }
     })
 
-    this.baService.init().then(response => {
+    this.boardActiveService.init().then(response => {
       console.log(`init(): ${JSON.stringify(response, null, 2)}`);
-      this.baService.putMe().then(data => {
+      this.boardActiveService.putMe().then(data => {
         console.log(`putMe(): ${JSON.stringify(data, null, 2)}`);
         this.addEvent('putMe()', new Date(), data);
+      }).catch(err => {
+        alert(`Missing Device Token`);
       });
     });
 
@@ -165,7 +167,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       console.log(`[BA:publishEvent] receive: ${name}`);
       this.localStorageService.getItem('msg').subscribe(payload => {
       this.addEvent(eventMsg, new Date(), payload);
-      this.baService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+      this.boardActiveService.postEvent('received', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
       this.cntNotifications = this.cntNotifications + 1;
       this.getData();
       });
@@ -192,7 +194,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       console.log(`[BA:publishEvent] open: ${name}`);
       this.localStorageService.getItem('msg').subscribe(payload => {
       this.addEvent(eventMsg, new Date(), payload);
-      this.baService.postEvent('opened', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
+      this.boardActiveService.postEvent('opened', payload.baMessageId, payload.baNotificationId, payload.firebaseNotificationId, payload.isTestMessage);
       });
     });
   }
@@ -294,11 +296,11 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
       this.odometer = (location.odometer / 1000).toFixed(1) + 'km';
       const lat: any = location.coords.latitude.toString();
       const lng: any = location.coords.longitude.toString();
-      this.baService.sharedPreferencesPut('X-BoardActive-Latitude', lat).then();
-      this.baService.sharedPreferencesPut('X-BoardActive-Longitude', lng).then();
+      this.boardActiveService.sharedPreferencesPut('X-BoardActive-Latitude', lat).then();
+      this.boardActiveService.sharedPreferencesPut('X-BoardActive-Longitude', lng).then();
       this.addEvent(event, new Date(location.timestamp), location);
       // this.baService.handleLocationUpdate(lat, lng);
-      this.baService.postLocation(lat, lng).then((res) => {
+      this.boardActiveService.postLocation(lat, lng).then((res) => {
         const eventMsg = 'BA Location: response';
         this.addEvent(eventMsg, new Date(location.timestamp), res);
         if (this.debug) {
@@ -406,14 +408,14 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
   }
 
   putMe() {
-    this.baService.putMe().then(response => {
+    this.boardActiveService.putMe().then(response => {
       console.log(JSON.stringify(response, null, 2));
       this.addEvent('putMe()', new Date(), response);
     });
   }
 
   testGetRestApi(headers: boolean) {
-    this.baService.testGetRestApi(headers).then(response => {
+    this.boardActiveService.testGetRestApi(headers).then(response => {
       console.log(`testGetRestApi: ${JSON.stringify(response, null, 2)}`);
     });
   }
@@ -422,7 +424,6 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
     this.localStorageService.getItem('messages').subscribe(data => {
       this.messages = data;
       this.messages = this.messages.sort((a, b) => new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime());
-      // console.log(`getData() messages: ${JSON.stringify(this.messages, null, 2)}`);
     });
   }
 
@@ -468,8 +469,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
   openMessage(item: MessageDto) {
     console.log(`openMessage: ${JSON.stringify(item, null, 2)}`);
-    // this.baService.postEvent('received', item.baMessageId, item.baNotificationId, item.firebaseNotificationId, item.isTestMessage);
-    this.baService.modalMessage(item);
+    this.boardActiveService.modalMessage(item);
   }
 
   async presentAlertConfirm() {
@@ -620,7 +620,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
             for (let index = 0; index < data.Hits; index++) {
               this.resetProgress();
               var t0 = performance.now();
-              this.baService.getMe().then(response => {
+              this.boardActiveService.getMe().then(response => {
                 var t1 = performance.now();
                 this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), response);
                 summary.push((t1 - t0));
@@ -673,7 +673,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
             for (let index = 0; index < data.Hits; index++) {
               this.resetProgress();
               var t0 = performance.now();
-              this.baService.putMe().then(response => {
+              this.boardActiveService.putMe().then(response => {
                 var t1 = performance.now();
                 this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), response);
                 summary.push((t1 - t0));
@@ -722,9 +722,9 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
             let latitude: string;
             let longitude: string;
 
-            this.baService.sharedPreferencesGet('X-BoardActive-Latitude').then(data => {
+            this.boardActiveService.sharedPreferencesGet('X-BoardActive-Latitude').then(data => {
               latitude = data;
-              this.baService.sharedPreferencesGet('X-BoardActive-Longitude').then(data => {
+              this.boardActiveService.sharedPreferencesGet('X-BoardActive-Longitude').then(data => {
                 longitude = data;
               });
             });
@@ -734,7 +734,7 @@ export class BaMessagesPage implements OnInit, AfterViewInit {
 
             for (let index = 0; index < data.Hits; index++) {
               var t0 = performance.now();
-              this.baService.postLocation(latitude, longitude).then(response => {
+              this.boardActiveService.postLocation(latitude, longitude).then(response => {
                 var t1 = performance.now();
                 this.addEvent(`milliseconds: ${(t1 - t0)}`, new Date(), response);
                 summary.push((t1 - t0));
