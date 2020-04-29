@@ -187,22 +187,23 @@ export class BoardActiveService {
                     this.newLocalNotification(thisMsg, 1);
 
                     if (thisMsg.tap) {
+                        console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.addMessage(thisMsg);
+                        this.modalMessage(thisMsg);
                         // this.newLocalNotification(thisMsg, 1);
 
-                        console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
-                        this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                            this.events.publish('notification:tap', null);
-                        });
-                        this.modalMessage(thisMsg);
+                        // this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                        //     this.events.publish('notification:tap', null);
+                        // });
                     } else {
-                        this.addMessage(thisMsg);
-
                         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
-                        this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                            this.events.publish('notification:notap', null);
-                        });
-                        // this.modalMessage(thisMsg);
+                        this.addMessage(thisMsg);
+                        this.modalMessage(thisMsg);
+                        // this.newLocalNotification(thisMsg, 1);
+
+                        // this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                        //     this.events.publish('notification:notap', null);
+                        // });
                     }
                 })).subscribe(payload => {
                 });
@@ -239,24 +240,24 @@ export class BoardActiveService {
                         this.events.publish('notification:receive', null);
                     });
 
-                    if (payload.tap) {
-                        this.addMessage(thisMsg);
-                        // this.newLocalNotification(thisMsg, 1);
-
+                    if (thisMsg.tap) {
                         console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
-                        this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                            this.events.publish('notification:tap', null);
-                        });
-                        this.modalMessage(thisMsg);
-                    } else {
                         this.addMessage(thisMsg);
+                        this.modalMessage(thisMsg);
                         // this.newLocalNotification(thisMsg, 1);
 
+                        // this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                        //     this.events.publish('notification:tap', null);
+                        // });
+                    } else {
                         console.log(`[BA:NOT_TAP] : ` + JSON.stringify(thisMsg, null, 2));
-                        this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
-                            this.events.publish('notification:notap', null);
-                        });
+                        this.addMessage(thisMsg);
                         this.modalMessage(thisMsg);
+                        // this.newLocalNotification(thisMsg, 1);
+
+                        // this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
+                        //     this.events.publish('notification:notap', null);
+                        // });
                     }
 
                 })).subscribe(payload => {
