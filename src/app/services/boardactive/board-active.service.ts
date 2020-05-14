@@ -149,11 +149,10 @@ export class BoardActiveService {
                         } else {
                             reject(token);
                         }
-
                     });
                 });
 
-                this.fcmProvider.onMessageReceived().pipe(tap(payload => {
+                this.fcmProvider.onMessage().pipe(tap(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
                     const myDate: string = new Date().toISOString();
                     let thisMsg: MessageDto = MessageModel.empty();
@@ -208,7 +207,7 @@ export class BoardActiveService {
                 })).subscribe(payload => {
                 });
 
-                this.fcmProvider.onMessageReceivedBackground().pipe(tap(payload => {
+                this.fcmProvider.onBackgroundMessage().pipe(tap(payload => {
                     console.log(`[BA:FCM] msg payload: ` + JSON.stringify(payload, null, 2));
                     const myDate: string = new Date().toISOString();
                     let thisMsg: MessageDto = MessageModel.empty();
@@ -239,12 +238,12 @@ export class BoardActiveService {
                         console.log(`[BA: backgroundTask] : ` + JSON.stringify(thisMsg, null, 2));
                         this.events.publish('notification:receive', null);
                     });
+                    this.newLocalNotification(thisMsg, 1);
 
                     if (thisMsg.tap) {
                         console.log(`[BA:TAP] : ` + JSON.stringify(thisMsg, null, 2));
                         this.addMessage(thisMsg);
                         this.modalMessage(thisMsg);
-                        // this.newLocalNotification(thisMsg, 1);
 
                         // this.localStorageService.setItem('msg', thisMsg).subscribe(response => {
                         //     this.events.publish('notification:tap', null);
@@ -693,7 +692,6 @@ export class BoardActiveService {
                 Promise_AppID,
                 Promise_AppVersionNumber,
                 Promise_DeviceToken,
-                Promise_AppTest,
                 Promise_DeviceOS,
                 Promise_DeviceOSVersion,
                 Promise_DeviceType,

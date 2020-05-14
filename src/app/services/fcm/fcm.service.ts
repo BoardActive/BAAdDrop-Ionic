@@ -90,11 +90,11 @@ export class FCMService {
   }
   
 
-  onMessageReceived() {
+  onMessage() {
     return this.firebaseMessaging.onMessage();
   }
   
-  onMessageReceivedBackground() {
+  onBackgroundMessage() {
     return this.firebaseMessaging.onBackgroundMessage();
   }
 

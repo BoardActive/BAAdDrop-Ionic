@@ -49,7 +49,7 @@ export class BaCustomPage implements OnInit {
 
   ngOnInit() {
     this.boardActiveService.getAttributes().then(data => {
-      console.log(JSON.stringify(data, null, 2));
+      console.log(`getAttributes(): ${JSON.stringify(data, null, 2)}`);
       const attributes: any = data;
       let order = 0;
       for (const item in attributes) {

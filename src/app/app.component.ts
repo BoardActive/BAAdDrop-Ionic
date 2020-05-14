@@ -67,6 +67,9 @@ export class AppComponent {
         this.localStorageService.getItem('App').subscribe(name => {
           this.AppName = name;
         });
+        this.boardActiveService.init().then(token => {
+
+        });
       } else {
         this.isCordova = false;
       }
